@@ -1,0 +1,58 @@
+:root {
+  --paper: #ede0be;
+  --ink: #353535;
+  --ink-light: #5a4a3a;
+  --accent: #9b6b2f;
+  --accent-2: #7b4c1a;
+  --accent-3: #c19a6b;
+  --bg-dark: #6c3c24;
+  --bg-darker: #4a2c18;
+  --border: #3a2a1e;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #353535;
+  background-color: #6c3c24;
+  font-family: 'Cormorant Garamond', 'IM Fell DW Pica', Georgia, serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+a {
+  color: var(--accent-2);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #d05e52;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}

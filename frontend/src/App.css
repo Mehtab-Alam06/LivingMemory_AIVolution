@@ -1,0 +1,2121 @@
+/* ============================================================================
+   LIVING MEMORY - YOKAI.COM INSPIRED DESIGN (COMPLETE)
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&family=Gloria+Hallelujah&family=Cormorant+Garamond:wght@400;600;700&display=swap');
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CSS VARIABLES & RESET
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --paper: #ede0be;
+  --paper-dark: #dcd1a8;
+  --paper-light: #f5f0e1;
+  --ink: #353535;
+  --ink-light: #5a4a3a;
+  --accent: #9b6b2f;
+  --accent-2: #7b4c1a;
+  --accent-3: #c19a6b;
+  --accent-gold: #d4ab63;
+  --bg-dark: #6c3c24;
+  --bg-darker: #4a2c18;
+  --bg-darkest: #1c0d04;
+  --border: #3a2a1e;
+  --shadow-light: rgba(0, 0, 0, 0.15);
+  --shadow-med: rgba(0, 0, 0, 0.35);
+  --shadow-heavy: rgba(0, 0, 0, 0.55);
+  --tape: rgba(220, 200, 120, 0.85);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cormorant Garamond', 'IM Fell DW Pica', Georgia, serif;
+  background-color: var(--bg-dark);
+  color: var(--ink);
+  line-height: 1.6;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   APP LAYOUT STRUCTURE
+   ───────────────────────────────────────────────────────────────────────── */
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-layout {
+  display: flex;
+  flex: 1;
+  margin-top: 0;
+}
+
+.sidebar-col {
+  width: 280px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #2e1508 0%, #1c0d04 100%);
+  border-right: 4px solid #0e0603;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.main-col {
+  flex: 1;
+  background-color: var(--bg-dark);
+  min-height: 100vh;
+}
+
+.page-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SIDEBAR (YOKAI.COM STYLE A-Z PANEL)
+   ───────────────────────────────────────────────────────────────────────── */
+
+.sidebar {
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 20px 16px;
+  border-bottom: 2px solid rgba(212, 171, 99, 0.2);
+  background: linear-gradient(180deg, rgba(212, 171, 99, 0.1) 0%, transparent 100%);
+}
+
+.sidebar-title {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 24px;
+  color: #f0e8d8;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-subtitle {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 12px;
+  color: rgba(240, 232, 216, 0.6);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+/* Domain Sections */
+.sb-domain-wrap {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sb-domain-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sb-domain-btn:hover {
+  background: rgba(212, 171, 99, 0.15);
+}
+
+.sb-domain-btn.open {
+  background: rgba(212, 171, 99, 0.1);
+}
+
+.sb-domain-label {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 16px;
+  color: #d4ab63;
+  letter-spacing: 0.03em;
+}
+
+.sb-chevron {
+  color: rgba(212, 171, 99, 0.6);
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.sb-chevron.rotated {
+  transform: rotate(90deg);
+}
+
+/* Letter Groups */
+.sb-letters-wrap {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.sb-letter-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.sb-letter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 16px 8px 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sb-letter-btn:hover {
+  background: rgba(212, 171, 99, 0.08);
+}
+
+.sb-letter-btn.open {
+  background: rgba(212, 171, 99, 0.05);
+}
+
+.sb-letter-label {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 14px;
+  color: #c8b898;
+}
+
+.sb-letter-count {
+  font-size: 11px;
+  color: rgba(200, 184, 152, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Topics */
+.sb-topics-wrap {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 4px 0;
+}
+
+.sb-topic-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 16px 8px 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.sb-topic-btn:hover {
+  background: rgba(212, 171, 99, 0.1);
+  padding-left: 48px;
+}
+
+.sb-topic-btn.active {
+  background: rgba(212, 171, 99, 0.2);
+}
+
+.sb-topic-dot {
+  color: rgba(212, 171, 99, 0.4);
+  margin-right: 10px;
+  font-size: 8px;
+}
+
+.sb-topic-btn.active .sb-topic-dot {
+  color: #d4ab63;
+}
+
+.sb-topic-text {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 13px;
+  color: #e8dcc8;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   HEADER & NAVIGATION
+   ───────────────────────────────────────────────────────────────────────── */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, #2e1508 0%, #1c0d04 100%);
+  box-shadow: 0 4px 16px var(--shadow-heavy);
+  border-bottom: 2px solid #0e0603;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 16px;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: #f0e8d8;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  transition: opacity 0.2s;
+}
+
+.hamburger:hover {
+  opacity: 0.7;
+}
+
+.logo-container {
+  flex: 1;
+  text-align: center;
+}
+
+.logo {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-title {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 36px;
+  color: #f0e8d8;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.logo-subtitle {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(240, 232, 216, 0.6);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+
+/* Navigation Tabs - YOKAI.COM STYLE */
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.2);
+  flex-wrap: wrap;
+}
+
+.navbar a {
+  color: #c8b898;
+  text-decoration: none;
+  padding: 14px 20px;
+  font-size: 14px;
+  font-family: 'IM Fell DW Pica', serif;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+
+.navbar a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0e8d8;
+}
+
+.navbar a.active,
+.navbar a.nav-active {
+  color: #fff;
+  background: rgba(212, 171, 99, 0.15);
+  border-bottom-color: #d4ab63;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   MAIN CONTENT AREA
+   ───────────────────────────────────────────────────────────────────────── */
+
+.main-content {
+  flex: 1;
+  padding: 32px 24px;
+  background-color: var(--bg-dark);
+}
+
+.page-center {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 22px 70px;
+}
+
+.container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PAPER CARDS - ENHANCED YOKAI.COM STYLE
+   ───────────────────────────────────────────────────────────────────────── */
+
+.paper-card {
+  position: relative;
+  background-color: #f4edd6;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, rgba(237, 224, 190, 0.8), rgba(244, 237, 214, 0.95));
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 2px 10px 2px 2px;
+  border: 1px solid rgba(212, 171, 99, 0.4);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    0 12px 32px rgba(0, 0, 0, 0.25),
+    inset 0 0 60px rgba(140, 100, 20, 0.08);
+  transition: all 0.3s ease;
+}
+
+.paper-card:hover {
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.18),
+    0 16px 40px rgba(0, 0, 0, 0.28),
+    inset 0 0 60px rgba(140, 100, 20, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Folded corner effect */
+.paper-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background:
+    linear-gradient(225deg, #9a7a40 46%, transparent 46%),
+    linear-gradient(315deg, #c8a868 46%, transparent 47%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.paper-card.alt {
+  background: linear-gradient(to bottom, rgba(252, 245, 230, 0.95), rgba(244, 237, 214, 0.98));
+}
+
+.paper-card.alt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(80, 60, 20, 0.02) 2px, rgba(80, 60, 20, 0.02) 4px),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(80, 60, 20, 0.02) 2px, rgba(80, 60, 20, 0.02) 4px);
+  pointer-events: none;
+  border-radius: 2px 10px 2px 2px;
+  z-index: 0;
+}
+
+.paper-card h1,
+.paper-card h2,
+.paper-card h3 {
+  font-family: 'IM Fell DW Pica', serif;
+  color: #2a1a08;
+}
+
+.paper-card h1 {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.paper-card h2 {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+}
+
+.paper-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 14px;
+}
+
+.paper-card p {
+  color: #353535;
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PARCHMENT WELCOME SECTION
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── PARCHMENT CONTAINER ── */
+.parchment-container {
+  display: flex;
+  flex-direction: column;
+  margin: 40px auto 60px;
+  width: 95%;
+  max-width: 900px;
+  background-color: #e8dcc8;
+  
+  /* Same drop-shadow approach as before — follows torn edge shape */
+  filter: drop-shadow(0px 16px 40px rgba(0,0,0,0.65));
+  
+  /* Float animation — matches sticky notes vibe */
+  animation: heroFloat 4s ease-in-out infinite;
+  
+  /* Subtle rotation like the sticky notes */
+  transform-origin: center center;
+}
+
+@keyframes heroFloat {
+  0%, 100% { 
+    transform: translateY(0px) rotate(-0.3deg);
+    filter: drop-shadow(0px 16px 40px rgba(0,0,0,0.65));
+  }
+  50% { 
+    transform: translateY(-10px) rotate(0.3deg);
+    filter: drop-shadow(0px 28px 50px rgba(0,0,0,0.45));
+  }
+}
+
+.parchment-cap-top {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: -2px;
+  position: relative;
+  z-index: 2;
+}
+
+.parchment-cap-bottom {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: -2px;
+  position: relative;
+  z-index: 2;
+}
+
+.parchment-body {
+  width: 100%;
+  background-image: url('/Images/paper2.jpg');
+  background-repeat: repeat;
+  background-color: #e8dcc8; /* same as container */
+  margin: 0;
+  padding: 10px 90px 20px;
+  position: relative;
+  z-index: 1;
+  /* NO box-shadow here — that's what creates the rectangle */
+}
+
+/* ── RESTORE ORIGINAL FONTS ── */
+.hero-eyebrow {
+  font-family: 'Space Mono', monospace;
+  color: #9b6b2f;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.parchment-body h1 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-weight: normal;
+  font-size: 3.2rem;
+  color: #2a1e12;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+  text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+}
+
+.parchment-body p {
+  color: #3a2a1a;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  line-height: 1.8;
+  margin: 0 auto 16px;
+  max-width: 700px;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   STICKY NOTES - YOKAI.COM STYLE
+   ───────────────────────────────────────────────────────────────────────── */
+
+.sticky-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 60px;
+  perspective: 1000px;
+}
+
+.sticky {
+  position: relative;
+  background-color: #ece07a;
+  background-image: 
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(80, 60, 20, 0.04) 2px, rgba(80, 60, 20, 0.04) 4px),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(80, 60, 20, 0.04) 2px, rgba(80, 60, 20, 0.04) 4px);
+  background-size: 256px 256px;
+  padding: 28px 22px 36px;
+  box-shadow:
+    2px 4px 8px var(--shadow-light),
+    4px 8px 24px var(--shadow-med),
+    6px 12px 32px var(--shadow-heavy),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.1),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 4px solid #bda830;
+  border-right: 3px solid #bda830;
+  transform: rotate(1.5deg) translateZ(0);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: stickyFloat 3s ease-in-out infinite;
+}
+
+.sticky:nth-child(2) {
+  transform: rotate(-1.2deg) translateZ(0);
+  animation: stickyFloat 3.5s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+@keyframes stickyFloat {
+  0%, 100% { transform: rotate(var(--sticky-rotate, 1.5deg)) translateY(0px) translateZ(0); }
+  50% { transform: rotate(var(--sticky-rotate, 1.5deg)) translateY(-4px) translateZ(0); }
+}
+
+.sticky:hover {
+  transform: rotate(0deg) scale(1.02) translateZ(0);
+  box-shadow:
+    4px 8px 16px var(--shadow-light),
+    8px 16px 32px var(--shadow-med),
+    12px 20px 48px var(--shadow-heavy),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.1),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4);
+  animation: none;
+}
+
+/* Tape effect */
+.sticky::before {
+  content: '';
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 110px;
+  height: 48px;
+  background: url('/Images/sticker.png') center/contain no-repeat;
+  z-index: 10;
+  pointer-events: none;
+  /* No box-shadow, no background-color — pure image */
+}
+
+/* Color variants */
+.sticky.yellow,
+.sticky:not(.pink):not(.blue):not(.green):not(.orange) {
+  background-color: #ece07a;
+  border-bottom-color: #bda830;
+  border-right-color: #bda830;
+}
+
+.sticky.pink {
+  background-color: #f5a5a0;
+  border-bottom-color: #c97a70;
+  border-right-color: #c97a70;
+}
+
+.sticky.blue {
+  background-color: #a8dae8;
+  border-bottom-color: #7ba8bc;
+  border-right-color: #7ba8bc;
+}
+
+.sticky.green {
+  background-color: #c8e8a0;
+  border-bottom-color: #9bb870;
+  border-right-color: #9bb870;
+}
+
+.sticky.orange {
+  background-color: #ffc890;
+  border-bottom-color: #c89a60;
+  border-right-color: #c89a60;
+}
+
+.sticky h3 {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 1.6rem;
+  font-weight: normal;
+  color: #2a1a08;
+  text-align: center;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(80, 55, 10, 0.2);
+}
+
+.sticky ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sticky ul li {
+  padding: 6px 0;
+  text-align: center;
+}
+
+.sticky ul li a {
+  color: #2a1a08;
+  font-style: italic;
+  font-size: 27px;
+  line-height: 1.6;
+  font-family: 'Gloria Hallelujah', cursive;
+  text-decoration: none;
+  transition: color 0.13s;
+}
+
+.sticky ul li a:hover {
+  color: #d05e52;
+  text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BUTTONS & CTAs
+   ───────────────────────────────────────────────────────────────────────── */
+
+.cta-buttons {
+  display: flex;
+  gap: 18px;
+  margin-top: 28px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.05em;
+}
+
+.btn-primary {
+  background: #d4ab63;
+  color: #1a0f08;
+  box-shadow: 0 4px 12px rgba(212, 171, 99, 0.4);
+}
+
+.btn-primary:hover {
+  background: #c49a50;
+  box-shadow: 0 6px 16px rgba(212, 171, 99, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #7b4c1a;
+  border: 2px solid #d4ab63;
+}
+
+.btn-secondary:hover {
+  background: rgba(212, 171, 99, 0.1);
+  border-color: #c49a50;
+}
+
+.btn.active {
+  background: rgba(212, 171, 99, 0.2);
+  border-color: #d4ab63;
+  color: #d4ab63;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   INTERVIEW TAB STYLING
+   ───────────────────────────────────────────────────────────────────────── */
+
+.interview {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 2px 10px 2px 2px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 0 60px rgba(140, 100, 20, 0.08);
+}
+
+.interview::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background:
+    linear-gradient(225deg, #9a7a40 46%, transparent 46%),
+    linear-gradient(315deg, #c8a868 46%, transparent 47%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.interview-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(212, 171, 99, 0.3);
+}
+
+.interview-header h2 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 1.8rem;
+  color: #2a1a08;
+  font-weight: normal;
+  margin-bottom: 8px;
+}
+
+.tk-desc {
+  color: #5a4a3a;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.interview-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+/* AI Avatar */
+.ai-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-figure {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #d8caa3 0%, #bda476 55%, #8a6a39 100%);
+  box-shadow: 0 6px 20px var(--shadow-med);
+  transition: box-shadow 0.25s ease;
+}
+
+.avatar-figure.speaking {
+  box-shadow: 0 0 26px rgba(212, 171, 99, 0.5);
+}
+
+/* Wave animation */
+.wave {
+  display: flex;
+  gap: 3px;
+  height: 24px;
+  align-items: flex-end;
+}
+
+.wave span {
+  width: 4px;
+  height: 8px;
+  background: rgba(212, 171, 99, 0.4);
+  border-radius: 2px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+.wave span:nth-child(1) { animation-delay: 0s; }
+.wave span:nth-child(2) { animation-delay: 0.1s; }
+.wave span:nth-child(3) { animation-delay: 0.2s; }
+.wave span:nth-child(4) { animation-delay: 0.3s; }
+.wave span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes wave {
+  0%, 100% { height: 8px; }
+  50% { height: 20px; }
+}
+
+/* Paper area */
+.interview-body .paper {
+  background: linear-gradient(to bottom, rgba(252, 248, 240, 0.95), rgba(248, 242, 230, 0.98));
+  padding: 24px;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 171, 99, 0.2);
+  box-shadow: inset 0 0 20px rgba(140, 100, 20, 0.06);
+}
+
+.paper-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ai-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ai-label {
+  background: #d4ab63;
+  color: #1a0f08;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.ai-text {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 18px;
+  color: #2a1a08;
+  font-style: italic;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.hint {
+  font-size: 13px;
+  color: #7b6b5a;
+  text-align: center;
+}
+
+/* Microphone button */
+.mic-box {
+  display: flex;
+  justify-content: center;
+}
+
+.mic {
+  background: linear-gradient(135deg, #d4ab63 0%, #b89050 100%);
+  border: 2px solid #7b5c30;
+  color: #1a0f08;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.mic.mic-on {
+  background: linear-gradient(135deg, #d05e52 0%, #b84a3e 100%);
+  border-color: #8a3028;
+  color: white;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(208, 94, 82, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(208, 94, 82, 0); }
+}
+
+/* Type input */
+.type-box {
+  display: flex;
+  gap: 10px;
+}
+
+.type-box input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  border-radius: 4px;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: border-color 0.2s;
+}
+
+.type-box input:focus {
+  outline: none;
+  border-color: #d4ab63;
+}
+
+.type-box .submit {
+  background: #d4ab63;
+  border: none;
+  color: #1a0f08;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.type-box .submit:hover {
+  background: #c49a50;
+}
+
+/* Structuring panel */
+.structuring {
+  background: rgba(212, 171, 99, 0.1);
+  border: 1px dashed rgba(212, 171, 99, 0.3);
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.struct-title {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 14px;
+  color: #5a4a3a;
+  margin-bottom: 10px;
+}
+
+.structuring ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+}
+
+.structuring ul li {
+  background: rgba(212, 171, 99, 0.15);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #5a4a3a;
+}
+
+/* Interview completion */
+.preview {
+  background: rgba(0, 0, 0, 0.03);
+  padding: 16px;
+  border-radius: 4px;
+  margin: 16px 0;
+}
+
+.preview > div {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.actions .submit {
+  background: #d4ab63;
+  border: none;
+  color: #1a0f08;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.actions .submit:hover {
+  background: #c49a50;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TECHNIQUE ANALYSIS TAB
+   ───────────────────────────────────────────────────────────────────────── */
+
+.tech {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 2px 10px 2px 2px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 0 60px rgba(140, 100, 20, 0.08);
+}
+
+.tech::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background:
+    linear-gradient(225deg, #9a7a40 46%, transparent 46%),
+    linear-gradient(315deg, #c8a868 46%, transparent 47%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tech h2 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 1.8rem;
+  color: #2a1a08;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* Upload area */
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.upload-box {
+  width: 100%;
+  max-width: 400px;
+  border: 2px dashed rgba(212, 171, 99, 0.4);
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(212, 171, 99, 0.05);
+}
+
+.upload-box:hover {
+  border-color: #d4ab63;
+  background: rgba(212, 171, 99, 0.1);
+}
+
+.upload-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.upload-box input {
+  display: none;
+}
+
+/* Domain banner */
+.domain-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: rgba(212, 171, 99, 0.1);
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.domain-banner > div:first-child {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #5a4a3a;
+}
+
+.domain-banner .mode {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.domain-banner label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #5a4a3a;
+  cursor: pointer;
+}
+
+/* Tech grid */
+.tech-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.tech-left .image-wrap {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tech-left img {
+  width: 100%;
+  display: block;
+}
+
+.tech-left .overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tech-left .mark {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d05e52;
+  border-radius: 50%;
+  animation: markPulse 2s infinite;
+}
+
+.tech-left .m1 { top: 20%; left: 30%; }
+.tech-left .m2 { top: 40%; right: 25%; }
+.tech-left .m3 { bottom: 30%; left: 40%; }
+.tech-left .m4 { top: 60%; right: 40%; }
+
+@keyframes markPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+/* Panel styling */
+.tech-right .panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-title {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 16px;
+  color: #2a1a08;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(212, 171, 99, 0.2);
+  padding-bottom: 6px;
+}
+
+.panel-text {
+  font-size: 14px;
+  color: #5a4a3a;
+  line-height: 1.5;
+}
+
+/* Metrics */
+.metrics {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.metric > span {
+  width: 140px;
+  font-size: 13px;
+  color: #5a4a3a;
+}
+
+.metric .bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.metric .bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, #d4ab63 0%, #c49a50 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Domain indicators */
+.domain-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.indicator {
+  background: rgba(212, 171, 99, 0.15);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #5a4a3a;
+}
+
+/* Knowledge graph connection */
+.kg {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(212, 171, 99, 0.2);
+}
+
+.kg-preview {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(212, 171, 99, 0.08);
+  border-radius: 4px;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 13px;
+  color: #5a4a3a;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   KNOWLEDGE GRAPH TAB
+   ───────────────────────────────────────────────────────────────────────── */
+
+.knowledge-graph {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 2px 10px 2px 2px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 0 60px rgba(140, 100, 20, 0.08);
+}
+
+.knowledge-graph::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background:
+    linear-gradient(225deg, #9a7a40 46%, transparent 46%),
+    linear-gradient(315deg, #c8a868 46%, transparent 47%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.kg-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(212, 171, 99, 0.3);
+}
+
+.kg-header h1 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 1.8rem;
+  color: #2a1a08;
+  font-weight: normal;
+  margin-bottom: 8px;
+}
+
+.kg-header p {
+  color: #5a4a3a;
+  font-size: 14px;
+}
+
+.graph-focus {
+  margin-top: 12px;
+  background: rgba(212, 171, 99, 0.15);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 14px;
+  color: #5a4a3a;
+}
+
+/* Filters */
+.kg-filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(212, 171, 99, 0.08);
+  border-radius: 8px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  color: #5a4a3a;
+}
+
+.filter-group select {
+  padding: 8px 12px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  border-radius: 4px;
+  background: white;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 14px;
+  color: #2a1a08;
+}
+
+/* Toggle switch */
+.toggle-group {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  display: none;
+}
+
+.toggle-switch .slider {
+  width: 40px;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggle-switch .slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .slider {
+  background: #d4ab63;
+}
+
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+.toggle-label {
+  font-size: 13px;
+  color: #5a4a3a;
+}
+
+/* Graph container */
+.kg-main {
+  display: flex;
+  gap: 24px;
+}
+
+.graph-container {
+  flex: 1;
+  min-height: 400px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.graph-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Node panel */
+.node-panel {
+  min-width: 250px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.panel-header h3 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 18px;
+  color: #2a1a08;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #5a4a3a;
+  cursor: pointer;
+}
+
+.node-category {
+  margin-bottom: 12px;
+}
+
+.category-badge {
+  background: rgba(212, 171, 99, 0.2);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #5a4a3a;
+}
+
+.node-description {
+  font-size: 14px;
+  color: #5a4a3a;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.node-connections h4,
+.node-sdg h4,
+.research-info h4 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 14px;
+  color: #2a1a08;
+  margin-bottom: 8px;
+}
+
+.node-connections ul,
+.node-sdg ul {
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+.node-connections li,
+.node-sdg li {
+  font-size: 13px;
+  color: #5a4a3a;
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+}
+
+.node-connections li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #d4ab63;
+}
+
+/* Intelligence panel */
+.intelligence-panel {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(212, 171, 99, 0.1);
+  border-radius: 8px;
+}
+
+.intelligence-panel h4 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 16px;
+  color: #2a1a08;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.insights-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.insight-item {
+  text-align: center;
+}
+
+.insight-number {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: #d4ab63;
+}
+
+.insight-label {
+  font-size: 13px;
+  color: #5a4a3a;
+}
+
+/* Region explorer */
+.region-explorer {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+}
+
+.region-explorer h4 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 16px;
+  color: #2a1a08;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.region-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.region-btn {
+  background: white;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 14px;
+  color: #5a4a3a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.region-btn:hover {
+  background: rgba(212, 171, 99, 0.1);
+}
+
+.region-btn.active {
+  background: #d4ab63;
+  border-color: #d4ab63;
+  color: #1a0f08;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   AI TUTOR TAB
+   ───────────────────────────────────────────────────────────────────────── */
+
+.ai-tutor {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 2px 10px 2px 2px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 0 60px rgba(140, 100, 20, 0.08);
+}
+
+.ai-tutor::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background:
+    linear-gradient(225deg, #9a7a40 46%, transparent 46%),
+    linear-gradient(315deg, #c8a868 46%, transparent 47%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tutor-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(212, 171, 99, 0.3);
+}
+
+.tutor-header h1 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 1.8rem;
+  color: #2a1a08;
+  font-weight: normal;
+  margin-bottom: 8px;
+}
+
+.tutor-header p {
+  color: #5a4a3a;
+  font-size: 14px;
+}
+
+.mentorship-session {
+  margin-top: 12px;
+  background: rgba(212, 171, 99, 0.15);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 14px;
+  color: #5a4a3a;
+}
+
+/* Learning modes */
+.learning-modes {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.mode-btn {
+  background: white;
+  border: 2px solid rgba(212, 171, 99, 0.3);
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 14px;
+  color: #5a4a3a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  border-color: #d4ab63;
+  background: rgba(212, 171, 99, 0.05);
+}
+
+.mode-btn.active {
+  background: #d4ab63;
+  border-color: #d4ab63;
+  color: #1a0f08;
+}
+
+/* Question area */
+.question-area {
+  margin-bottom: 24px;
+}
+
+.question-form {
+  margin-bottom: 16px;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 10px;
+  background: white;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.question-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 16px;
+  background: transparent;
+}
+
+.question-input:focus {
+  outline: none;
+}
+
+.ask-btn {
+  background: #d4ab63;
+  border: none;
+  color: #1a0f08;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ask-btn:hover {
+  background: #c49a50;
+}
+
+.ask-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Suggestions */
+.suggestions {
+  text-align: center;
+}
+
+.suggestions p {
+  font-size: 13px;
+  color: #7b6b5a;
+  margin-bottom: 10px;
+}
+
+.suggestion-chips {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.suggestion-chip {
+  background: rgba(212, 171, 99, 0.1);
+  border: 1px solid rgba(212, 171, 99, 0.2);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  color: #5a4a3a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.suggestion-chip:hover {
+  background: rgba(212, 171, 99, 0.2);
+  border-color: #d4ab63;
+}
+
+/* Response section */
+.response-section {
+  margin-top: 24px;
+}
+
+.response-parchment {
+  position: relative;
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(212, 171, 99, 0.2);
+}
+
+.response-header h3 {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 18px;
+  color: #2a1a08;
+}
+
+.voice-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.voice-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.voice-btn:hover {
+  background: rgba(212, 171, 99, 0.1);
+}
+
+.text-only-toggle {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.text-only-toggle.active {
+  opacity: 1;
+}
+
+/* Response content */
+.response-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.response-section .response-section {
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+.response-section h4 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 15px;
+  color: #2a1a08;
+  margin-bottom: 8px;
+}
+
+.response-section p {
+  font-size: 15px;
+  color: #5a4a3a;
+  line-height: 1.6;
+}
+
+/* Related concepts */
+.related-concepts {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(212, 171, 99, 0.2);
+}
+
+.related-concepts h4 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 14px;
+  color: #2a1a08;
+  margin-bottom: 10px;
+}
+
+.concept-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.concept-tag {
+  background: rgba(212, 171, 99, 0.15);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #5a4a3a;
+}
+
+/* Voice wave animation */
+.voice-wave {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 16px;
+  height: 30px;
+  align-items: center;
+}
+
+.voice-wave span {
+  width: 4px;
+  height: 10px;
+  background: #d4ab63;
+  border-radius: 2px;
+  animation: voiceWave 1s ease-in-out infinite;
+}
+
+.voice-wave span:nth-child(1) { animation-delay: 0s; }
+.voice-wave span:nth-child(2) { animation-delay: 0.1s; }
+.voice-wave span:nth-child(3) { animation-delay: 0.2s; }
+.voice-wave span:nth-child(4) { animation-delay: 0.3s; }
+.voice-wave span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes voiceWave {
+  0%, 100% { height: 10px; }
+  50% { height: 25px; }
+}
+
+.voice-note {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #7b6b5a;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   EMPTY STATE
+   ───────────────────────────────────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.9), rgba(244, 237, 214, 0.95));
+  border-radius: 8px;
+  border: 1px solid rgba(212, 171, 99, 0.3);
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-state h2 {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 24px;
+  color: #2a1a08;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: #5a4a3a;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.empty-state strong {
+  color: #d4ab63;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BREADCRUMB
+   ───────────────────────────────────────────────────────────────────────── */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #d8caa3;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.bc-item {
+  color: #d8caa3;
+}
+
+.bc-link {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.bc-link:hover {
+  color: #e9dcbd;
+}
+
+.bc-sep {
+  margin: 0 8px;
+  color: #8b7355;
+}
+
+.bc-current {
+  color: #e9dcbd;
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CARDS GRID
+   ───────────────────────────────────────────────────────────────────────── */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.cards-grid .paper-card {
+  margin-bottom: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FOOTER
+   ───────────────────────────────────────────────────────────────────────── */
+
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 12px;
+  color: rgba(240, 218, 168, 0.5);
+  font-family: 'IM Fell DW Pica', serif;
+  border-top: 1px solid rgba(233, 220, 189, 0.1);
+  margin-top: auto;
+}
+
+.footer small {
+  display: block;
+  color: rgba(240, 218, 168, 0.4);
+  margin-top: 4px;
+}
+
+.footer a {
+  color: rgba(240, 218, 168, 0.6);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: rgba(240, 218, 168, 0.9);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FADE IN ANIMATIONS
+   ───────────────────────────────────────────────────────────────────────── */
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.6s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   DOMAIN COLORS
+   ───────────────────────────────────────────────────────────────────────── */
+
+.domain-health { border-left: 4px solid #6b8e6b; }
+.domain-agriculture { border-left: 4px solid #a89060; }
+.domain-art-craft { border-left: 4px solid #8b6b4d; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   RESPONSIVE DESIGN
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .sidebar-col {
+    width: 240px;
+  }
+  
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .kg-main {
+    flex-direction: column;
+  }
+  
+  .node-panel {
+    min-width: 100%;
+  }
+}
+
+

@@ -1,0 +1,342 @@
+{
+  "health": {
+    "A": [
+      { "title": "Adivasi Herbal Medicine Systems", "description": "Forest-based plant healing by Kondh, Saora, Bonda communities.", "tags": ["tribal", "herbal", "forest", "healing"], "id": "adivasi-herbal-medicine-systems", "letter": "A" },
+      { "title": "Amla-Based Tribal Immunity Remedies", "description": "Long-term preservation and digestive tonics.", "tags": ["amla", "immunity", "tribal", "remedies"], "id": "amla-based-tribal-immunity-remedies", "letter": "A" },
+      { "title": "Ayush Tribal Bone-Setting Techniques", "description": "Bamboo splints + herbal paste orthopedic alignment.", "tags": ["bone-setting", "bamboo", "ayush", "tribal"], "id": "ayush-tribal-bone-setting-techniques", "letter": "A" },
+      { "title": "Alata Medicinal Use", "description": "Traditional red dye used with cooling/herbal properties in rituals.", "tags": ["alata", "dye", "ritual", "herbal"], "id": "alata-medicinal-use", "letter": "A" }
+    ],
+    "B": [
+      { "title": "Bone Fracture Folk Alignment Practices", "description": "Pressure-based correction methods.", "tags": ["fracture", "alignment", "pressure", "folk"], "id": "bone-fracture-folk-alignment-practices", "letter": "B" },
+      { "title": "Bark-Based Fever Remedies", "description": "Tree bark decoctions for malaria-like symptoms.", "tags": ["bark", "fever", "decoction", "malaria"], "id": "bark-based-fever-remedies", "letter": "B" },
+      { "title": "Bonda Women Reproductive Herbal Knowledge", "description": "Indigenous maternal care systems.", "tags": ["bonda", "women", "reproductive", "herbal"], "id": "bonda-women-reproductive-herbal-knowledge", "letter": "B" }
+    ],
+    "C": [
+      { "title": "Cold & Cough Herbal Steam Therapy", "description": "Leaf steaming using tulsi, neem, eucalyptus.", "tags": ["cold", "cough", "steam", "herbal"], "id": "cold-and-cough-herbal-steam-therapy", "letter": "C" },
+      { "title": "Community Healing Circles", "description": "Ritual + psychological healing gatherings.", "tags": ["community", "healing", "ritual", "psychological"], "id": "community-healing-circles", "letter": "C" },
+      { "title": "Coconut Oil Medicinal Infusions", "description": "Herbal oil soaking for skin treatment.", "tags": ["coconut-oil", "medicinal", "skin", "herbal"], "id": "coconut-oil-medicinal-infusions", "letter": "C" }
+    ],
+    "D": [
+      { "title": "Dongria Medicinal Plant Knowledge", "description": "Hill forest pharmacology.", "tags": ["dongria", "medicinal", "forest", "pharmacology"], "id": "dongria-medicinal-plant-knowledge", "letter": "D" },
+      { "title": "Digestive Fermented Food Systems", "description": "Pakhala, Handia gut microbiome tradition.", "tags": ["digestive", "pakhala", "handia", "fermented"], "id": "digestive-fermented-food-systems", "letter": "D" },
+      { "title": "Detox Fasting Ritual Practices", "description": "Seasonal fasting cycles for body cleansing.", "tags": ["detox", "fasting", "ritual", "seasonal"], "id": "detox-fasting-ritual-practices", "letter": "D" }
+    ],
+    "E": [
+      { "title": "Ethno-Veterinary Healing Knowledge", "description": "Animal health herbal care.", "tags": ["ethno-veterinary", "animal", "herbal", "healing"], "id": "ethno-veterinary-healing-knowledge", "letter": "E" },
+      { "title": "Earthen Pot Water Cooling Therapy", "description": "Natural mineral cooling hydration method.", "tags": ["earthen-pot", "water", "cooling", "mineral"], "id": "earthen-pot-water-cooling-therapy", "letter": "E" }
+    ],
+    "F": [
+      { "title": "Folk Fever Diagnosis by Pulse", "description": "Indigenous pulse reading system.", "tags": ["fever", "diagnosis", "pulse", "folk"], "id": "folk-fever-diagnosis-by-pulse", "letter": "F" },
+      { "title": "Forest Root Anti-Venom Knowledge", "description": "Snakebite herbal emergency treatment.", "tags": ["forest", "anti-venom", "snakebite", "herbal"], "id": "forest-root-anti-venom-knowledge", "letter": "F" },
+      { "title": "Fermented Rice Water Probiotics", "description": "Gut restoration practice.", "tags": ["fermented", "rice-water", "probiotics", "gut"], "id": "fermented-rice-water-probiotics", "letter": "F" }
+    ],
+    "G": [
+      { "title": "Grain-Based Postpartum Nutrition Diets", "description": "Millet + jaggery strengthening food.", "tags": ["grain", "postpartum", "nutrition", "millet"], "id": "grain-based-postpartum-nutrition-diets", "letter": "G" },
+      { "title": "Garlic Mustard Oil Pain Therapy", "description": "Heated oil massage for joint pain.", "tags": ["garlic", "mustard-oil", "pain", "massage"], "id": "garlic-mustard-oil-pain-therapy", "letter": "G" }
+    ],
+    "H": [
+      { "title": "Herbal Smoke Fumigation for Immunity", "description": "Home purification via leaf burning.", "tags": ["herbal", "smoke", "fumigation", "immunity"], "id": "herbal-smoke-fumigation-for-immunity", "letter": "H" },
+      { "title": "Handia Controlled Fermentation Health Uses", "description": "Microbial balancing drink.", "tags": ["handia", "fermentation", "microbial", "health"], "id": "handia-controlled-fermentation-health-uses", "letter": "H" },
+      { "title": "Heat Stroke Cooling Leaf Wrap Therapy", "description": "Wet leaf wrapping method.", "tags": ["heat-stroke", "cooling", "leaf-wrap", "therapy"], "id": "heat-stroke-cooling-leaf-wrap-therapy", "letter": "H" }
+    ],
+    "I": [
+      { "title": "Indigenous Immunity Booster Kadhas", "description": "Multi-herb decoctions.", "tags": ["indigenous", "immunity", "kadha", "herbal"], "id": "indigenous-immunity-booster-kadhas", "letter": "I" },
+      { "title": "Iron-Rich Tribal Diet Practices", "description": "Leafy forest greens preventing anemia.", "tags": ["iron-rich", "tribal", "diet", "anemia"], "id": "iron-rich-tribal-diet-practices", "letter": "I" }
+    ],
+    "J": [
+      { "title": "Jau Fermentation Digestive Drink", "description": "Barley-based probiotic ritual drink.", "tags": ["jau", "fermentation", "barley", "probiotic"], "id": "jau-fermentation-digestive-drink", "letter": "J" },
+      { "title": "Joint Pain Leaf Compression Therapy", "description": "Heated medicinal leaf bandage.", "tags": ["joint-pain", "leaf", "compression", "therapy"], "id": "joint-pain-leaf-compression-therapy", "letter": "J" }
+    ],
+    "K": [
+      { "title": "Kandhamal Turmeric Medicinal Use", "description": "Anti-inflammatory healing application.", "tags": ["kandhamal", "turmeric", "anti-inflammatory", "healing"], "id": "kandhamal-turmeric-medicinal-use", "letter": "K" },
+      { "title": "Knee Alignment Folk Massage", "description": "Traditional physiotherapy method.", "tags": ["knee", "alignment", "massage", "physiotherapy"], "id": "knee-alignment-folk-massage", "letter": "K" }
+    ],
+    "L": [
+      { "title": "Leaf-Based Wound Dressing Techniques", "description": "Antiseptic forest leaf bandaging.", "tags": ["leaf", "wound", "dressing", "antiseptic"], "id": "leaf-based-wound-dressing-techniques", "letter": "L" },
+      { "title": "Lactation Enhancing Herbal Diets", "description": "Tribal postpartum plant recipes.", "tags": ["lactation", "herbal", "diet", "postpartum"], "id": "lactation-enhancing-herbal-diets", "letter": "L" }
+    ],
+    "M": [
+      { "title": "Millet-Based Diabetic-Friendly Diets", "description": "Low glycemic traditional grains.", "tags": ["millet", "diabetic", "diet", "grains"], "id": "millet-based-diabetic-friendly-diets", "letter": "M" },
+      { "title": "Mud Therapy for Inflammation", "description": "Clay cooling packs.", "tags": ["mud", "therapy", "inflammation", "clay"], "id": "mud-therapy-for-inflammation", "letter": "M" },
+      { "title": "Menstrual Pain Herbal Remedies", "description": "Root decoctions + abdominal oil massage.", "tags": ["menstrual", "pain", "herbal", "remedies"], "id": "menstrual-pain-herbal-remedies", "letter": "M" }
+    ],
+    "N": [
+      { "title": "Neem-Based Skin Treatments", "description": "Antifungal + antibacterial paste.", "tags": ["neem", "skin", "antifungal", "antibacterial"], "id": "neem-based-skin-treatments", "letter": "N" },
+      { "title": "Natural Detox Herbal Baths", "description": "Medicinal leaf soaking bath.", "tags": ["natural", "detox", "herbal", "bath"], "id": "natural-detox-herbal-baths", "letter": "N" }
+    ],
+    "O": [
+      { "title": "Oil Pulling (Traditional Mouth Detox)", "description": "Mustard oil swishing method.", "tags": ["oil-pulling", "mouth", "detox", "mustard-oil"], "id": "oil-pulling-traditional-mouth-detox", "letter": "O" },
+      { "title": "Odia Postpartum 40-Day Care System", "description": "Structured recovery diet + rest cycle.", "tags": ["odia", "postpartum", "care", "diet"], "id": "odia-postpartum-40-day-care-system", "letter": "O" }
+    ],
+    "P": [
+      { "title": "Pakhala Fermentation Gut Health System", "description": "Cooling probiotic summer food.", "tags": ["pakhala", "fermentation", "gut", "probiotic"], "id": "pakhala-fermentation-gut-health-system", "letter": "P" },
+      { "title": "Plant-Based Anti-Parasitic Decoctions", "description": "Intestinal cleansing herbs.", "tags": ["plant-based", "anti-parasitic", "decoction", "intestinal"], "id": "plant-based-anti-parasitic-decoctions", "letter": "P" },
+      { "title": "Pressure-Point Healing Knowledge", "description": "Manual nerve stimulation therapy.", "tags": ["pressure-point", "healing", "nerve", "therapy"], "id": "pressure-point-healing-knowledge", "letter": "P" }
+    ],
+    "Q": [
+      { "title": "Quinine-Like Tribal Bark Fever Remedies", "description": "Indigenous malaria plant extracts.", "tags": ["quinine", "tribal", "bark", "malaria"], "id": "quinine-like-tribal-bark-fever-remedies", "letter": "Q" }
+    ],
+    "R": [
+      { "title": "Rice Beer Medicinal Microbial Knowledge", "description": "Controlled fermentation for health.", "tags": ["rice-beer", "medicinal", "microbial", "fermentation"], "id": "rice-beer-medicinal-microbial-knowledge", "letter": "R" },
+      { "title": "Root-Based Blood Purification Decoctions", "description": "Detox tonics.", "tags": ["root", "blood", "purification", "decoction"], "id": "root-based-blood-purification-decoctions", "letter": "R" }
+    ],
+    "S": [
+      { "title": "Sacred Grove Medicinal Biodiversity Protection", "description": "Conservation for health security.", "tags": ["sacred-grove", "medicinal", "biodiversity", "conservation"], "id": "sacred-grove-medicinal-biodiversity-protection", "letter": "S" },
+      { "title": "Seasonal Diet Rotation Knowledge", "description": "Eating by climate cycles.", "tags": ["seasonal", "diet", "rotation", "climate"], "id": "seasonal-diet-rotation-knowledge", "letter": "S" },
+      { "title": "Steam Bath Herbal Detox Practices", "description": "Indigenous sweating therapy.", "tags": ["steam-bath", "herbal", "detox", "sweating"], "id": "steam-bath-herbal-detox-practices", "letter": "S" }
+    ],
+    "T": [
+      { "title": "Tribal Trauma Herbal Paste Treatment", "description": "Swelling + fracture control paste.", "tags": ["tribal", "trauma", "herbal", "paste"], "id": "tribal-trauma-herbal-paste-treatment", "letter": "T" },
+      { "title": "Turmeric + Mustard Oil Antiseptic Mix", "description": "Wound care.", "tags": ["turmeric", "mustard-oil", "antiseptic", "wound"], "id": "turmeric-plus-mustard-oil-antiseptic-mix", "letter": "T" }
+    ],
+    "U": [
+      { "title": "Umbilical Cord Care Herbal Methods", "description": "Neonatal protection paste.", "tags": ["umbilical", "neonatal", "herbal", "care"], "id": "umbilical-cord-care-herbal-methods", "letter": "U" },
+      { "title": "Urinary Infection Leaf Decoctions", "description": "Folk UTI treatment.", "tags": ["urinary", "infection", "leaf", "decoction"], "id": "urinary-infection-leaf-decoctions", "letter": "U" }
+    ],
+    "V": [
+      { "title": "Village Midwife (Dai) Birthing Knowledge", "description": "Traditional childbirth systems.", "tags": ["midwife", "dai", "birthing", "traditional"], "id": "village-midwife-dai-birthing-knowledge", "letter": "V" },
+      { "title": "Viral Fever Leaf Steam Therapy", "description": "Respiratory herbal inhalation.", "tags": ["viral", "fever", "leaf-steam", "respiratory"], "id": "viral-fever-leaf-steam-therapy", "letter": "V" }
+    ],
+    "W": [
+      { "title": "Warm Salt Compress Pain Relief", "description": "Muscle relaxation therapy.", "tags": ["salt", "compress", "pain", "muscle"], "id": "warm-salt-compress-pain-relief", "letter": "W" },
+      { "title": "Wild Honey Medicinal Use", "description": "Immunity and cough control.", "tags": ["wild-honey", "immunity", "cough", "medicinal"], "id": "wild-honey-medicinal-use", "letter": "W" }
+    ],
+    "X": [
+      { "title": "Xanthophyll-Rich Tribal Greens Diet", "description": "Eye health nutrition from forest plants.", "tags": ["xanthophyll", "tribal", "greens", "eye-health"], "id": "xanthophyll-rich-tribal-greens-diet", "letter": "X" }
+    ],
+    "Y": [
+      { "title": "Yoga-like Indigenous Body Stretch Rituals", "description": "Morning mobility routines.", "tags": ["yoga", "indigenous", "stretch", "mobility"], "id": "yoga-like-indigenous-body-stretch-rituals", "letter": "Y" },
+      { "title": "Yam-Based Strength Diet", "description": "Energy-rich tuber consumption.", "tags": ["yam", "strength", "diet", "tuber"], "id": "yam-based-strength-diet", "letter": "Y" }
+    ],
+    "Z": [
+      { "title": "Zero-Chemical Food Consumption Practice", "description": "Organic-only healing philosophy.", "tags": ["zero-chemical", "organic", "food", "healing"], "id": "zero-chemical-food-consumption-practice", "letter": "Z" }
+    ]
+  },
+  "agriculture": {
+    "A": [
+      { "title": "Agriculture Lunar Calendar Practices", "description": "Crop planning based on moon cycles and wind patterns.", "tags": ["lunar", "calendar", "moon", "crop-planning"], "id": "agriculture-lunar-calendar-practices", "letter": "A" },
+      { "title": "Adivasi Seed Preservation Methods", "description": "Ash, neem leaf, and mud pot storage.", "tags": ["seed", "preservation", "ash", "storage"], "id": "adivasi-seed-preservation-methods", "letter": "A" },
+      { "title": "Akshaya Tritiya Agricultural Ritual", "description": "Ceremonial ploughing marking sowing season.", "tags": ["akshaya-tritiya", "ritual", "ploughing", "sowing"], "id": "akshaya-tritiya-agricultural-ritual", "letter": "A" },
+      { "title": "Aranyaka Forest Farming Systems", "description": "Forest-integrated cultivation methods.", "tags": ["aranyaka", "forest", "farming", "cultivation"], "id": "aranyaka-forest-farming-systems", "letter": "A" }
+    ],
+    "B": [
+      { "title": "Bali Jatra Coastal Crop Trade Knowledge", "description": "Historic agricultural trade systems.", "tags": ["bali-jatra", "trade", "coastal", "agricultural"], "id": "bali-jatra-coastal-crop-trade-knowledge", "letter": "B" },
+      { "title": "Bamboo Irrigation Channels", "description": "Temporary water flow systems in hilly regions.", "tags": ["bamboo", "irrigation", "water", "hilly"], "id": "bamboo-irrigation-channels", "letter": "B" },
+      { "title": "Bio-Fencing with Thorny Plants", "description": "Natural crop protection boundary.", "tags": ["bio-fencing", "thorny", "crop-protection", "natural"], "id": "bio-fencing-with-thorny-plants", "letter": "B" }
+    ],
+    "C": [
+      { "title": "Community Grain Bank Systems", "description": "Shared storage for drought resilience.", "tags": ["grain-bank", "community", "storage", "drought"], "id": "community-grain-bank-systems", "letter": "C" },
+      { "title": "Cow Dung Composting Techniques", "description": "Organic manure preparation.", "tags": ["cow-dung", "composting", "organic", "manure"], "id": "cow-dung-composting-techniques", "letter": "C" },
+      { "title": "Crop Rotation Indigenous Models", "description": "Soil fertility cycling with pulses and millets.", "tags": ["crop-rotation", "soil", "fertility", "millets"], "id": "crop-rotation-indigenous-models", "letter": "C" }
+    ],
+    "D": [
+      { "title": "Dongria Kondh Agroforestry Systems", "description": "Multi-layer hill farming (millet + fruit + forest).", "tags": ["dongria-kondh", "agroforestry", "millet", "hill-farming"], "id": "dongria-kondh-agroforestry-systems", "letter": "D" },
+      { "title": "Dryland Millet Farming Techniques", "description": "Rain-fed crop survival knowledge.", "tags": ["dryland", "millet", "rain-fed", "farming"], "id": "dryland-millet-farming-techniques", "letter": "D" },
+      { "title": "Desi Plough Animal-Based Tillage", "description": "Bullock-powered soil aeration.", "tags": ["desi-plough", "bullock", "tillage", "soil"], "id": "desi-plough-animal-based-tillage", "letter": "D" }
+    ],
+    "E": [
+      { "title": "Earthen Irrigation Bund Construction", "description": "Soil bunds for water retention.", "tags": ["earthen", "irrigation", "bund", "water-retention"], "id": "earthen-irrigation-bund-construction", "letter": "E" },
+      { "title": "Ecological Pest Indicator Plants", "description": "Companion plants detecting infestation.", "tags": ["ecological", "pest", "indicator", "companion-plants"], "id": "ecological-pest-indicator-plants", "letter": "E" }
+    ],
+    "F": [
+      { "title": "Folk Rice Variety Preservation", "description": "Indigenous flood- and drought-resistant rice.", "tags": ["folk", "rice", "variety", "drought-resistant"], "id": "folk-rice-variety-preservation", "letter": "F" },
+      { "title": "Floodplain Farming Adaptation Knowledge", "description": "Seasonal cropping in river belts.", "tags": ["floodplain", "farming", "seasonal", "river"], "id": "floodplain-farming-adaptation-knowledge", "letter": "F" },
+      { "title": "Farmyard Manure Layering Systems", "description": "Nutrient-rich compost stacking.", "tags": ["farmyard", "manure", "compost", "nutrient"], "id": "farmyard-manure-layering-systems", "letter": "F" }
+    ],
+    "G": [
+      { "title": "Green Leaf Mulching Practices", "description": "Moisture retention through forest leaves.", "tags": ["mulching", "green-leaf", "moisture", "forest"], "id": "green-leaf-mulching-practices", "letter": "G" },
+      { "title": "Granary Mud Structure Architecture", "description": "Pest-resistant storage design.", "tags": ["granary", "mud", "storage", "pest-resistant"], "id": "granary-mud-structure-architecture", "letter": "G" }
+    ],
+    "H": [
+      { "title": "Herbal Pest Repellent Sprays", "description": "Neem, chili, garlic mixtures.", "tags": ["herbal", "pest", "repellent", "neem"], "id": "herbal-pest-repellent-sprays", "letter": "H" },
+      { "title": "Hand Harvesting Techniques", "description": "Low-damage crop cutting methods.", "tags": ["hand-harvesting", "crop", "cutting", "low-damage"], "id": "hand-harvesting-techniques", "letter": "H" }
+    ],
+    "I": [
+      { "title": "Indigenous Irrigation Channels (Munduli Systems)", "description": "Gravity-based water diversion.", "tags": ["indigenous", "irrigation", "munduli", "gravity"], "id": "indigenous-irrigation-channels-munduli-systems", "letter": "I" },
+      { "title": "Intercropping Traditional Patterns", "description": "Mixed cropping for risk reduction.", "tags": ["intercropping", "mixed-cropping", "risk", "traditional"], "id": "intercropping-traditional-patterns", "letter": "I" }
+    ],
+    "J": [
+      { "title": "Jute Rope Farm Tool Binding", "description": "Natural fiber agricultural tools.", "tags": ["jute", "rope", "natural-fiber", "tools"], "id": "jute-rope-farm-tool-binding", "letter": "J" },
+      { "title": "Joint Family Labor Sharing System", "description": "Collective farming model.", "tags": ["joint-family", "labor", "collective", "farming"], "id": "joint-family-labor-sharing-system", "letter": "J" }
+    ],
+    "K": [
+      { "title": "Kandhamal Turmeric Cultivation", "description": "Shade-grown organic turmeric farming.", "tags": ["kandhamal", "turmeric", "shade-grown", "organic"], "id": "kandhamal-turmeric-cultivation", "letter": "K" },
+      { "title": "Kitchen Garden Seasonal Crop Knowledge", "description": "Household food security farming.", "tags": ["kitchen-garden", "seasonal", "food-security", "household"], "id": "kitchen-garden-seasonal-crop-knowledge", "letter": "K" }
+    ],
+    "L": [
+      { "title": "Local Seed Exchange Ritual Fairs", "description": "Informal biodiversity conservation.", "tags": ["seed-exchange", "ritual", "biodiversity", "fairs"], "id": "local-seed-exchange-ritual-fairs", "letter": "L" },
+      { "title": "Leaf Compost Pit Method", "description": "Underground decomposition systems.", "tags": ["leaf-compost", "pit", "underground", "decomposition"], "id": "leaf-compost-pit-method", "letter": "L" }
+    ],
+    "M": [
+      { "title": "Millet Farming & Processing Traditions", "description": "Climate-resilient grain cultivation.", "tags": ["millet", "farming", "processing", "climate-resilient"], "id": "millet-farming-and-processing-traditions", "letter": "M" },
+      { "title": "Mixed Livestock-Integrated Farming", "description": "Crop-animal nutrient cycles.", "tags": ["livestock", "integrated", "farming", "nutrient-cycle"], "id": "mixed-livestock-integrated-farming", "letter": "M" },
+      { "title": "Mud Storage Silos", "description": "Low-cost grain preservation.", "tags": ["mud", "storage", "silos", "grain"], "id": "mud-storage-silos", "letter": "M" }
+    ],
+    "N": [
+      { "title": "Natural Indigo Cultivation", "description": "Dye crop farming methods.", "tags": ["natural", "indigo", "dye", "crop"], "id": "natural-indigo-cultivation", "letter": "N" },
+      { "title": "Neem-Based Pest Control Practices", "description": "Botanical pesticide systems.", "tags": ["neem", "pest-control", "botanical", "pesticide"], "id": "neem-based-pest-control-practices", "letter": "N" }
+    ],
+    "O": [
+      { "title": "Organic Soil Amendment with Ash", "description": "Potassium enrichment practice.", "tags": ["organic", "soil", "ash", "potassium"], "id": "organic-soil-amendment-with-ash", "letter": "O" },
+      { "title": "Oilseed Bullock-Driven Press Farming Linkages", "description": "Crop to oil extraction cycle.", "tags": ["oilseed", "bullock", "press", "extraction"], "id": "oilseed-bullock-driven-press-farming-linkages", "letter": "O" }
+    ],
+    "P": [
+      { "title": "Paddy Transplantation Folk Timing Knowledge", "description": "Rain and soil moisture judgment.", "tags": ["paddy", "transplantation", "timing", "rain"], "id": "paddy-transplantation-folk-timing-knowledge", "letter": "P" },
+      { "title": "Plant-Based Crop Disease Diagnosis", "description": "Visual symptom-based detection.", "tags": ["plant-based", "crop", "disease", "diagnosis"], "id": "plant-based-crop-disease-diagnosis", "letter": "P" },
+      { "title": "Pond-Based Irrigation Systems", "description": "Village tank water usage.", "tags": ["pond", "irrigation", "tank", "village"], "id": "pond-based-irrigation-systems", "letter": "P" }
+    ],
+    "Q": [
+      { "title": "Quasi-Shifting Cultivation (Podu Farming)", "description": "Controlled forest clearing cycles.", "tags": ["quasi-shifting", "podu", "forest", "cultivation"], "id": "quasi-shifting-cultivation-podu-farming", "letter": "Q" }
+    ],
+    "R": [
+      { "title": "Rainwater Harvesting Tank Systems", "description": "Traditional water capture ponds.", "tags": ["rainwater", "harvesting", "tank", "ponds"], "id": "rainwater-harvesting-tank-systems", "letter": "R" },
+      { "title": "Root Crop Storage in Underground Pits", "description": "Natural refrigeration technique.", "tags": ["root-crop", "storage", "underground", "refrigeration"], "id": "root-crop-storage-in-underground-pits", "letter": "R" }
+    ],
+    "S": [
+      { "title": "Sacred Grove Agricultural Protection Systems", "description": "Ecological balance zones.", "tags": ["sacred-grove", "agricultural", "ecological", "protection"], "id": "sacred-grove-agricultural-protection-systems", "letter": "S" },
+      { "title": "Seasonal Wind Crop Planning", "description": "Monsoon-aligned sowing strategy.", "tags": ["seasonal", "wind", "monsoon", "sowing"], "id": "seasonal-wind-crop-planning", "letter": "S" },
+      { "title": "Seed Ash Preservation Technique", "description": "Moisture-free seed longevity method.", "tags": ["seed", "ash", "preservation", "moisture-free"], "id": "seed-ash-preservation-technique", "letter": "S" }
+    ],
+    "T": [
+      { "title": "Traditional Bullock Plough Engineering", "description": "Soil-friendly tilling tool.", "tags": ["bullock", "plough", "tilling", "traditional"], "id": "traditional-bullock-plough-engineering", "letter": "T" },
+      { "title": "Terrace Farming in Tribal Hills", "description": "Slope erosion control farming.", "tags": ["terrace", "farming", "tribal", "erosion-control"], "id": "terrace-farming-in-tribal-hills", "letter": "T" },
+      { "title": "Turmeric Boiling & Drying Post-Harvest Technique", "description": "Value preservation method.", "tags": ["turmeric", "boiling", "drying", "post-harvest"], "id": "turmeric-boiling-and-drying-post-harvest-technique", "letter": "T" }
+    ],
+    "U": [
+      { "title": "Upland Rice Cultivation Practices", "description": "Rain-fed hill paddy farming.", "tags": ["upland", "rice", "hill", "rain-fed"], "id": "upland-rice-cultivation-practices", "letter": "U" },
+      { "title": "Underground Water Recharge Pits", "description": "Soil moisture conservation.", "tags": ["underground", "water", "recharge", "moisture"], "id": "underground-water-recharge-pits", "letter": "U" }
+    ],
+    "V": [
+      { "title": "Village Tank Water Management Systems", "description": "Community-managed irrigation.", "tags": ["village-tank", "water", "management", "community"], "id": "village-tank-water-management-systems", "letter": "V" },
+      { "title": "Vegetable Seed Ash Preservation", "description": "Organic storage practice.", "tags": ["vegetable", "seed", "ash", "storage"], "id": "vegetable-seed-ash-preservation", "letter": "V" }
+    ],
+    "W": [
+      { "title": "Water Wheel Traditional Irrigation", "description": "Manual water lifting system.", "tags": ["water-wheel", "irrigation", "manual", "traditional"], "id": "water-wheel-traditional-irrigation", "letter": "W" },
+      { "title": "Wild Crop Domestication Practices", "description": "Forest plant adaptation for farming.", "tags": ["wild-crop", "domestication", "forest", "adaptation"], "id": "wild-crop-domestication-practices", "letter": "W" }
+    ],
+    "X": [
+      { "title": "Xerophytic Crop Adaptation Knowledge", "description": "Drought-resistant plant cultivation.", "tags": ["xerophytic", "drought-resistant", "crop", "adaptation"], "id": "xerophytic-crop-adaptation-knowledge", "letter": "X" }
+    ],
+    "Y": [
+      { "title": "Yam & Tuber Cultivation in Forest Margins", "description": "Nutritional crop resilience.", "tags": ["yam", "tuber", "forest", "cultivation"], "id": "yam-and-tuber-cultivation-in-forest-margins", "letter": "Y" }
+    ],
+    "Z": [
+      { "title": "Zero-Chemical Farming Practices", "description": "No synthetic fertilizer agriculture.", "tags": ["zero-chemical", "organic", "farming", "fertilizer"], "id": "zero-chemical-farming-practices", "letter": "Z" },
+      { "title": "Zero-Budget Natural Farming (Localized Variants)", "description": "Cow-based bio-input model.", "tags": ["zero-budget", "natural-farming", "cow", "bio-input"], "id": "zero-budget-natural-farming-localized-variants", "letter": "Z" }
+    ]
+  },
+  "art-craft": {
+    "A": [
+      { "title": "Appliqué of Pipili (Chandua Craft)", "description": "Layered textile canopy art for temples.", "tags": ["applique", "pipili", "chandua", "temple"], "id": "appliqué-of-pipili-chandua-craft", "letter": "A" },
+      { "title": "Ancient Palm Leaf Manuscript Engraving", "description": "Talapatra etching technique.", "tags": ["palm-leaf", "manuscript", "engraving", "talapatra"], "id": "ancient-palm-leaf-manuscript-engraving", "letter": "A" },
+      { "title": "Alata Ritual Decorative Art", "description": "Traditional foot adornment craft.", "tags": ["alata", "ritual", "decorative", "foot"], "id": "alata-ritual-decorative-art", "letter": "A" },
+      { "title": "Architectural Wood Joinery (Temple Structures)", "description": "Interlocking sacred wood systems.", "tags": ["wood-joinery", "temple", "architecture", "interlocking"], "id": "architectural-wood-joinery-temple-structures", "letter": "A" }
+    ],
+    "B": [
+      { "title": "Brass & Bell Metal Craft (Kansa Shilpa)", "description": "Ritual utensils from Balakati & Kantilo.", "tags": ["brass", "bell-metal", "kansa", "ritual"], "id": "brass-and-bell-metal-craft-kansa-shilpa", "letter": "B" },
+      { "title": "Bonda Textile Weaving", "description": "Tribal geometric bead-integrated cloth.", "tags": ["bonda", "textile", "weaving", "geometric"], "id": "bonda-textile-weaving", "letter": "B" },
+      { "title": "Bali Jatra Boat Craft Miniatures", "description": "Maritime symbolic craft.", "tags": ["bali-jatra", "boat", "miniature", "maritime"], "id": "bali-jatra-boat-craft-miniatures", "letter": "B" },
+      { "title": "Bamboo Basketry Weaving", "description": "Rural utility craft systems.", "tags": ["bamboo", "basketry", "weaving", "rural"], "id": "bamboo-basketry-weaving", "letter": "B" }
+    ],
+    "C": [
+      { "title": "Cuttack Silver Filigree (Tarakasi)", "description": "Fine silver wire jewelry art.", "tags": ["silver", "filigree", "tarakasi", "jewelry"], "id": "cuttack-silver-filigree-tarakasi", "letter": "C" },
+      { "title": "Chhau Mask Craft (Mayurbhanj)", "description": "Theatrical martial dance masks.", "tags": ["chhau", "mask", "mayurbhanj", "dance"], "id": "chhau-mask-craft-mayurbhanj", "letter": "C" },
+      { "title": "Coconut Fiber Rope Making", "description": "Twisted coastal rope craft.", "tags": ["coconut-fiber", "rope", "coastal", "craft"], "id": "coconut-fiber-rope-making", "letter": "C" },
+      { "title": "Clay Idol Sculpting (Seasonal Rituals)", "description": "Temporary deity crafting.", "tags": ["clay", "idol", "sculpting", "ritual"], "id": "clay-idol-sculpting-seasonal-rituals", "letter": "C" }
+    ],
+    "D": [
+      { "title": "Dhokra Metal Casting (Lost-Wax Technique)", "description": "Tribal brass sculpture process.", "tags": ["dhokra", "metal-casting", "lost-wax", "brass"], "id": "dhokra-metal-casting-lost-wax-technique", "letter": "D" },
+      { "title": "Dokra Ritual Figurine Craft", "description": "Sacred symbolic metal forms.", "tags": ["dokra", "ritual", "figurine", "metal"], "id": "dokra-ritual-figurine-craft", "letter": "D" },
+      { "title": "Decorative Door Carving (Temple & Rural Homes)", "description": "Ornamental wood engraving.", "tags": ["door-carving", "temple", "wood", "ornamental"], "id": "decorative-door-carving-temple-and-rural-homes", "letter": "D" }
+    ],
+    "E": [
+      { "title": "Ekamra Temple Architectural Carving Knowledge", "description": "Kalinga sacred geometry.", "tags": ["ekamra", "temple", "carving", "kalinga"], "id": "ekamra-temple-architectural-carving-knowledge", "letter": "E" },
+      { "title": "Embossed Metal Plate Engraving", "description": "Hammered ritual plate decoration.", "tags": ["embossed", "metal", "plate", "engraving"], "id": "embossed-metal-plate-engraving", "letter": "E" }
+    ],
+    "F": [
+      { "title": "Folk Scroll Painting Traditions", "description": "Narrative visual storytelling.", "tags": ["folk", "scroll", "painting", "storytelling"], "id": "folk-scroll-painting-traditions", "letter": "F" },
+      { "title": "Festival Torana (Entrance Arch) Crafting", "description": "Decorative ceremonial gateways.", "tags": ["torana", "festival", "arch", "ceremonial"], "id": "festival-torana-entrance-arch-crafting", "letter": "F" }
+    ],
+    "G": [
+      { "title": "Gotipua Dance Costume Craft", "description": "Embroidered devotional attire.", "tags": ["gotipua", "dance", "costume", "embroidered"], "id": "gotipua-dance-costume-craft", "letter": "G" },
+      { "title": "Ganjapa Card Circular Painting", "description": "Mythological hand-painted cards.", "tags": ["ganjapa", "card", "painting", "mythological"], "id": "ganjapa-card-circular-painting", "letter": "G" },
+      { "title": "Granite Temple Sculpture Finishing", "description": "Fine polishing tradition.", "tags": ["granite", "temple", "sculpture", "polishing"], "id": "granite-temple-sculpture-finishing", "letter": "G" }
+    ],
+    "H": [
+      { "title": "Handloom Ikat (Sambalpuri Bandha)", "description": "Resist-dye tie pattern weaving.", "tags": ["handloom", "ikat", "sambalpuri", "bandha"], "id": "handloom-ikat-sambalpuri-bandha", "letter": "H" },
+      { "title": "Hand-Carved Wooden Toys", "description": "Lac-finished children's art objects.", "tags": ["hand-carved", "wooden", "toys", "lac"], "id": "hand-carved-wooden-toys", "letter": "H" }
+    ],
+    "I": [
+      { "title": "Indigenous Musical Instrument Crafting", "description": "Mridanga, dhol, tribal percussion.", "tags": ["indigenous", "musical", "instrument", "percussion"], "id": "indigenous-musical-instrument-crafting", "letter": "I" },
+      { "title": "Ivory-Style Bone Craft (Historic)", "description": "Decorative miniature carving tradition.", "tags": ["ivory", "bone-craft", "miniature", "carving"], "id": "ivory-style-bone-craft-historic", "letter": "I" }
+    ],
+    "J": [
+      { "title": "Jagannath Rath Yatra Chariot Crafting", "description": "Annual sacred wooden engineering.", "tags": ["jagannath", "rath-yatra", "chariot", "wooden"], "id": "jagannath-rath-yatra-chariot-crafting", "letter": "J" },
+      { "title": "Jute Decorative Fiber Craft", "description": "Eco-friendly fiber art.", "tags": ["jute", "decorative", "fiber", "eco-friendly"], "id": "jute-decorative-fiber-craft", "letter": "J" }
+    ],
+    "K": [
+      { "title": "Konark Stone Carving Techniques", "description": "High-relief temple sculpting.", "tags": ["konark", "stone-carving", "temple", "sculpting"], "id": "konark-stone-carving-techniques", "letter": "K" },
+      { "title": "Kansa Thali Acoustic Craft", "description": "Sound-tuned ritual metal plates.", "tags": ["kansa", "thali", "acoustic", "ritual"], "id": "kansa-thali-acoustic-craft", "letter": "K" },
+      { "title": "Kandhei Puppet Making", "description": "Traditional wooden puppet theatre craft.", "tags": ["kandhei", "puppet", "wooden", "theatre"], "id": "kandhei-puppet-making", "letter": "K" }
+    ],
+    "L": [
+      { "title": "Lacquer Wooden Toys (Nabarangpur)", "description": "Natural lac polished toys.", "tags": ["lacquer", "wooden", "toys", "nabarangpur"], "id": "lacquer-wooden-toys-nabarangpur", "letter": "L" },
+      { "title": "Leaf Plate Stitching (Sal & Siali)", "description": "Eco-friendly craft production.", "tags": ["leaf-plate", "stitching", "sal", "siali"], "id": "leaf-plate-stitching-sal-and-siali", "letter": "L" }
+    ],
+    "M": [
+      { "title": "Mud House Decorative Wall Art", "description": "Painted rural architecture.", "tags": ["mud-house", "wall-art", "rural", "painted"], "id": "mud-house-decorative-wall-art", "letter": "M" },
+      { "title": "Metal Engraved Ritual Lamps", "description": "Temple oil lamp crafting.", "tags": ["metal", "engraved", "ritual", "lamp"], "id": "metal-engraved-ritual-lamps", "letter": "M" }
+    ],
+    "N": [
+      { "title": "Natural Indigo Textile Dyeing", "description": "Plant-based blue dye art.", "tags": ["natural", "indigo", "textile", "dye"], "id": "natural-indigo-textile-dyeing", "letter": "N" },
+      { "title": "Naga Motif Temple Carvings", "description": "Serpent symbolism in sculpture.", "tags": ["naga", "motif", "temple", "serpent"], "id": "naga-motif-temple-carvings", "letter": "N" }
+    ],
+    "O": [
+      { "title": "Odisha Palm Leaf Manuscripts (Talapatra Art)", "description": "Illustrated engraving tradition.", "tags": ["odisha", "palm-leaf", "talapatra", "engraving"], "id": "odisha-palm-leaf-manuscripts-talapatra-art", "letter": "O" },
+      { "title": "Ornamental Silver Waistband Craft", "description": "Ritual jewelry making.", "tags": ["ornamental", "silver", "waistband", "jewelry"], "id": "ornamental-silver-waistband-craft", "letter": "O" }
+    ],
+    "P": [
+      { "title": "Pattachitra Cloth Painting", "description": "Mineral pigment mythological art.", "tags": ["pattachitra", "cloth", "painting", "mythological"], "id": "pattachitra-cloth-painting", "letter": "P" },
+      { "title": "Pipili Appliqué Craft", "description": "Temple canopy textile layering.", "tags": ["pipili", "applique", "temple", "textile"], "id": "pipili-appliqué-craft", "letter": "P" },
+      { "title": "Patta Scroll Storytelling Panels", "description": "Sequential narrative painting.", "tags": ["patta", "scroll", "storytelling", "narrative"], "id": "patta-scroll-storytelling-panels", "letter": "P" }
+    ],
+    "Q": [
+      { "title": "Quilted Kantha Stitching (Odia Variant)", "description": "Layered embroidery storytelling textile.", "tags": ["quilted", "kantha", "stitching", "embroidery"], "id": "quilted-kantha-stitching-odia-variant", "letter": "Q" }
+    ],
+    "R": [
+      { "title": "Ritual Mask Making (Sahi Jatra)", "description": "Papier-mâché theatrical masks.", "tags": ["ritual", "mask", "sahi-jatra", "papier-mache"], "id": "ritual-mask-making-sahi-jatra", "letter": "R" },
+      { "title": "Ratha Wheel Wood Turning Craft", "description": "Circular precision carving.", "tags": ["ratha", "wheel", "wood-turning", "carving"], "id": "ratha-wheel-wood-turning-craft", "letter": "R" }
+    ],
+    "S": [
+      { "title": "Saura Wall Art", "description": "Tribal symbolic mural tradition.", "tags": ["saura", "wall-art", "tribal", "mural"], "id": "saura-wall-art", "letter": "S" },
+      { "title": "Stone Carving of Kalinga Temples", "description": "Interlocking temple stone engineering.", "tags": ["stone-carving", "kalinga", "temple", "engineering"], "id": "stone-carving-of-kalinga-temples", "letter": "S" },
+      { "title": "Sacred Umbrella Decorative Craft", "description": "Temple ceremonial canopy.", "tags": ["sacred-umbrella", "temple", "ceremonial", "canopy"], "id": "sacred-umbrella-decorative-craft", "letter": "S" }
+    ],
+    "T": [
+      { "title": "Terracotta Pottery Traditions", "description": "Clay shaping and open kiln firing.", "tags": ["terracotta", "pottery", "clay", "kiln"], "id": "terracotta-pottery-traditions", "letter": "T" },
+      { "title": "Temple Kitchen Clay Pot Craft", "description": "Large-scale ritual cookware shaping.", "tags": ["temple", "clay-pot", "ritual", "cookware"], "id": "temple-kitchen-clay-pot-craft", "letter": "T" },
+      { "title": "Tribal Bead Ornament Craft", "description": "Hand-strung ceremonial jewelry.", "tags": ["tribal", "bead", "ornament", "jewelry"], "id": "tribal-bead-ornament-craft", "letter": "T" }
+    ],
+    "U": [
+      { "title": "Umbrella & Canopy Ritual Craft", "description": "Bamboo-framed ceremonial structures.", "tags": ["umbrella", "canopy", "bamboo", "ceremonial"], "id": "umbrella-and-canopy-ritual-craft", "letter": "U" }
+    ],
+    "V": [
+      { "title": "Village Wall Relief Sculpting", "description": "Decorative rural plaster carving.", "tags": ["village", "wall-relief", "sculpting", "plaster"], "id": "village-wall-relief-sculpting", "letter": "V" },
+      { "title": "Vegetable-Dyed Textile Weaving", "description": "Natural pigment cloth art.", "tags": ["vegetable-dye", "textile", "weaving", "natural-pigment"], "id": "vegetable-dyed-textile-weaving", "letter": "V" }
+    ],
+    "W": [
+      { "title": "Wooden Chariot Engineering", "description": "Load-bearing sacred vehicle design.", "tags": ["wooden", "chariot", "engineering", "sacred"], "id": "wooden-chariot-engineering", "letter": "W" },
+      { "title": "Wood Carving of Coastal Odisha", "description": "Maritime and temple motifs.", "tags": ["wood-carving", "coastal", "maritime", "temple"], "id": "wood-carving-of-coastal-odisha", "letter": "W" }
+    ],
+    "X": [
+      { "title": "Xylophonic Tribal Instrument Craft", "description": "Wooden tuned percussion making.", "tags": ["xylophonic", "tribal", "instrument", "percussion"], "id": "xylophonic-tribal-instrument-craft", "letter": "X" }
+    ],
+    "Y": [
+      { "title": "Yaksha & Folk Myth Narration Performance Art", "description": "Oral + gesture storytelling craft.", "tags": ["yaksha", "folk-myth", "narration", "performance"], "id": "yaksha-and-folk-myth-narration-performance-art", "letter": "Y" },
+      { "title": "Yajna Ritual Mandala Floor Art", "description": "Sacred geometric design drawing.", "tags": ["yajna", "ritual", "mandala", "geometric"], "id": "yajna-ritual-mandala-floor-art", "letter": "Y" }
+    ],
+    "Z": [
+      { "title": "Zero-Waste Craft Production Systems", "description": "Full material utilization practice.", "tags": ["zero-waste", "craft", "production", "sustainability"], "id": "zero-waste-craft-production-systems", "letter": "Z" }
+    ]
+  }
+}
