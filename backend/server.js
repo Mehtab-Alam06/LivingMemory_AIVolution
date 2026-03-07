@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 // ─── 2. CORS CONFIGURATION (EASY FIX) ───────────────────────────────────────
 // This allows your Vercel frontend to talk to your Render backend
 const corsOptions = {
-  origin: '*', // Allows all origins - easiest for initial deployment
+  origin: 'https://livingmemory-aivolution.onrender.com', // Allows all origins - easiest for initial deployment
   methods: ['GET', 'POST'],
   credentials: true
 };
