@@ -94,11 +94,34 @@ export default function App() {
         .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
         .archive-scroll { flex: 1; overflow-y: auto; }
         .community-fill { flex: 1; display: flex; flex-direction: column; padding: 12px 24px 16px; min-height: 0; }
+        .announce-bar { padding: 8px 12px; font-size: 11px !important; letter-spacing: 0.06em !important; }
+        .announce-bar .full-text { display: inline; }
+        .announce-bar .short-text { display: none; }
+        .profile-name { display: inline; }
+        .sticky-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; perspective: 1000px; }
+        @media (max-width: 768px) {
+          .logo-title-el { font-size: 28px !important; }
+          .logo-subtitle-el { display: none !important; }
+          .announce-bar .full-text { display: none; }
+          .announce-bar .short-text { display: inline; }
+          .profile-name { display: none !important; }
+          .nav-tab { padding: 12px 20px !important; font-size: 11px !important; }
+          .header-top { padding: 8px 12px !important; }
+          .sticky-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .parchment-body-inner { padding: 10px 24px 20px !important; }
+          .page-center-inner { padding: 0 12px 40px !important; }
+          .community-tab-wrap { padding: 4px 8px 8px !important; }
+        }
+        @media (max-width: 480px) {
+          .logo-title-el { font-size: 22px !important; }
+          .nav-tab { padding: 10px 14px !important; font-size: 10px !important; letter-spacing: 0.06em !important; }
+          .community-tab-wrap { padding: 2px 4px 6px !important; }
+        }
       `}</style>
 
       {/* Announce Bar */}
-      <div style={{background:'linear-gradient(90deg,#2c1a0e,#3d2010,#2c1a0e)',color:'#e8a020',textAlign:'center',padding:'10px 20px',fontFamily:'Space Mono,monospace',fontSize:'13px',letterSpacing:'0.14em',borderBottom:'1px solid rgba(200,146,42,0.2)'}}>
-        🌿 <span style={{opacity:0.7}}>LIVING MEMORY PROJECT —</span> PRESERVING THE WISDOM OF ODISHA BEFORE IT IS LOST FOREVER
+      <div className="announce-bar" style={{background:'linear-gradient(90deg,#2c1a0e,#3d2010,#2c1a0e)',color:'#e8a020',textAlign:'center',padding:'10px 20px',fontFamily:'Space Mono,monospace',fontSize:'13px',letterSpacing:'0.14em',borderBottom:'1px solid rgba(200,146,42,0.2)'}}>
+        🌿 <span className="full-text" style={{opacity:0.7}}>LIVING MEMORY PROJECT —</span><span className="full-text"> PRESERVING THE WISDOM OF ODISHA BEFORE IT IS LOST FOREVER</span><span className="short-text">LIVING MEMORY PROJECT</span>
       </div>
 
       {/* Header */}
@@ -107,10 +130,10 @@ export default function App() {
           <button className="hamburger" onClick={() => setSidebarOpen(true)}>☰</button>
           <div className="logo-container">
             <a className="logo" href="#">
-              <span className="logo-title" style={{fontSize:'42px'}}>
+              <span className="logo-title logo-title-el" style={{fontSize:'42px'}}>
                 Living <em style={{color:'#d4ab63',fontStyle:'normal'}}>Memory</em>
               </span>
-              <span className="logo-subtitle" style={{fontFamily:'Cormorant Garamond,serif',fontSize:'18px',letterSpacing:'0.1em'}}>
+              <span className="logo-subtitle logo-subtitle-el" style={{fontFamily:'Cormorant Garamond,serif',fontSize:'18px',letterSpacing:'0.1em'}}>
                 an AI knowledge preservation system — Odisha, India
               </span>
             </a>
@@ -122,7 +145,7 @@ export default function App() {
             <div style={{width:30,height:30,borderRadius:'50%',background:colorFor(user.email),display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'IM Fell DW Pica,serif',fontSize:14,color:'#1c0d04',fontWeight:'bold',flexShrink:0}}>
               {(user.name||'?')[0].toUpperCase()}
             </div>
-            <span style={{fontFamily:'Space Mono,monospace',fontSize:10,color:'rgba(212,171,99,.72)',letterSpacing:'.05em',maxWidth:160,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+            <span className="profile-name" style={{fontFamily:'Space Mono,monospace',fontSize:10,color:'rgba(212,171,99,.72)',letterSpacing:'.05em',maxWidth:160,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
               {user.name}
             </span>
           </button>
@@ -164,7 +187,7 @@ export default function App() {
 
       {/* ── COMMUNITY TAB ── */}
       {mainTab === 'community' && (
-        <div className="tab-content" style={{padding:'8px 16px 12px', boxSizing:'border-box'}}>
+        <div className="tab-content community-tab-wrap" style={{padding:'8px 16px 12px', boxSizing:'border-box'}}>
           <CommunityChat domainData={domainData} />
         </div>
       )}
@@ -188,7 +211,7 @@ export default function App() {
             </div>
 
             {/* Sticky Notes */}
-            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'32px',perspective:'1000px'}}>
+            <div className="sticky-grid">
               <div onClick={() => openSidebarForDomain('agriculture')} style={{cursor:'pointer'}}>
                 <StickyNote color="green" title="🌾 Agriculture" animated={true}>
                   <p style={{textAlign:'center',fontSize:'16px',color:'#2a1a08',marginBottom:'16px',fontFamily:'Cormorant Garamond,serif'}}>Indigenous cultivation, seed preservation, soil knowledge, and weather reading.</p>
