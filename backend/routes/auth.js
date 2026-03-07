@@ -1,43 +1,36 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const SibApiV3Sdk = require("@getbrevo/brevo");
 
 const User = require("../models/User");
 const OTP = require("../models/OTP");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // ─────────────────────────────────────────────
-// Brevo Email Setup
+// Send OTP Email via Brevo API
 // ─────────────────────────────────────────────
-const client = new SibApiV3Sdk.TransactionalEmailsApi();
 
-client.setApiKey(
-  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY
-);
-
-// ─────────────────────────────────────────────
-// Send OTP Email
-// ─────────────────────────────────────────────
 const sendOtpEmail = async (toEmail, otp) => {
 
-  const emailData = {
-
-    sender: {
-      name: "Living Memory",
-      email: "livingmemory104@gmail.com"
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "accept": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+      "content-type": "application/json"
     },
-
-    to: [
-      {
-        email: toEmail
-      }
-    ],
-
-    subject: "🌿 Living Memory Verification Code",
-
-    htmlContent: `
+    body: JSON.stringify({
+      sender: {
+        name: "Living Memory",
+        email: "livingmemory104@gmail.com"
+      },
+      to: [
+        {
+          email: toEmail
+        }
+      ],
+      subject: "🌿 Living Memory Verification Code",
+      htmlContent: `
       <div style="font-family:Arial;padding:30px;background:#111;color:white">
         <h2>🌿 Living Memory</h2>
         <p>Your OTP code is:</p>
@@ -53,17 +46,23 @@ const sendOtpEmail = async (toEmail, otp) => {
 
         <p>This code expires in 5 minutes.</p>
       </div>
-    `
-  };
+      `
+    })
+  });
 
-  await client.sendTransacEmail(emailData);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(JSON.stringify(data));
+  }
 
 };
 
 
 // ─────────────────────────────────────────────
-// Check if email exists
+// Check Email
 // ─────────────────────────────────────────────
+
 router.post("/check-email", async (req, res) => {
 
   try {
@@ -77,9 +76,7 @@ router.post("/check-email", async (req, res) => {
       email: email.toLowerCase()
     });
 
-    res.json({
-      exists: !!user
-    });
+    res.json({ exists: !!user });
 
   } catch (err) {
 
@@ -95,6 +92,7 @@ router.post("/check-email", async (req, res) => {
 // ─────────────────────────────────────────────
 // Send OTP
 // ─────────────────────────────────────────────
+
 router.post("/send-otp", async (req, res) => {
 
   try {
@@ -139,6 +137,7 @@ router.post("/send-otp", async (req, res) => {
 // ─────────────────────────────────────────────
 // Register
 // ─────────────────────────────────────────────
+
 router.post("/register", async (req, res) => {
 
   try {
@@ -151,9 +150,7 @@ router.post("/register", async (req, res) => {
     });
 
     if (!record)
-      return res.status(400).json({
-        error: "Invalid OTP"
-      });
+      return res.status(400).json({ error: "Invalid OTP" });
 
     await OTP.deleteMany({
       email: email.toLowerCase()
@@ -179,10 +176,7 @@ router.post("/register", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.json({
-      token,
-      user
-    });
+    res.json({ token, user });
 
   } catch (err) {
 
@@ -200,6 +194,7 @@ router.post("/register", async (req, res) => {
 // ─────────────────────────────────────────────
 // Verify OTP Login
 // ─────────────────────────────────────────────
+
 router.post("/verify-otp", async (req, res) => {
 
   try {
@@ -235,10 +230,7 @@ router.post("/verify-otp", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.json({
-      token,
-      user
-    });
+    res.json({ token, user });
 
   } catch (err) {
 
@@ -256,6 +248,7 @@ router.post("/verify-otp", async (req, res) => {
 // ─────────────────────────────────────────────
 // Update Profile
 // ─────────────────────────────────────────────
+
 router.patch("/profile", authMiddleware, async (req, res) => {
 
   try {
@@ -286,6 +279,7 @@ router.patch("/profile", authMiddleware, async (req, res) => {
 // ─────────────────────────────────────────────
 // Get Current User
 // ─────────────────────────────────────────────
+
 router.get("/me", authMiddleware, async (req, res) => {
 
   try {
