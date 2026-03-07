@@ -151,11 +151,12 @@ const ReplyThread = ({ replies, currentUserEmail, onReact }) => {
   );
 };
 
-const MessageCard = ({ msg, currentUserEmail, onReact, onReply, onDelete }) => {
+const MessageCard = ({ msg, currentUserEmail, onReact, onReply, onDelete, resolveDisplayName }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const u = resolveUser(msg.user);
   const isMe = u.email === currentUserEmail;
+  const displayName = resolveDisplayName ? resolveDisplayName(msg.user, isMe) : u.name;
 
   useEffect(() => {
     if (!showMenu) return;
@@ -167,12 +168,12 @@ const MessageCard = ({ msg, currentUserEmail, onReact, onReply, onDelete }) => {
   const msgId = msg._id || msg.id;
 
   return (
-    <motion.div layout initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }}
+    <motion.div initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }}
       style={{ display:'flex', flexDirection:'column', alignItems: isMe ? 'flex-end' : 'flex-start', marginBottom:18 }}>
       <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexDirection: isMe ? 'row-reverse' : 'row' }}>
         <Avatar name={u.name} email={u.email} size={26} />
         <span style={{ fontFamily:"'IM Fell DW Pica',serif", fontSize:13, fontWeight:700, color: isMe ? '#c4922a' : '#5a4a3a' }}>
-          {isMe ? "You" : u.name}
+          {isMe ? displayName : u.name}
         </span>
         <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:'#9b8b7a', opacity:0.7 }}>
           {formatTime(msg.timestamp)}
@@ -309,6 +310,13 @@ const CommunityChat = ({ domainData }) => {
   const currentUserEmail = user?.email || '';
   const currentUserName  = user?.name  || 'You';
 
+  // Override name in message for display: if it's the current user and the stored name
+  // looks like an email prefix (old messages), show their actual name instead.
+  const resolveDisplayName = (u, isMe) => {
+    if (isMe && user?.name) return user.name;
+    return resolveUser(u).name;
+  };
+
   const [messages,        setMessages]       = useState([]);
   const [localReactions,  setLocalReactions] = useState({});
   const [localReplies,    setLocalReplies]   = useState({});
@@ -442,7 +450,7 @@ const CommunityChat = ({ domainData }) => {
   return (
     <>
       <AnimatePresence>{isTopicModalOpen && <TopicModal isOpen={isTopicModalOpen} onClose={() => setTopicModalOpen(false)} onSelect={setAttachedTopic} domainData={domainData} />}</AnimatePresence>
-      <div style={{ display:'flex', flexDirection:'column', height:'calc(100vh - 200px)', maxWidth:760, margin:'0 auto', background:'linear-gradient(to bottom,#f8f2e0,#f0e8d0)', border:'1px solid rgba(196,146,42,0.25)', borderRadius:6, boxShadow:'0 4px 24px rgba(0,0,0,0.14)', overflow:'hidden', fontFamily:"'Cormorant Garamond',serif", position:'relative' }}>
+      <div style={{ display:'flex', flexDirection:'column', height:'100%', background:'linear-gradient(to bottom,#f8f2e0,#f0e8d0)', border:'1px solid rgba(196,146,42,0.25)', borderRadius:6, boxShadow:'0 4px 24px rgba(0,0,0,0.14)', overflow:'hidden', fontFamily:"'Cormorant Garamond',serif", position:'relative' }}>
         <div style={{ position:'absolute', inset:0, pointerEvents:'none', zIndex:0, opacity:0.3, backgroundImage:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\")" }} />
         <div style={{ padding:'14px 20px', zIndex:1, borderBottom:'1px solid rgba(196,146,42,0.2)', background:'linear-gradient(to bottom,#ede0be,#e4d4a8)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div><div style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:'#c4922a', letterSpacing:'0.2em', marginBottom:2 }}>🌿 COMMUNITY CIRCLE</div><div style={{ fontFamily:"'IM Fell DW Pica',serif", fontSize:20, color:'#2a1a08' }}>Living Memory — Open Discourse</div></div>
@@ -454,7 +462,7 @@ const CommunityChat = ({ domainData }) => {
           {Object.entries(grouped).map(([date, msgs]) => (
             <div key={date}>
               <div style={{ display:'flex', alignItems:'center', gap:12, margin:'14px 0 10px', fontFamily:"'Space Mono',monospace", fontSize:8, letterSpacing:'.15em', color:'rgba(155,107,47,0.4)', textTransform:'uppercase' }}><div style={{ flex:1, borderTop:'1px solid rgba(155,107,47,0.15)' }}/><span style={{ background:'rgba(196,146,42,0.07)', border:'1px solid rgba(196,146,42,0.15)', borderRadius:20, padding:'2px 10px' }}>{date}</span><div style={{ flex:1, borderTop:'1px solid rgba(155,107,47,0.15)' }}/></div>
-              {msgs.map((msg, i) => <MessageCard key={msg._id || msg.id} msg={msg} currentUserEmail={currentUserEmail} onReact={handleReact} onReply={setReplyingTo} onDelete={handleDelete} prevSame={i > 0 && msgs[i - 1]?.user?.email === msg.user?.email} />)}
+              {msgs.map((msg, i) => <MessageCard key={msg._id || msg.id} msg={msg} currentUserEmail={currentUserEmail} onReact={handleReact} onReply={setReplyingTo} onDelete={handleDelete} resolveDisplayName={resolveDisplayName} prevSame={i > 0 && msgs[i - 1]?.user?.email === msg.user?.email} />)}
             </div>
           ))}
         </div>

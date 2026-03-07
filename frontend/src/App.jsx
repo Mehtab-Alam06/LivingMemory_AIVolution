@@ -89,6 +89,11 @@ export default function App() {
           text-shadow: 0 0 16px rgba(212,171,99,.55), 0 0 32px rgba(212,171,99,.25) !important;
         }
         .profile-btn:hover { background: rgba(212,171,99,.18) !important; }
+        html, body, #root { height: 100%; overflow: hidden; }
+        .app-root { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+        .archive-scroll { flex: 1; overflow-y: auto; }
+        .community-fill { flex: 1; display: flex; flex-direction: column; padding: 12px 24px 16px; min-height: 0; }
       `}</style>
 
       {/* Announce Bar */}
@@ -117,7 +122,7 @@ export default function App() {
             <div style={{width:30,height:30,borderRadius:'50%',background:colorFor(user.email),display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'IM Fell DW Pica,serif',fontSize:14,color:'#1c0d04',fontWeight:'bold',flexShrink:0}}>
               {(user.name||'?')[0].toUpperCase()}
             </div>
-            <span style={{fontFamily:'Space Mono,monospace',fontSize:10,color:'rgba(212,171,99,.72)',letterSpacing:'.05em',maxWidth:90,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+            <span style={{fontFamily:'Space Mono,monospace',fontSize:10,color:'rgba(212,171,99,.72)',letterSpacing:'.05em',maxWidth:160,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
               {user.name}
             </span>
           </button>
@@ -159,24 +164,16 @@ export default function App() {
 
       {/* ── COMMUNITY TAB ── */}
       {mainTab === 'community' && (
-        <main className="main-content">
-          <div style={{maxWidth:840,margin:'0 auto',padding:'36px 24px'}}>
-            <div style={{marginBottom:28,textAlign:'center'}}>
-              <h2 style={{fontFamily:'IM Fell DW Pica,serif',fontSize:36,color:'#f0e8d8',margin:'0 0 8px',fontWeight:'normal',textShadow:'0 0 30px rgba(212,171,99,.2)'}}>
-                Community Gathering 🏛️
-              </h2>
-              <p style={{fontFamily:'Cormorant Garamond,serif',fontSize:17,color:'rgba(212,171,99,.55)',margin:0,fontStyle:'italic'}}>
-                A living space for knowledge keepers to meet, share, and preserve wisdom together
-              </p>
-            </div>
-            <CommunityChat domainData={domainData} />
-          </div>
-        </main>
+        <div className="tab-content" style={{padding:'8px 16px 12px', boxSizing:'border-box'}}>
+          <CommunityChat domainData={domainData} />
+        </div>
       )}
 
       {/* ── HOME / ARCHIVE TAB ── */}
       {mainTab === 'home' && (
-        <main className="main-content">
+        <div className="tab-content">
+          <div className="archive-scroll">
+            <main className="main-content">
           <div className="page-center fade-in">
 
             {/* Parchment Hero */}
@@ -213,7 +210,9 @@ export default function App() {
             </div>
 
           </div>
-        </main>
+            </main>
+          </div>
+        </div>
       )}
 
       {/* Profile Modal */}
