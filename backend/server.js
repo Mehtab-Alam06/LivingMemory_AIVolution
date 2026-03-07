@@ -8,29 +8,18 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 
-// ─────────────────────────────────────────────
-// PORT (Render uses dynamic port)
-// ─────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 
-
-// ─────────────────────────────────────────────
-// ALLOWED ORIGINS
-// ─────────────────────────────────────────────
+// Allowed frontend domains
 const allowedOrigins = [
   "http://localhost:5173",
   "https://living-memory-ai-volution.vercel.app"
 ];
 
-
-// ─────────────────────────────────────────────
-// CORS CONFIGURATION
-// ─────────────────────────────────────────────
+// CORS
 app.use(
   cors({
     origin: function (origin, callback) {
-
-      // allow requests with no origin (mobile apps, curl etc)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
@@ -46,10 +35,7 @@ app.use(
 
 app.use(express.json());
 
-
-// ─────────────────────────────────────────────
-// SOCKET.IO
-// ─────────────────────────────────────────────
+// Socket.io
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -58,43 +44,28 @@ const io = new Server(server, {
   }
 });
 
-
-// ─────────────────────────────────────────────
-// DATABASE
-// ─────────────────────────────────────────────
+// MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
-
-// ─────────────────────────────────────────────
-// ROUTES
-// ─────────────────────────────────────────────
+// Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/uploads", express.static("uploads"));
 app.use("/api/upload", require("./routes/upload"));
 
-
-// ─────────────────────────────────────────────
-// ROOT ROUTE
-// ─────────────────────────────────────────────
+// Root test route
 app.get("/", (req, res) => {
   res.json({
     status: "🌿 Living Memory API is running"
   });
 });
 
-
-// ─────────────────────────────────────────────
-// SOCKET CHAT HANDLER
-// ─────────────────────────────────────────────
+// Socket handler
 require("./socket/chatHandler")(io);
 
-
-// ─────────────────────────────────────────────
-// START SERVER
-// ─────────────────────────────────────────────
+// Start server
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

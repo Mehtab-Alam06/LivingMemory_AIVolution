@@ -1,5 +1,3 @@
-// backend/routes/auth.js
-
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -10,75 +8,32 @@ const User = require("../models/User");
 const OTP = require("../models/OTP");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// ─────────────────────────────────────────────
-// FORCE IPv4 (Fix for Render Gmail SMTP error)
-// ─────────────────────────────────────────────
 dns.setDefaultResultOrder("ipv4first");
 
-
-// ─────────────────────────────────────────────
-// Nodemailer Transporter
-// ─────────────────────────────────────────────
+// Gmail transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
-  connectionTimeout: 20000,
-  greetingTimeout: 20000,
-  socketTimeout: 20000
+  }
 });
 
-
-// ─────────────────────────────────────────────
-// Send OTP Email Function
-// ─────────────────────────────────────────────
+// send OTP email
 const sendOtpEmail = async (toEmail, otp) => {
 
   const mailOptions = {
     from: `"Living Memory" <${process.env.EMAIL_USER}>`,
     to: toEmail,
-    subject: "🌿 Your Living Memory Verification Code",
-
+    subject: "🌿 Living Memory Verification Code",
     html: `
-<!DOCTYPE html>
-<html>
-<body style="background:#0e0704;font-family:Georgia,serif;padding:40px">
-
-<div style="max-width:480px;margin:auto;background:#1e0e06;border:1px solid #d4ab63;padding:30px">
-
-<h2 style="text-align:center;color:#d4ab63">🌿 Living Memory</h2>
-
-<p style="color:#c9b99a;text-align:center">
-Your one-time verification code is below
-</p>
-
-<div style="
-background:black;
-border:1px solid #d4ab63;
-text-align:center;
-padding:20px;
-font-size:40px;
-letter-spacing:12px;
-color:#d4ab63;
-font-family:monospace">
-
-${otp}
-
-</div>
-
-<p style="text-align:center;color:#aaa;margin-top:20px">
-Expires in <b>5 minutes</b>
-</p>
-
-</div>
-
-</body>
-</html>
-`
+      <div style="font-family:Arial;padding:30px;background:#111;color:white">
+        <h2>Living Memory</h2>
+        <p>Your OTP code is:</p>
+        <h1 style="letter-spacing:6px">${otp}</h1>
+        <p>This code expires in 5 minutes.</p>
+      </div>
+    `
   };
 
   await transporter.sendMail(mailOptions);
@@ -86,9 +41,7 @@ Expires in <b>5 minutes</b>
 
 
 
-// ─────────────────────────────────────────────
-// Check if email exists
-// ─────────────────────────────────────────────
+// check email
 router.post("/check-email", async (req, res) => {
 
   try {
@@ -118,38 +71,42 @@ router.post("/check-email", async (req, res) => {
 
 
 
-// ─────────────────────────────────────────────
-// Send OTP
-// ─────────────────────────────────────────────
+// send otp
 router.post("/send-otp", async (req, res) => {
 
   try {
 
     const { email } = req.body;
 
-    if (!email || !email.includes("@"))
+    if (!email)
       return res.status(400).json({ error: "Valid email required" });
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    await OTP.deleteMany({ email: email.toLowerCase() });
+    await OTP.deleteMany({
+      email: email.toLowerCase()
+    });
 
     await OTP.create({
       email: email.toLowerCase(),
       otp
     });
 
-    console.log("Sending OTP to:", email);
+    console.log("📨 Sending OTP to:", email);
 
     await sendOtpEmail(email, otp);
 
-    res.json({ message: "OTP sent successfully" });
+    res.json({
+      message: "OTP sent successfully"
+    });
 
   } catch (err) {
 
-    console.error("OTP ERROR:", err);
+    console.error("❌ OTP ERROR:", err);
 
-    res.status(500).json({ error: "Failed to send OTP" });
+    res.status(500).json({
+      error: "Failed to send OTP"
+    });
 
   }
 
@@ -157,17 +114,12 @@ router.post("/send-otp", async (req, res) => {
 
 
 
-// ─────────────────────────────────────────────
-// Register
-// ─────────────────────────────────────────────
+// register
 router.post("/register", async (req, res) => {
 
   try {
 
     const { email, otp, name } = req.body;
-
-    if (!email || !otp || !name?.trim())
-      return res.status(400).json({ error: "Name, email and OTP required" });
 
     const record = await OTP.findOne({
       email: email.toLowerCase(),
@@ -175,15 +127,21 @@ router.post("/register", async (req, res) => {
     });
 
     if (!record)
-      return res.status(400).json({ error: "Invalid or expired OTP" });
+      return res.status(400).json({
+        error: "Invalid OTP"
+      });
 
-    await OTP.deleteMany({ email: email.toLowerCase() });
+    await OTP.deleteMany({
+      email: email.toLowerCase()
+    });
 
-    const exists = await User.findOne({ email: email.toLowerCase() });
+    const exists = await User.findOne({
+      email: email.toLowerCase()
+    });
 
     if (exists)
       return res.status(400).json({
-        error: "Account already exists. Please sign in instead."
+        error: "Account already exists"
       });
 
     const user = await User.create({
@@ -199,17 +157,16 @@ router.post("/register", async (req, res) => {
 
     res.json({
       token,
-      user: {
-        email: user.email,
-        name: user.name
-      }
+      user
     });
 
   } catch (err) {
 
     console.error("REGISTER ERROR:", err);
 
-    res.status(500).json({ error: "Registration failed" });
+    res.status(500).json({
+      error: "Registration failed"
+    });
 
   }
 
@@ -217,9 +174,7 @@ router.post("/register", async (req, res) => {
 
 
 
-// ─────────────────────────────────────────────
-// Login with OTP
-// ─────────────────────────────────────────────
+// login verify otp
 router.post("/verify-otp", async (req, res) => {
 
   try {
@@ -232,9 +187,13 @@ router.post("/verify-otp", async (req, res) => {
     });
 
     if (!record)
-      return res.status(400).json({ error: "Invalid or expired OTP" });
+      return res.status(400).json({
+        error: "Invalid OTP"
+      });
 
-    await OTP.deleteMany({ email: email.toLowerCase() });
+    await OTP.deleteMany({
+      email: email.toLowerCase()
+    });
 
     const user = await User.findOne({
       email: email.toLowerCase()
@@ -242,7 +201,7 @@ router.post("/verify-otp", async (req, res) => {
 
     if (!user)
       return res.status(404).json({
-        error: "No account found. Please register first."
+        error: "User not found"
       });
 
     const token = jwt.sign(
@@ -253,17 +212,16 @@ router.post("/verify-otp", async (req, res) => {
 
     res.json({
       token,
-      user: {
-        email: user.email,
-        name: user.name
-      }
+      user
     });
 
   } catch (err) {
 
     console.error("LOGIN ERROR:", err);
 
-    res.status(500).json({ error: "Login failed" });
+    res.status(500).json({
+      error: "Login failed"
+    });
 
   }
 
@@ -271,34 +229,28 @@ router.post("/verify-otp", async (req, res) => {
 
 
 
-// ─────────────────────────────────────────────
-// Update Profile
-// ─────────────────────────────────────────────
+// profile update
 router.patch("/profile", authMiddleware, async (req, res) => {
 
   try {
 
     const { name } = req.body;
 
-    if (!name?.trim())
-      return res.status(400).json({ error: "Name required" });
-
     const user = await User.findByIdAndUpdate(
       req.user.userId,
-      { name: name.trim() },
+      { name },
       { new: true }
     );
 
-    res.json({
-      email: user.email,
-      name: user.name
-    });
+    res.json(user);
 
   } catch (err) {
 
-    console.error("PROFILE UPDATE ERROR:", err);
+    console.error("PROFILE ERROR:", err);
 
-    res.status(500).json({ error: "Update failed" });
+    res.status(500).json({
+      error: "Update failed"
+    });
 
   }
 
@@ -306,19 +258,12 @@ router.patch("/profile", authMiddleware, async (req, res) => {
 
 
 
-// ─────────────────────────────────────────────
-// Get Current User
-// ─────────────────────────────────────────────
+// get current user
 router.get("/me", authMiddleware, async (req, res) => {
 
   try {
 
-    const user = await User
-      .findById(req.user.userId)
-      .select("-__v");
-
-    if (!user)
-      return res.status(404).json({ error: "User not found" });
+    const user = await User.findById(req.user.userId);
 
     res.json(user);
 
@@ -326,7 +271,9 @@ router.get("/me", authMiddleware, async (req, res) => {
 
     console.error("ME ERROR:", err);
 
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      error: "Server error"
+    });
 
   }
 
