@@ -81,11 +81,15 @@ router.post('/send-otp', async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     await OTP.deleteMany({ email: email.toLowerCase() });
     await OTP.create({ email: email.toLowerCase(), otp });
+    console.log('📧 Sending OTP to:', email);
+    console.log('📧 Using sender:', process.env.EMAIL_FROM || process.env.EMAIL_USER);
+    console.log('📧 Brevo key set:', !!process.env.BREVO_API_KEY);
     await sendOtpEmail(email, otp);
+    console.log('📧 OTP sent successfully');
     res.json({ message: 'OTP sent' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to send OTP' });
+    console.error('❌ OTP send error:', err.message);
+    res.status(500).json({ error: err.message || 'Failed to send OTP' });
   }
 });
 
