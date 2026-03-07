@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 5000;
 // Allowed frontend domains
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://living-memory-ai-volution.vercel.app"
+  "http://localhost:5174",
+  "https://living-memory-ai-volution.vercel.app",
+  "https://livingmemory-aivolution.vercel.app",
+  "https://living-memory-aivolution.vercel.app",
 ];
 
 // CORS
