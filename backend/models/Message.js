@@ -11,6 +11,11 @@ const MessageSchema = new mongoose.Schema({
     trim: true,
     maxlength: 500
   },
+  replyTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Message',
+    default: null
+  },
   timestamp: {
     type: Date,
     default: Date.now

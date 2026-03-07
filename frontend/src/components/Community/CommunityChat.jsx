@@ -50,10 +50,12 @@ const parseMsg = (msg) => {
     text  = imgMatch[2];
   }
   const topicMatch = text.match(/^__TOPIC__([^_]+)__(.+?)__END__([\s\S]*)$/);
+  
+  let result = { ...msg, image, text };
   if (topicMatch) {
-    return { ...msg, image, topic: { domain: topicMatch[1], label: topicMatch[2] }, text: topicMatch[3] };
+    result = { ...result, topic: { domain: topicMatch[1], label: topicMatch[2] }, text: topicMatch[3] };
   }
-  return { ...msg, image, text };
+  return result;
 };
 
 // ─── SUB-COMPONENTS (Avatar, Badge, Bars, etc) ────────────────────────────────
@@ -176,6 +178,14 @@ const MessageCard = ({ msg, currentUserEmail, onReact, onReply, onDelete }) => {
           {formatTime(msg.timestamp)}
         </span>
       </div>
+      
+      {/* Global Reply Display */}
+      {msg.replyTo && typeof msg.replyTo === 'object' && (
+        <div style={{ maxWidth:'78%', marginBottom: 4, opacity: 0.85, transform: 'scale(0.95)', transformOrigin: isMe ? 'right bottom' : 'left bottom' }}>
+          <ReplyPreviewStrip replyingTo={msg.replyTo} onClear={() => {}} />
+        </div>
+      )}
+
       <div ref={menuRef} onDoubleClick={() => setShowMenu(m => !m)}
         style={{
           position:'relative', maxWidth:'78%',
@@ -203,7 +213,6 @@ const MessageCard = ({ msg, currentUserEmail, onReact, onReply, onDelete }) => {
         </AnimatePresence>
       </div>
       {msg.reactions?.length > 0 && <div style={{ maxWidth:'78%', marginTop:2 }}><ReactionBar reactions={msg.reactions} messageId={msgId} currentUserEmail={currentUserEmail} onReact={onReact} /></div>}
-      {msg.replies?.length > 0 && <div style={{ maxWidth:'78%', width:'100%', marginTop:2 }}><ReplyThread replies={msg.replies} currentUserEmail={currentUserEmail} onReact={onReact} /></div>}
     </motion.div>
   );
 };
@@ -260,15 +269,36 @@ const AttachedTopicStrip = ({ topic, onClear }) => (
 );
 
 const ReplyPreviewStrip = ({ replyingTo, onClear }) => {
-  const u = resolveUser(replyingTo.user);
+  const u = resolveUser(replyingTo?.user);
+  if (!replyingTo) return null;
+  
+  let displayText = replyingTo.text || "";
+  let imageUrl = replyingTo.image || null;
+  
+  if (typeof replyingTo.text === 'string') {
+    const topicMatch = replyingTo.text.match(/^__TOPIC__([^_]+)__(.+?)__END__([\s\S]*)$/);
+    if (topicMatch) displayText = topicMatch[3];
+    
+    const imgMatch = displayText.match(/^__IMG__(.+?)__ENDIMG__([\s\S]*)$/);
+    if (imgMatch) {
+      if (!imageUrl) imageUrl = imgMatch[1];
+      displayText = imgMatch[2].trim();
+    }
+  }
+  
   return (
-    <motion.div initial={{ height:0, opacity:0 }} animate={{ height:'auto', opacity:1 }} exit={{ height:0, opacity:0 }} style={{ padding:'8px 16px', borderTop:'1px solid rgba(196,146,42,0.2)', background:'rgba(196,146,42,0.06)', display:'flex', alignItems:'center', gap:10 }}>
+    <motion.div initial={{ height:0, opacity:0 }} animate={{ height:'auto', opacity:1 }} exit={{ height:0, opacity:0 }} style={{ padding:'8px 16px', borderTop: onClear ? '1px solid rgba(196,146,42,0.2)' : 'none', background: onClear ? 'rgba(196,146,42,0.06)' : 'transparent', display:'flex', alignItems:'center', gap:10, borderRadius: 6, border: onClear ? 'none' : '1px solid rgba(196,146,42,0.15)', overflow: 'hidden' }}>
       <div style={{ width:2, height:32, background:'#c4922a', borderRadius:1, flexShrink:0 }} />
+      {imageUrl && (
+        <img src={imageUrl} alt="preview" style={{ height:32, width:32, objectFit:'cover', borderRadius:4, border:'1px solid rgba(196,146,42,0.3)' }} />
+      )}
       <div style={{ flex:1, overflow:'hidden' }}>
         <div style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:'#c4922a', letterSpacing:'0.08em' }}>↩ REPLYING TO {u.name.toUpperCase()}</div>
-        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:13, color:'#7b6b5a', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{replyingTo.text || "Image"}</div>
+        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:13, color:'#7b6b5a', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+          {displayText || (imageUrl ? "Attached Image" : "")}
+        </div>
       </div>
-      <button onClick={onClear} style={{ background:'none', border:'none', cursor:'pointer', color:'#9b8b7a' }}>✕</button>
+      {onClear ? <button onClick={onClear} style={{ background:'none', border:'none', cursor:'pointer', color:'#9b8b7a' }}>✕</button> : null}
     </motion.div>
   );
 };
@@ -359,23 +389,19 @@ const CommunityChat = ({ domainData }) => {
       }
     }
 
-    if (replyingTo) {
-      const parentId = replyingTo._id || replyingTo.id;
-      const replyMsg = {
-        id: generateId(),
-        user: { name: currentUserName, email: currentUserEmail },
-        text: inputText.trim(),
-        image: imageUrl || null,
-        timestamp: new Date().toISOString(),
-        reactions: [],
-      };
-      setLocalReplies(prev => ({ ...prev, [parentId]: [...(prev[parentId] || []), replyMsg] }));
-      setReplyingTo(null);
-    } else {
-      let txt = inputText.trim();
-      if (attachedTopic) txt = `__TOPIC__${attachedTopic.domain}__${attachedTopic.label}__END__${txt}`;
-      if (imageUrl) txt = `__IMG__${imageUrl}__ENDIMG__${txt}`;
-      if (txt || imageUrl) socketRef.current.emit('chat:message', txt);
+    let txt = inputText.trim();
+    if (attachedTopic) txt = `__TOPIC__${attachedTopic.domain}__${attachedTopic.label}__END__${txt}`;
+    if (imageUrl) txt = `__IMG__${imageUrl}__ENDIMG__${txt}`;
+    
+    // Global emit (object payload)
+    if (txt || imageUrl) {
+      if (replyingTo) {
+        const parentId = replyingTo._id || replyingTo.id;
+        socketRef.current.emit('chat:message', { text: txt, replyTo: parentId });
+        setReplyingTo(null);
+      } else {
+        socketRef.current.emit('chat:message', { text: txt });
+      }
     }
 
     setInputText(''); setImageFile(null); setImagePreview(null); setAttachedTopic(null);
@@ -404,8 +430,7 @@ const CommunityChat = ({ domainData }) => {
 
   const grouped = messages.map(msg => ({
     ...msg,
-    reactions: localReactions[msg._id || msg.id] || [],
-    replies:   localReplies[msg._id || msg.id]   || [],
+    reactions: localReactions[msg._id || msg.id] || []
   })).reduce((acc, msg) => {
     const k = fmtDate(msg.timestamp);
     if (!acc[k]) acc[k] = [];
