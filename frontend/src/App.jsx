@@ -169,8 +169,11 @@ export default function App() {
           .nav-tab { padding: 12px 20px !important; font-size: 11px !important; }
           .header-top { padding: 8px 12px !important; }
           .sticky-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
-          .parchment-body-inner { padding: 10px 24px 20px !important; }
-          .page-center-inner { padding: 0 12px 40px !important; }
+          .parchment-body { padding: 10px 24px 20px !important; }
+          .page-center { padding: 0 12px 40px !important; }
+          .parchment-body h1 { font-size: 2rem !important; }
+          .parchment-body p { font-size: 16px !important; }
+          .sticky { padding: 20px 16px 24px !important; }
           .community-tab-wrap { padding: 4px 8px 8px !important; }
         }
         @media (max-width: 480px) {
@@ -515,7 +518,7 @@ export default function App() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "340px",
+          width: "min(340px, 85vw)",
           height: "100vh",
           background: "#fcf5e6",
           zIndex: 400,
