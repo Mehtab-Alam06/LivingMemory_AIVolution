@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 
-const API = 'http://localhost:5000/api';
+import { API } from '../../context/AuthContext';
 
 export default function AuthPage() {
   const { sendOtp, register, verifyOtp } = useAuth();
