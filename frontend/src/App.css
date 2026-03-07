@@ -2,7 +2,7 @@
    LIVING MEMORY - YOKAI.COM INSPIRED DESIGN (COMPLETE)
    ============================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&family=Gloria+Hallelujah&family=Cormorant+Garamond:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&family=Gloria+Hallelujah&family=Cormorant+Garamond:wght@400;600;700&display=swap");
 
 /* ─────────────────────────────────────────────────────────────────────────
    CSS VARIABLES & RESET
@@ -39,7 +39,7 @@ html {
 }
 
 body {
-  font-family: 'Cormorant Garamond', 'IM Fell DW Pica', Georgia, serif;
+  font-family: "Cormorant Garamond", "IM Fell DW Pica", Georgia, serif;
   background-color: var(--bg-dark);
   color: var(--ink);
   line-height: 1.6;
@@ -100,11 +100,13 @@ body {
 .sidebar-header {
   padding: 20px 16px;
   border-bottom: 2px solid rgba(212, 171, 99, 0.2);
-  background: linear-gradient(180deg, rgba(212, 171, 99, 0.1) 0%, transparent 100%);
+  background: linear-gradient(180deg,
+      rgba(212, 171, 99, 0.1) 0%,
+      transparent 100%);
 }
 
 .sidebar-title {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 24px;
   color: #f0e8d8;
   text-align: center;
@@ -112,7 +114,7 @@ body {
 }
 
 .sidebar-subtitle {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 12px;
   color: rgba(240, 232, 216, 0.6);
   text-align: center;
@@ -151,7 +153,7 @@ body {
 }
 
 .sb-domain-label {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 16px;
   color: #d4ab63;
   letter-spacing: 0.03em;
@@ -197,7 +199,7 @@ body {
 }
 
 .sb-letter-label {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 14px;
   color: #c8b898;
 }
@@ -248,7 +250,7 @@ body {
 }
 
 .sb-topic-text {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 13px;
   color: #e8dcc8;
 }
@@ -300,7 +302,7 @@ body {
 }
 
 .logo-title {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 36px;
   color: #f0e8d8;
   font-weight: normal;
@@ -309,7 +311,7 @@ body {
 }
 
 .logo-subtitle {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 12px;
   font-style: italic;
   color: rgba(240, 232, 216, 0.6);
@@ -333,7 +335,7 @@ body {
   text-decoration: none;
   padding: 14px 20px;
   font-size: 14px;
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   letter-spacing: 0.05em;
   transition: all 0.2s;
   white-space: nowrap;
@@ -384,9 +386,11 @@ body {
 .paper-card {
   position: relative;
   background-color: #f4edd6;
-  background-image: 
+  background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom, rgba(237, 224, 190, 0.8), rgba(244, 237, 214, 0.95));
+    linear-gradient(to bottom,
+      rgba(237, 224, 190, 0.8),
+      rgba(244, 237, 214, 0.95));
   padding: 32px;
   margin-bottom: 28px;
   border-radius: 2px 10px 2px 2px;
@@ -410,7 +414,7 @@ body {
 
 /* Folded corner effect */
 .paper-card::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -424,16 +428,26 @@ body {
 }
 
 .paper-card.alt {
-  background: linear-gradient(to bottom, rgba(252, 245, 230, 0.95), rgba(244, 237, 214, 0.98));
+  background: linear-gradient(to bottom,
+      rgba(252, 245, 230, 0.95),
+      rgba(244, 237, 214, 0.98));
 }
 
 .paper-card.alt::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: 
-    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(80, 60, 20, 0.02) 2px, rgba(80, 60, 20, 0.02) 4px),
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(80, 60, 20, 0.02) 2px, rgba(80, 60, 20, 0.02) 4px);
+  background:
+    repeating-linear-gradient(90deg,
+      transparent,
+      transparent 2px,
+      rgba(80, 60, 20, 0.02) 2px,
+      rgba(80, 60, 20, 0.02) 4px),
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(80, 60, 20, 0.02) 2px,
+      rgba(80, 60, 20, 0.02) 4px);
   pointer-events: none;
   border-radius: 2px 10px 2px 2px;
   z-index: 0;
@@ -442,7 +456,7 @@ body {
 .paper-card h1,
 .paper-card h2,
 .paper-card h3 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   color: #2a1a08;
 }
 
@@ -481,25 +495,28 @@ body {
   width: 95%;
   max-width: 900px;
   background-color: #e8dcc8;
-  
+
   /* Same drop-shadow approach as before — follows torn edge shape */
-  filter: drop-shadow(0px 16px 40px rgba(0,0,0,0.65));
-  
+  filter: drop-shadow(0px 16px 40px rgba(0, 0, 0, 0.65));
+
   /* Float animation — matches sticky notes vibe */
   animation: heroFloat 4s ease-in-out infinite;
-  
+
   /* Subtle rotation like the sticky notes */
   transform-origin: center center;
 }
 
 @keyframes heroFloat {
-  0%, 100% { 
+
+  0%,
+  100% {
     transform: translateY(0px) rotate(-0.3deg);
-    filter: drop-shadow(0px 16px 40px rgba(0,0,0,0.65));
+    filter: drop-shadow(0px 16px 40px rgba(0, 0, 0, 0.65));
   }
-  50% { 
+
+  50% {
     transform: translateY(-10px) rotate(0.3deg);
-    filter: drop-shadow(0px 28px 50px rgba(0,0,0,0.45));
+    filter: drop-shadow(0px 28px 50px rgba(0, 0, 0, 0.45));
   }
 }
 
@@ -523,9 +540,10 @@ body {
 
 .parchment-body {
   width: 100%;
-  background-image: url('/Images/paper2.jpg');
+  background-image: url("/Images/paper2.jpg");
   background-repeat: repeat;
-  background-color: #e8dcc8; /* same as container */
+  background-color: #e8dcc8;
+  /* same as container */
   margin: 0;
   padding: 10px 90px 20px;
   position: relative;
@@ -535,7 +553,7 @@ body {
 
 /* ── RESTORE ORIGINAL FONTS ── */
 .hero-eyebrow {
-  font-family: 'Space Mono', monospace;
+  font-family: "Space Mono", monospace;
   color: #9b6b2f;
   font-size: 12px;
   letter-spacing: 0.2em;
@@ -546,19 +564,19 @@ body {
 }
 
 .parchment-body h1 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-weight: normal;
   font-size: 3.2rem;
   color: #2a1e12;
   text-align: center;
   margin-bottom: 16px;
   letter-spacing: 0.02em;
-  text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4);
 }
 
 .parchment-body p {
   color: #3a2a1a;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 19px;
   line-height: 1.8;
   margin: 0 auto 16px;
@@ -581,9 +599,17 @@ body {
 .sticky {
   position: relative;
   background-color: #ece07a;
-  background-image: 
-    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(80, 60, 20, 0.04) 2px, rgba(80, 60, 20, 0.04) 4px),
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(80, 60, 20, 0.04) 2px, rgba(80, 60, 20, 0.04) 4px);
+  background-image:
+    repeating-linear-gradient(90deg,
+      transparent,
+      transparent 2px,
+      rgba(80, 60, 20, 0.04) 2px,
+      rgba(80, 60, 20, 0.04) 4px),
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(80, 60, 20, 0.04) 2px,
+      rgba(80, 60, 20, 0.04) 4px);
   background-size: 256px 256px;
   padding: 28px 22px 36px;
   box-shadow:
@@ -607,8 +633,15 @@ body {
 }
 
 @keyframes stickyFloat {
-  0%, 100% { transform: rotate(var(--sticky-rotate, 1.5deg)) translateY(0px) translateZ(0); }
-  50% { transform: rotate(var(--sticky-rotate, 1.5deg)) translateY(-4px) translateZ(0); }
+
+  0%,
+  100% {
+    transform: rotate(var(--sticky-rotate, 1.5deg)) translateY(0px) translateZ(0);
+  }
+
+  50% {
+    transform: rotate(var(--sticky-rotate, 1.5deg)) translateY(-4px) translateZ(0);
+  }
 }
 
 .sticky:hover {
@@ -624,14 +657,14 @@ body {
 
 /* Tape effect */
 .sticky::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -22px;
   left: 50%;
   transform: translateX(-50%) rotate(-3deg);
   width: 110px;
   height: 48px;
-  background: url('/Images/sticker.png') center/contain no-repeat;
+  background: url("/Images/sticker.png") center/contain no-repeat;
   z-index: 10;
   pointer-events: none;
   /* No box-shadow, no background-color — pure image */
@@ -670,7 +703,7 @@ body {
 }
 
 .sticky h3 {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 1.6rem;
   font-weight: normal;
   color: #2a1a08;
@@ -695,7 +728,7 @@ body {
   font-style: italic;
   font-size: 27px;
   line-height: 1.6;
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   text-decoration: none;
   transition: color 0.13s;
 }
@@ -729,7 +762,7 @@ body {
   cursor: pointer;
   border: none;
   transition: all 0.2s;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   letter-spacing: 0.05em;
 }
 
@@ -768,7 +801,9 @@ body {
 
 .interview {
   position: relative;
-  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  background: linear-gradient(to bottom,
+      rgba(237, 224, 190, 0.95),
+      rgba(244, 237, 214, 0.98));
   padding: 32px;
   margin-bottom: 28px;
   border-radius: 2px 10px 2px 2px;
@@ -780,7 +815,7 @@ body {
 }
 
 .interview::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -801,7 +836,7 @@ body {
 }
 
 .interview-header h2 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 1.8rem;
   color: #2a1a08;
   font-weight: normal;
@@ -833,7 +868,10 @@ body {
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #d8caa3 0%, #bda476 55%, #8a6a39 100%);
+  background: radial-gradient(circle at 40% 35%,
+      #d8caa3 0%,
+      #bda476 55%,
+      #8a6a39 100%);
   box-shadow: 0 6px 20px var(--shadow-med);
   transition: box-shadow 0.25s ease;
 }
@@ -858,20 +896,43 @@ body {
   animation: wave 1s ease-in-out infinite;
 }
 
-.wave span:nth-child(1) { animation-delay: 0s; }
-.wave span:nth-child(2) { animation-delay: 0.1s; }
-.wave span:nth-child(3) { animation-delay: 0.2s; }
-.wave span:nth-child(4) { animation-delay: 0.3s; }
-.wave span:nth-child(5) { animation-delay: 0.4s; }
+.wave span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.wave span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.wave span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.wave span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.wave span:nth-child(5) {
+  animation-delay: 0.4s;
+}
 
 @keyframes wave {
-  0%, 100% { height: 8px; }
-  50% { height: 20px; }
+
+  0%,
+  100% {
+    height: 8px;
+  }
+
+  50% {
+    height: 20px;
+  }
 }
 
 /* Paper area */
 .interview-body .paper {
-  background: linear-gradient(to bottom, rgba(252, 248, 240, 0.95), rgba(248, 242, 230, 0.98));
+  background: linear-gradient(to bottom,
+      rgba(252, 248, 240, 0.95),
+      rgba(248, 242, 230, 0.98));
   padding: 24px;
   border-radius: 4px;
   border: 1px solid rgba(212, 171, 99, 0.2);
@@ -900,7 +961,7 @@ body {
 }
 
 .ai-text {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 18px;
   color: #2a1a08;
   font-style: italic;
@@ -926,7 +987,7 @@ body {
   color: #1a0f08;
   padding: 12px 24px;
   border-radius: 30px;
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
@@ -946,8 +1007,15 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(208, 94, 82, 0.4); }
-  50% { box-shadow: 0 0 0 10px rgba(208, 94, 82, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(208, 94, 82, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(208, 94, 82, 0);
+  }
 }
 
 /* Type input */
@@ -961,7 +1029,7 @@ body {
   padding: 12px 16px;
   border: 1px solid rgba(212, 171, 99, 0.3);
   border-radius: 4px;
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 15px;
   background: rgba(255, 255, 255, 0.5);
   transition: border-color 0.2s;
@@ -996,7 +1064,7 @@ body {
 }
 
 .struct-title {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 14px;
   color: #5a4a3a;
   margin-bottom: 10px;
@@ -1025,7 +1093,7 @@ body {
   margin: 16px 0;
 }
 
-.preview > div {
+.preview>div {
   padding: 6px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   font-size: 14px;
@@ -1060,7 +1128,9 @@ body {
 
 .tech {
   position: relative;
-  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  background: linear-gradient(to bottom,
+      rgba(237, 224, 190, 0.95),
+      rgba(244, 237, 214, 0.98));
   padding: 32px;
   margin-bottom: 28px;
   border-radius: 2px 10px 2px 2px;
@@ -1072,7 +1142,7 @@ body {
 }
 
 .tech::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -1086,7 +1156,7 @@ body {
 }
 
 .tech h2 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 1.8rem;
   color: #2a1a08;
   font-weight: normal;
@@ -1142,8 +1212,8 @@ body {
   margin-bottom: 20px;
 }
 
-.domain-banner > div:first-child {
-  font-family: 'Gloria Hallelujah', cursive;
+.domain-banner>div:first-child {
+  font-family: "Gloria Hallelujah", cursive;
   color: #5a4a3a;
 }
 
@@ -1197,14 +1267,38 @@ body {
   animation: markPulse 2s infinite;
 }
 
-.tech-left .m1 { top: 20%; left: 30%; }
-.tech-left .m2 { top: 40%; right: 25%; }
-.tech-left .m3 { bottom: 30%; left: 40%; }
-.tech-left .m4 { top: 60%; right: 40%; }
+.tech-left .m1 {
+  top: 20%;
+  left: 30%;
+}
+
+.tech-left .m2 {
+  top: 40%;
+  right: 25%;
+}
+
+.tech-left .m3 {
+  bottom: 30%;
+  left: 40%;
+}
+
+.tech-left .m4 {
+  top: 60%;
+  right: 40%;
+}
 
 @keyframes markPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.7; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
 }
 
 /* Panel styling */
@@ -1215,7 +1309,7 @@ body {
 }
 
 .panel-title {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 16px;
   color: #2a1a08;
   font-weight: 600;
@@ -1243,7 +1337,7 @@ body {
   gap: 12px;
 }
 
-.metric > span {
+.metric>span {
   width: 140px;
   font-size: 13px;
   color: #5a4a3a;
@@ -1257,7 +1351,7 @@ body {
   overflow: hidden;
 }
 
-.metric .bar > div {
+.metric .bar>div {
   height: 100%;
   background: linear-gradient(90deg, #d4ab63 0%, #c49a50 100%);
   border-radius: 4px;
@@ -1292,7 +1386,7 @@ body {
   padding: 12px;
   background: rgba(212, 171, 99, 0.08);
   border-radius: 4px;
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 13px;
   color: #5a4a3a;
 }
@@ -1303,7 +1397,9 @@ body {
 
 .knowledge-graph {
   position: relative;
-  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  background: linear-gradient(to bottom,
+      rgba(237, 224, 190, 0.95),
+      rgba(244, 237, 214, 0.98));
   padding: 32px;
   margin-bottom: 28px;
   border-radius: 2px 10px 2px 2px;
@@ -1315,7 +1411,7 @@ body {
 }
 
 .knowledge-graph::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -1336,7 +1432,7 @@ body {
 }
 
 .kg-header h1 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 1.8rem;
   color: #2a1a08;
   font-weight: normal;
@@ -1354,7 +1450,7 @@ body {
   padding: 8px 16px;
   border-radius: 20px;
   display: inline-block;
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 14px;
   color: #5a4a3a;
 }
@@ -1386,7 +1482,7 @@ body {
   border: 1px solid rgba(212, 171, 99, 0.3);
   border-radius: 4px;
   background: white;
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 14px;
   color: #2a1a08;
 }
@@ -1418,7 +1514,7 @@ body {
 }
 
 .toggle-switch .slider::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 18px;
   height: 18px;
@@ -1429,11 +1525,11 @@ body {
   transition: transform 0.2s;
 }
 
-.toggle-switch input:checked + .slider {
+.toggle-switch input:checked+.slider {
   background: #d4ab63;
 }
 
-.toggle-switch input:checked + .slider::before {
+.toggle-switch input:checked+.slider::before {
   transform: translateX(18px);
 }
 
@@ -1475,7 +1571,7 @@ body {
 }
 
 .panel-header h3 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 18px;
   color: #2a1a08;
 }
@@ -1510,7 +1606,7 @@ body {
 .node-connections h4,
 .node-sdg h4,
 .research-info h4 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 14px;
   color: #2a1a08;
   margin-bottom: 8px;
@@ -1532,7 +1628,7 @@ body {
 }
 
 .node-connections li::before {
-  content: '→';
+  content: "→";
   position: absolute;
   left: 0;
   color: #d4ab63;
@@ -1547,7 +1643,7 @@ body {
 }
 
 .intelligence-panel h4 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 16px;
   color: #2a1a08;
   margin-bottom: 16px;
@@ -1586,7 +1682,7 @@ body {
 }
 
 .region-explorer h4 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 16px;
   color: #2a1a08;
   margin-bottom: 16px;
@@ -1605,7 +1701,7 @@ body {
   border: 1px solid rgba(212, 171, 99, 0.3);
   padding: 10px 20px;
   border-radius: 20px;
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 14px;
   color: #5a4a3a;
   cursor: pointer;
@@ -1628,7 +1724,9 @@ body {
 
 .ai-tutor {
   position: relative;
-  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.95), rgba(244, 237, 214, 0.98));
+  background: linear-gradient(to bottom,
+      rgba(237, 224, 190, 0.95),
+      rgba(244, 237, 214, 0.98));
   padding: 32px;
   margin-bottom: 28px;
   border-radius: 2px 10px 2px 2px;
@@ -1640,7 +1738,7 @@ body {
 }
 
 .ai-tutor::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -1661,7 +1759,7 @@ body {
 }
 
 .tutor-header h1 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 1.8rem;
   color: #2a1a08;
   font-weight: normal;
@@ -1679,7 +1777,7 @@ body {
   padding: 8px 16px;
   border-radius: 20px;
   display: inline-block;
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 14px;
   color: #5a4a3a;
 }
@@ -1698,7 +1796,7 @@ body {
   border: 2px solid rgba(212, 171, 99, 0.3);
   padding: 10px 24px;
   border-radius: 24px;
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 14px;
   color: #5a4a3a;
   cursor: pointer;
@@ -1738,7 +1836,7 @@ body {
   flex: 1;
   padding: 12px 16px;
   border: none;
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 16px;
   background: transparent;
 }
@@ -1820,7 +1918,7 @@ body {
 }
 
 .response-header h3 {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: "Gloria Hallelujah", cursive;
   font-size: 18px;
   color: #2a1a08;
 }
@@ -1875,7 +1973,7 @@ body {
 }
 
 .response-section h4 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 15px;
   color: #2a1a08;
   margin-bottom: 8px;
@@ -1895,7 +1993,7 @@ body {
 }
 
 .related-concepts h4 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 14px;
   color: #2a1a08;
   margin-bottom: 10px;
@@ -1933,15 +2031,36 @@ body {
   animation: voiceWave 1s ease-in-out infinite;
 }
 
-.voice-wave span:nth-child(1) { animation-delay: 0s; }
-.voice-wave span:nth-child(2) { animation-delay: 0.1s; }
-.voice-wave span:nth-child(3) { animation-delay: 0.2s; }
-.voice-wave span:nth-child(4) { animation-delay: 0.3s; }
-.voice-wave span:nth-child(5) { animation-delay: 0.4s; }
+.voice-wave span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.voice-wave span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.voice-wave span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.voice-wave span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.voice-wave span:nth-child(5) {
+  animation-delay: 0.4s;
+}
 
 @keyframes voiceWave {
-  0%, 100% { height: 10px; }
-  50% { height: 25px; }
+
+  0%,
+  100% {
+    height: 10px;
+  }
+
+  50% {
+    height: 25px;
+  }
 }
 
 .voice-note {
@@ -1958,7 +2077,9 @@ body {
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(to bottom, rgba(237, 224, 190, 0.9), rgba(244, 237, 214, 0.95));
+  background: linear-gradient(to bottom,
+      rgba(237, 224, 190, 0.9),
+      rgba(244, 237, 214, 0.95));
   border-radius: 8px;
   border: 1px solid rgba(212, 171, 99, 0.3);
 }
@@ -1969,7 +2090,7 @@ body {
 }
 
 .empty-state h2 {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   font-size: 24px;
   color: #2a1a08;
   margin-bottom: 12px;
@@ -2048,7 +2169,7 @@ body {
   padding: 24px;
   font-size: 12px;
   color: rgba(240, 218, 168, 0.5);
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: "IM Fell DW Pica", serif;
   border-top: 1px solid rgba(233, 220, 189, 0.1);
   margin-top: auto;
 }
@@ -2082,6 +2203,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2092,15 +2214,25 @@ body {
    DOMAIN COLORS
    ───────────────────────────────────────────────────────────────────────── */
 
-.domain-health { border-left: 4px solid #6b8e6b; }
-.domain-agriculture { border-left: 4px solid #a89060; }
-.domain-art-craft { border-left: 4px solid #8b6b4d; }
+.domain-health {
+  border-left: 4px solid #6b8e6b;
+}
+
+.domain-agriculture {
+  border-left: 4px solid #a89060;
+}
+
+.domain-art-craft {
+  border-left: 4px solid #8b6b4d;
+}
 
 /* ─────────────────────────────────────────────────────────────────────────
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN - TABLET & MOBILE
    ───────────────────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
+
+  /* === LAYOUT BASICS === */
   .parchment-body {
     padding: 10px 20px 20px !important;
   }
@@ -2144,7 +2276,7 @@ body {
     letter-spacing: 0.1em !important;
   }
 
-  /* Sidebar always off-canvas on mobile */
+  /* === SIDEBAR === */
   .sidebar-col {
     width: 280px;
     position: fixed !important;
@@ -2158,9 +2290,272 @@ body {
   .sidebar-col.open {
     left: 0;
   }
+
+  /* === INTERVIEW PAGE === */
+  .interview-body {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 16px !important;
+  }
+
+  .ai-avatar {
+    padding: 16px 0;
+    flex-direction: row;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .avatar-figure {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+  }
+
+  .interview-body .paper {
+    padding: 16px !important;
+  }
+
+  .ai-text {
+    font-size: 16px !important;
+  }
+
+  /* === TECHNIQUE ANALYSIS GRID === */
+  .tech-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 20px !important;
+  }
+
+  .tech-left .image-wrap {
+    max-height: 300px;
+  }
+
+  .tech-left img {
+    max-height: 300px;
+    object-fit: cover;
+  }
+
+  .tech-right {
+    width: 100%;
+  }
+
+  /* === DOMAIN BANNER === */
+  .domain-banner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .domain-banner>div:first-child {
+    width: 100%;
+    text-align: left;
+  }
+
+  .domain-banner .mode {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    width: 100%;
+  }
+
+  .domain-banner label {
+    font-size: 12px !important;
+  }
+
+  /* === UPLOAD BOXES === */
+  .upload-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 24px !important;
+  }
+
+  .upload {
+    gap: 12px !important;
+  }
+
+  .upload-icon {
+    font-size: 36px !important;
+  }
+
+  /* === KNOWLEDGE GRAPH === */
+  .kg-main {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .graph-container {
+    min-height: 300px !important;
+    width: 100% !important;
+  }
+
+  .node-panel {
+    min-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* === MODAL === */
+  .modal-content,
+  div[style*="maxWidth: 850px"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: 85vh !important;
+    margin: 16px !important;
+  }
+
+  /* === LEARNING MODES === */
+  .learning-modes {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .mode-btn {
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 13px !important;
+  }
+
+  /* === CANVAS === */
+  .graph-canvas {
+    min-height: 300px !important;
+  }
+
+  /* === BUTTONS === */
+  .cta-buttons {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .btn {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+
+  .mic {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    font-size: 14px !important;
+  }
+
+  /* === PAPER CARDS === */
+  .paper-card {
+    padding: 20px !important;
+    border-radius: 4px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .paper-card h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .paper-card h2 {
+    font-size: 1.4rem !important;
+  }
+
+  .paper-card h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .paper-card p {
+    font-size: 15px !important;
+  }
+
+  /* === TECH PANEL === */
+  .tech {
+    padding: 20px !important;
+  }
+
+  .tech h2 {
+    font-size: 1.6rem !important;
+  }
+
+  /* === METRICS & PANELS === */
+  .metrics {
+    gap: 10px !important;
+  }
+
+  .metric>span {
+    width: auto !important;
+    min-width: 120px !important;
+  }
+
+  .metric-bar {
+    flex-grow: 1;
+  }
+
+  /* === INPUT FIELDS === */
+  .type-box {
+    gap: 8px !important;
+    flex-direction: column !important;
+  }
+
+  .type-box input {
+    width: 100% !important;
+  }
+
+  .type-box .submit {
+    width: 100% !important;
+  }
+
+  /* === WAVE ANIMATION === */
+  .wave {
+    gap: 2px !important;
+    height: 20px !important;
+  }
+
+  .wave span {
+    width: 3px !important;
+    height: 6px !important;
+  }
+
+  /* === CHAT === */
+  div[style*="display: flex"][style*="flexDirection: column"][style*="height: 400px"] {
+    height: 350px !important;
+  }
+
+  /* === INTELLIGENCE PANEL === */
+  .insights-grid {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* === REGION EXPLORER === */
+  .region-buttons {
+    gap: 8px !important;
+  }
+
+  .region-btn {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* === CONTAINERS === */
+  .container {
+    padding: 0 12px !important;
+  }
+
+  /* === GENERAL TEXT === */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 0.9em !important;
+  }
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   RESPONSIVE DESIGN - MOBILE PHONES
+   ───────────────────────────────────────────────────────────────────────── */
+
 @media (max-width: 480px) {
+
+  /* === PARCHMENT & HERO === */
   .parchment-body {
     padding: 8px 12px 16px !important;
   }
@@ -2169,11 +2564,321 @@ body {
     font-size: 1.6rem !important;
   }
 
+  .parchment-body p {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* === HEADER & LOGO === */
   .logo-title {
     font-size: 20px !important;
   }
 
+  .header-top {
+    padding: 6px 8px !important;
+    gap: 6px !important;
+  }
+
   .main-content {
     padding: 8px 4px !important;
+  }
+
+  /* === NAVIGATION === */
+  .navbar a,
+  .nav-tab {
+    padding: 12px 12px !important;
+    font-size: 11px !important;
+  }
+
+  /* === SIDEBAR === */
+  .sidebar-col {
+    width: 75vw !important;
+    left: -75vw !important;
+  }
+
+  /* === INTERVIEW PAGE === */
+  .interview {
+    padding: 16px !important;
+  }
+
+  .interview-header {
+    margin-bottom: 16px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .interview-header h2 {
+    font-size: 1.4rem !important;
+  }
+
+  .ai-avatar {
+    gap: 12px !important;
+    padding: 8px 0 !important;
+  }
+
+  .avatar-figure {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .ai-label {
+    padding: 3px 8px !important;
+    font-size: 10px !important;
+  }
+
+  .ai-text {
+    font-size: 15px !important;
+  }
+
+  .mic-box {
+    padding: 12px 0 !important;
+  }
+
+  .mic {
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+  }
+
+  /* === TECHNIQUE ANALYSIS === */
+  .tech {
+    padding: 16px !important;
+  }
+
+  .tech h2 {
+    font-size: 1.4rem !important;
+  }
+
+  .tech-grid {
+    gap: 12px !important;
+  }
+
+  .tech-left .image-wrap {
+    max-height: 250px !important;
+  }
+
+  .upload-box {
+    padding: 20px !important;
+  }
+
+  .upload-icon {
+    font-size: 32px !important;
+  }
+
+  /* === KNOWLEDGE GRAPH === */
+  .graph-container {
+    min-height: 250px !important;
+  }
+
+  .panel-header h3 {
+    font-size: 16px !important;
+  }
+
+  .node-description {
+    font-size: 13px !important;
+  }
+
+  /* === PAPER CARDS === */
+  .paper-card {
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .paper-card::after {
+    width: 35px !important;
+    height: 35px !important;
+  }
+
+  .paper-card h1 {
+    font-size: 1.6rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .paper-card h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .paper-card h3 {
+    font-size: 1.1rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .paper-card p {
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* === BUTTONS === */
+  .btn {
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    min-height: 40px !important;
+  }
+
+  /* === MODAL === */
+  div[style*="display: flex"][style*="alignItems: center"][style*="justifyContent: center"][style*="padding: 24px"] {
+    padding: 8px !important;
+  }
+
+  /* === UPLOAD === */
+  .upload {
+    margin: 16px 0 !important;
+    gap: 10px !important;
+  }
+
+  /* === DOMAIN BANNER === */
+  .domain-banner {
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  .domain-banner label {
+    font-size: 11px !important;
+  }
+
+  /* === STRUCTURING === */
+  .structuring {
+    padding: 12px !important;
+  }
+
+  .struct-title {
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .structuring ul li {
+    font-size: 11px !important;
+    padding: 3px 10px !important;
+  }
+
+  /* === METRICS === */
+  .metric {
+    gap: 8px !important;
+  }
+
+  .metric>span {
+    min-width: 100px !important;
+    font-size: 12px !important;
+  }
+
+  /* === TEXT SIZES === */
+  .tk-desc {
+    font-size: 13px !important;
+  }
+
+  .hint {
+    font-size: 12px !important;
+  }
+
+  /* === INPUT FIELDS === */
+  .type-box input {
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+  }
+
+  .type-box .submit {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* === CHAT INTERFACE === */
+  div[style*="display: flex"][style*="flexDirection: column"][style*="height: 400px"],
+  div[style*="height: 400px"][style*="background: rgba(212"] {
+    height: 300px !important;
+  }
+
+  /* === PREVIEW === */
+  .preview {
+    padding: 12px !important;
+    margin: 12px 0 !important;
+  }
+
+  .preview>div {
+    padding: 4px 0 !important;
+    font-size: 13px !important;
+  }
+
+  /* === ACTIONS === */
+  .actions {
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .actions .submit {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    width: 100% !important;
+  }
+
+  /* === INTELLIGENCE INSIGHTS === */
+  .intelligence-panel {
+    padding: 16px !important;
+    margin-top: 16px !important;
+  }
+
+  .intelligence-panel h4 {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .insight-number {
+    font-size: 28px !important;
+  }
+
+  .insight-label {
+    font-size: 11px !important;
+  }
+
+  /* === REGION EXPLORER === */
+  .region-explorer {
+    margin-top: 16px !important;
+    padding: 16px !important;
+  }
+
+  .region-explorer h4 {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .region-buttons {
+    gap: 6px !important;
+  }
+
+  .region-btn {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+
+  /* === GENERAL SPACING === */
+  .container {
+    padding: 0 10px !important;
+  }
+
+  .page-center {
+    padding: 0 8px 30px !important;
+  }
+
+  /* === WAVE ANIMATION === */
+  .wave {
+    gap: 2px !important;
+    height: 18px !important;
+  }
+
+  .wave span {
+    width: 2px !important;
+    height: 5px !important;
+  }
+
+  /* === TOGGLE SWITCH === */
+  .toggle-switch {
+    gap: 6px !important;
+  }
+
+  .toggle-label {
+    font-size: 12px !important;
   }
 }
