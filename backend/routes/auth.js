@@ -13,14 +13,18 @@ const authMiddleware = require("../middleware/authMiddleware");
 // ─────────────────────────────────────────────
 // Nodemailer Transporter
 // ─────────────────────────────────────────────
-
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, 
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS, 
+    },
+    family: 4,
+    connectionTimeout: 15000,
+    tls: { rejectUnauthorized: false },
+  });
 
 
 // ─────────────────────────────────────────────
