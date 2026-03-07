@@ -1,47 +1,69 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-const dns = require("dns");
+const SibApiV3Sdk = require("@getbrevo/brevo");
 
 const User = require("../models/User");
 const OTP = require("../models/OTP");
 const authMiddleware = require("../middleware/authMiddleware");
 
-dns.setDefaultResultOrder("ipv4first");
+// ─────────────────────────────────────────────
+// Brevo Email Setup
+// ─────────────────────────────────────────────
+const client = new SibApiV3Sdk.TransactionalEmailsApi();
 
-// Gmail transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+client.setApiKey(
+  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
-// send OTP email
+// ─────────────────────────────────────────────
+// Send OTP Email
+// ─────────────────────────────────────────────
 const sendOtpEmail = async (toEmail, otp) => {
 
-  const mailOptions = {
-    from: `"Living Memory" <${process.env.EMAIL_USER}>`,
-    to: toEmail,
+  const emailData = {
+
+    sender: {
+      name: "Living Memory",
+      email: "livingmemory104@gmail.com"
+    },
+
+    to: [
+      {
+        email: toEmail
+      }
+    ],
+
     subject: "🌿 Living Memory Verification Code",
-    html: `
+
+    htmlContent: `
       <div style="font-family:Arial;padding:30px;background:#111;color:white">
-        <h2>Living Memory</h2>
+        <h2>🌿 Living Memory</h2>
         <p>Your OTP code is:</p>
-        <h1 style="letter-spacing:6px">${otp}</h1>
+
+        <h1 style="
+        letter-spacing:8px;
+        background:black;
+        padding:20px;
+        border:1px solid #d4ab63;
+        display:inline-block">
+        ${otp}
+        </h1>
+
         <p>This code expires in 5 minutes.</p>
       </div>
     `
   };
 
-  await transporter.sendMail(mailOptions);
+  await client.sendTransacEmail(emailData);
+
 };
 
 
-
-// check email
+// ─────────────────────────────────────────────
+// Check if email exists
+// ─────────────────────────────────────────────
 router.post("/check-email", async (req, res) => {
 
   try {
@@ -70,8 +92,9 @@ router.post("/check-email", async (req, res) => {
 });
 
 
-
-// send otp
+// ─────────────────────────────────────────────
+// Send OTP
+// ─────────────────────────────────────────────
 router.post("/send-otp", async (req, res) => {
 
   try {
@@ -113,8 +136,9 @@ router.post("/send-otp", async (req, res) => {
 });
 
 
-
-// register
+// ─────────────────────────────────────────────
+// Register
+// ─────────────────────────────────────────────
 router.post("/register", async (req, res) => {
 
   try {
@@ -173,8 +197,9 @@ router.post("/register", async (req, res) => {
 });
 
 
-
-// login verify otp
+// ─────────────────────────────────────────────
+// Verify OTP Login
+// ─────────────────────────────────────────────
 router.post("/verify-otp", async (req, res) => {
 
   try {
@@ -228,8 +253,9 @@ router.post("/verify-otp", async (req, res) => {
 });
 
 
-
-// profile update
+// ─────────────────────────────────────────────
+// Update Profile
+// ─────────────────────────────────────────────
 router.patch("/profile", authMiddleware, async (req, res) => {
 
   try {
@@ -257,8 +283,9 @@ router.patch("/profile", authMiddleware, async (req, res) => {
 });
 
 
-
-// get current user
+// ─────────────────────────────────────────────
+// Get Current User
+// ─────────────────────────────────────────────
 router.get("/me", authMiddleware, async (req, res) => {
 
   try {
