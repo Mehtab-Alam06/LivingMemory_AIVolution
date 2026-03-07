@@ -4,33 +4,38 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const dns = require("dns");
 
 const User = require("../models/User");
 const OTP = require("../models/OTP");
 const authMiddleware = require("../middleware/authMiddleware");
+
+// ─────────────────────────────────────────────
+// FORCE IPv4 (Fix for Render Gmail SMTP error)
+// ─────────────────────────────────────────────
+dns.setDefaultResultOrder("ipv4first");
 
 
 // ─────────────────────────────────────────────
 // Nodemailer Transporter
 // ─────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true, 
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS, 
-    },
-    family: 4,
-    connectionTimeout: 15000,
-    tls: { rejectUnauthorized: false },
-  });
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000
+});
 
 
 // ─────────────────────────────────────────────
 // Send OTP Email Function
 // ─────────────────────────────────────────────
-
 const sendOtpEmail = async (toEmail, otp) => {
 
   const mailOptions = {
@@ -84,7 +89,6 @@ Expires in <b>5 minutes</b>
 // ─────────────────────────────────────────────
 // Check if email exists
 // ─────────────────────────────────────────────
-
 router.post("/check-email", async (req, res) => {
 
   try {
@@ -104,7 +108,7 @@ router.post("/check-email", async (req, res) => {
 
   } catch (err) {
 
-    console.error(err);
+    console.error("CHECK EMAIL ERROR:", err);
 
     res.status(500).json({ error: "Server error" });
 
@@ -115,9 +119,8 @@ router.post("/check-email", async (req, res) => {
 
 
 // ─────────────────────────────────────────────
-// Send OTP (Register + Login)
+// Send OTP
 // ─────────────────────────────────────────────
-
 router.post("/send-otp", async (req, res) => {
 
   try {
@@ -144,7 +147,7 @@ router.post("/send-otp", async (req, res) => {
 
   } catch (err) {
 
-    console.error(err);
+    console.error("OTP ERROR:", err);
 
     res.status(500).json({ error: "Failed to send OTP" });
 
@@ -157,7 +160,6 @@ router.post("/send-otp", async (req, res) => {
 // ─────────────────────────────────────────────
 // Register
 // ─────────────────────────────────────────────
-
 router.post("/register", async (req, res) => {
 
   try {
@@ -205,7 +207,7 @@ router.post("/register", async (req, res) => {
 
   } catch (err) {
 
-    console.error(err);
+    console.error("REGISTER ERROR:", err);
 
     res.status(500).json({ error: "Registration failed" });
 
@@ -218,7 +220,6 @@ router.post("/register", async (req, res) => {
 // ─────────────────────────────────────────────
 // Login with OTP
 // ─────────────────────────────────────────────
-
 router.post("/verify-otp", async (req, res) => {
 
   try {
@@ -258,7 +259,9 @@ router.post("/verify-otp", async (req, res) => {
       }
     });
 
-  } catch {
+  } catch (err) {
+
+    console.error("LOGIN ERROR:", err);
 
     res.status(500).json({ error: "Login failed" });
 
@@ -271,7 +274,6 @@ router.post("/verify-otp", async (req, res) => {
 // ─────────────────────────────────────────────
 // Update Profile
 // ─────────────────────────────────────────────
-
 router.patch("/profile", authMiddleware, async (req, res) => {
 
   try {
@@ -292,7 +294,9 @@ router.patch("/profile", authMiddleware, async (req, res) => {
       name: user.name
     });
 
-  } catch {
+  } catch (err) {
+
+    console.error("PROFILE UPDATE ERROR:", err);
 
     res.status(500).json({ error: "Update failed" });
 
@@ -305,7 +309,6 @@ router.patch("/profile", authMiddleware, async (req, res) => {
 // ─────────────────────────────────────────────
 // Get Current User
 // ─────────────────────────────────────────────
-
 router.get("/me", authMiddleware, async (req, res) => {
 
   try {
@@ -319,13 +322,14 @@ router.get("/me", authMiddleware, async (req, res) => {
 
     res.json(user);
 
-  } catch {
+  } catch (err) {
+
+    console.error("ME ERROR:", err);
 
     res.status(500).json({ error: "Server error" });
 
   }
 
 });
-
 
 module.exports = router;
