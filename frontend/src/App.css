@@ -2881,45 +2881,4 @@ body {
   .toggle-label {
     font-size: 12px !important;
   }
-  /* === FORCED RESPONSIVENESS OVERRIDES === */
-  html, body {
-    overflow-x: hidden !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-  }
-  .app-root, .main-content, .page-wrapper, .page-center, .container, .app-layout {
-    overflow-x: hidden !important;
-    width: 100% !important;
-    max-width: 100vw !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-    box-sizing: border-box !important;
-  }
-  .parchment-container {
-    width: 100% !important;
-    margin: 20px 0 !important;
-    padding: 0 !important;
-  }
-  .parchment-body {
-    padding: 10px 16px 20px !important;
-  }
-  .sticky {
-    width: 100% !important;
-    max-width: 100vw !important;
-    box-sizing: border-box !important;
-  }
-  img, svg, video {
-    max-width: 100% !important;
-    height: auto !important;
-  }
-  .sticky-row, .sticky-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: 20px !important;
-  }
-  * {
-    word-break: break-word;
-    box-sizing: border-box !important;
-  }
 }
