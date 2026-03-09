@@ -142,6 +142,7 @@ export default function App() {
   return (
     <div className="app-root">
       <style>{`
+        * { box-sizing: border-box; }
         .nav-tab { transition: color .2s, border-color .2s, text-shadow .2s; }
         .nav-tab:hover { color: rgba(212,171,99,.75) !important; }
         .nav-tab.active {
@@ -150,36 +151,36 @@ export default function App() {
           text-shadow: 0 0 16px rgba(212,171,99,.55), 0 0 32px rgba(212,171,99,.25) !important;
         }
         .profile-btn:hover { background: rgba(212,171,99,.18) !important; }
-        html, body, #root { height: 100%; overflow: hidden; }
-        .app-root { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
-        .archive-scroll { flex: 1; overflow-y: auto; }
-        .community-fill { flex: 1; display: flex; flex-direction: column; padding: 12px 24px 16px; min-height: 0; }
-        .announce-bar { padding: 8px 12px; font-size: 11px !important; letter-spacing: 0.06em !important; }
+        html, body, #root { height: 100%; width: 100vw; max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
+        .app-root { height: 100dvh; width: 100vw; max-width: 100vw; overflow-x: hidden; overflow-y: hidden; display: flex; flex-direction: column; }
+        .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; width: 100%; }
+        .archive-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; width: 100%; }
+        .community-fill { flex: 1; display: flex; flex-direction: column; padding: 12px 24px 16px; min-height: 0; width: 100%; }
+        .announce-bar { padding: 8px 12px; font-size: 11px !important; letter-spacing: 0.06em !important; width: 100%; }
         .announce-bar .full-text { display: inline; }
         .announce-bar .short-text { display: none; }
         .profile-name { display: inline; }
-        .sticky-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; perspective: 1000px; }
+        .sticky-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; perspective: 1000px; width: 100%; }
+        .community-tab-wrap { padding: 8px 16px 12px; width: 100%; }
         @media (max-width: 768px) {
           .logo-title-el { font-size: 28px !important; }
           .logo-subtitle-el { display: none !important; }
           .announce-bar .full-text { display: none; }
           .announce-bar .short-text { display: inline; }
           .profile-name { display: none !important; }
-          .nav-tab { padding: 12px 20px !important; font-size: 11px !important; }
+          .nav-tab { padding: 12px 14px !important; font-size: 10px !important; letter-spacing: 0.05em !important; }
           .header-top { padding: 8px 12px !important; }
-          .sticky-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
-          .parchment-body { padding: 10px 24px 20px !important; }
-          .page-center { padding: 0 12px 40px !important; }
-          .parchment-body h1 { font-size: 2rem !important; }
-          .parchment-body p { font-size: 16px !important; }
-          .sticky { padding: 20px 16px 24px !important; }
-          .community-tab-wrap { padding: 4px 8px 8px !important; }
+          .sticky-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .parchment-body { padding: 10px 16px 20px !important; }
+          .page-center { padding: 0 8px 40px !important; overflow-x: hidden; }
+          .parchment-container { width: 100% !important; margin: 20px auto 40px !important; }
+          .parchment-body h1 { font-size: 1.8rem !important; }
+          .parchment-body p { font-size: 15px !important; }
+          .sticky { padding: 16px 12px 20px !important; }
+          .community-tab-wrap { padding: 0 !important; }
         }
         @media (max-width: 480px) {
           .logo-title-el { font-size: 22px !important; }
-          .nav-tab { padding: 10px 14px !important; font-size: 10px !important; letter-spacing: 0.06em !important; }
-          .community-tab-wrap { padding: 2px 4px 6px !important; }
         }
       `}</style>
 
@@ -342,10 +343,7 @@ export default function App() {
 
       {/* ── COMMUNITY TAB ── */}
       {mainTab === "community" && (
-        <div
-          className="tab-content community-tab-wrap"
-          style={{ padding: "8px 16px 12px", boxSizing: "border-box" }}
-        >
+        <div className="tab-content community-tab-wrap">
           <CommunityChat domainData={domainData} />
         </div>
       )}
