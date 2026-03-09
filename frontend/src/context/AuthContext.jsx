@@ -4,7 +4,7 @@ import axios from 'axios';
 const AuthContext = createContext();
 export const API = import.meta.env.VITE_BACKEND_URL 
   ? `${import.meta.env.VITE_BACKEND_URL}/api` 
-  : 'http://localhost:5000/api';
+  : 'https://livingmemory-aivolution.onrender.com/api';
 
 export function AuthProvider({ children }) {
   const [user, setUser]       = useState(null);

@@ -337,7 +337,7 @@ const CommunityChat = ({ domainData }) => {
 
   useEffect(() => {
     if (!token) return;
-    const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    const BACKEND = import.meta.env.VITE_BACKEND_URL || 'https://livingmemory-aivolution.onrender.com';
     const socket = io(BACKEND, {
       auth: { token },
       transports: ['websocket'],
@@ -382,7 +382,7 @@ const CommunityChat = ({ domainData }) => {
       try {
         const formData = new FormData();
         formData.append('image', imageFile);
-        const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+        const BACKEND = import.meta.env.VITE_BACKEND_URL || 'https://livingmemory-aivolution.onrender.com';
         const res = await fetch(`${BACKEND}/api/upload`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
