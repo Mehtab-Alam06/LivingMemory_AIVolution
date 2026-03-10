@@ -12,6 +12,7 @@ import AuthPage from "./components/Auth/AuthPage";
 import ProfileModal from "./components/Auth/ProfileModal";
 import CommunityChat from "./components/Community/CommunityChat";
 import ContributeKnowledge from "./components/ContributeKnowledge/ContributeKnowledge";
+import LandingPage from "./components/LandingPage/LandingPage";
 import { useAuth } from "./context/AuthContext";
 
 const DOMAIN_CONFIG = {
@@ -49,6 +50,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("record");
   const [showProfile, setShowProfile] = useState(false);
   const [mainTab, setMainTab] = useState("home");
+  const [showAuth, setShowAuth] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const chatEndRef = useRef(null);
@@ -138,6 +140,7 @@ export default function App() {
     );
 
   // AUTH WALL
+  if (!user && !showAuth) return <LandingPage onEnter={() => setShowAuth(true)} />;
   if (!user) return <AuthPage />;
 
   return (

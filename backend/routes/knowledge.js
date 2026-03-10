@@ -105,4 +105,22 @@ router.get('/stats', authMiddleware, async (req, res) => {
   }
 });
 
+// ─────────────────────────────────────────────
+// GET /api/knowledge/submission/:id
+// ─────────────────────────────────────────────
+router.get('/submission/:id', authMiddleware, async (req, res) => {
+  try {
+    const submission = await KnowledgeSubmission.findOne({
+      _id: req.params.id,
+      userId: req.user.userId
+    });
+    if (!submission) return res.status(404).json({ error: 'Submission not found' });
+    res.json(submission);
+  } catch (err) {
+    console.error('❌ SUBMISSION DETAIL ERROR:', err);
+    res.status(500).json({ error: 'Failed to fetch submission' });
+  }
+});
+
 module.exports = router;
+
