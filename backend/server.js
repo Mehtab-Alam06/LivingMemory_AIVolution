@@ -57,6 +57,7 @@ mongoose
 app.use("/api/auth", require("./routes/auth"));
 app.use("/uploads", express.static("uploads"));
 app.use("/api/upload", require("./routes/upload"));
+app.use("/api/knowledge", require("./routes/knowledge"));
 
 // Root test route
 app.get("/", (req, res) => {

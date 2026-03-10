@@ -11,6 +11,7 @@ import StickyNote from "./components/StickyNote";
 import AuthPage from "./components/Auth/AuthPage";
 import ProfileModal from "./components/Auth/ProfileModal";
 import CommunityChat from "./components/Community/CommunityChat";
+import ContributeKnowledge from "./components/ContributeKnowledge/ContributeKnowledge";
 import { useAuth } from "./context/AuthContext";
 
 const DOMAIN_CONFIG = {
@@ -155,6 +156,7 @@ export default function App() {
         .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
         .archive-scroll { flex: 1; overflow-y: auto; }
         .community-fill { flex: 1; display: flex; flex-direction: column; padding: 12px 24px 16px; min-height: 0; }
+        .contribute-fill { flex: 1; overflow-y: auto; }
         .announce-bar { padding: 8px 12px; font-size: 11px !important; letter-spacing: 0.06em !important; }
         .announce-bar .full-text { display: inline; }
         .announce-bar .short-text { display: none; }
@@ -310,6 +312,7 @@ export default function App() {
         {[
           { id: "home", label: "🏛", text: "Archive" },
           { id: "community", label: "🌿", text: "Community" },
+          { id: "contribute", label: "📜", text: "Contribute" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -347,6 +350,13 @@ export default function App() {
           style={{ padding: "8px 16px 12px", boxSizing: "border-box" }}
         >
           <CommunityChat domainData={domainData} />
+        </div>
+      )}
+
+      {/* ── CONTRIBUTE TAB ── */}
+      {mainTab === "contribute" && (
+        <div className="tab-content contribute-fill">
+          <ContributeKnowledge />
         </div>
       )}
 
