@@ -13,6 +13,8 @@ import KnowledgeSection from "./components/KnowledgeSection";
 import AuthPage from "./components/Auth/AuthPage";
 import ProfileModal from "./components/Auth/ProfileModal";
 import CommunityChat from "./components/Community/CommunityChat";
+import ContributeKnowledge from "./components/ContributeKnowledge/ContributeKnowledge";
+import LandingPage from "./components/LandingPage/LandingPage";
 import { useAuth } from "./context/AuthContext";
 
 const DOMAIN_CONFIG = {
@@ -50,6 +52,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("record");
   const [showProfile, setShowProfile] = useState(false);
   const [mainTab, setMainTab] = useState("home");
+  const [showAuth, setShowAuth] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const chatEndRef = useRef(null);
@@ -139,6 +142,8 @@ export default function App() {
     );
 
   // ── AUTH WALL ────────────────────────────────────────────────────────────────
+  if (!user && !showAuth)
+    return <LandingPage onEnter={() => setShowAuth(true)} />;
   if (!user) return <AuthPage />;
 
   return (
@@ -157,6 +162,7 @@ export default function App() {
         .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
         .archive-scroll { flex: 1; overflow-y: auto; }
         .community-fill { flex: 1; display: flex; flex-direction: column; padding: 12px 24px 16px; min-height: 0; }
+        .contribute-fill { flex: 1; overflow-y: auto; }
         .announce-bar { padding: 8px 12px; font-size: 11px !important; letter-spacing: 0.06em !important; }
         .announce-bar .full-text { display: inline; }
         .announce-bar .short-text { display: none; }
@@ -311,6 +317,7 @@ export default function App() {
         {[
           { id: "home", label: "🏛", text: "Archive" },
           { id: "community", label: "🌿", text: "Community" },
+          { id: "contribute", label: "📜", text: "Contribute" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -351,7 +358,14 @@ export default function App() {
         </div>
       )}
 
-      {/* ── Home / Archive Tab ── */}
+      {/* ── CONTRIBUTE TAB ── */}
+      {mainTab === "contribute" && (
+        <div className="tab-content contribute-fill">
+          <ContributeKnowledge />
+        </div>
+      )}
+
+      {/* ── HOME / ARCHIVE TAB ── */}
       {mainTab === "home" && (
         <div className="tab-content">
           <div className="archive-scroll">
