@@ -8,6 +8,8 @@ import {
 } from "./data/knowledgedata.js";
 import PaperCard from "./components/PaperCard";
 import StickyNote from "./components/StickyNote";
+import AIInterview from "./components/Interview";
+import KnowledgeSection from "./components/KnowledgeSection";
 import AuthPage from "./components/Auth/AuthPage";
 import ProfileModal from "./components/Auth/ProfileModal";
 import CommunityChat from "./components/Community/CommunityChat";
@@ -94,7 +96,7 @@ export default function App() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatHistory]);
 
-  // LOADING
+  // ── LOADING ──────────────────────────────────────────────────────────────────
   if (loading)
     return (
       <div
@@ -136,7 +138,7 @@ export default function App() {
       </div>
     );
 
-  // AUTH WALL
+  // ── AUTH WALL ────────────────────────────────────────────────────────────────
   if (!user) return <AuthPage />;
 
   return (
@@ -160,6 +162,7 @@ export default function App() {
         .announce-bar .short-text { display: none; }
         .profile-name { display: inline; }
         .sticky-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; perspective: 1000px; }
+        .modal-tab-content { padding: max(16px,2vw); }
         @media (max-width: 768px) {
           .logo-title-el { font-size: 28px !important; }
           .logo-subtitle-el { display: none !important; }
@@ -175,6 +178,7 @@ export default function App() {
           .parchment-body p { font-size: 16px !important; }
           .sticky { padding: 20px 16px 24px !important; }
           .community-tab-wrap { padding: 4px 8px 8px !important; }
+          .modal-tab-content { padding: 12px !important; }
         }
         @media (max-width: 480px) {
           .logo-title-el { font-size: 22px !important; }
@@ -183,7 +187,7 @@ export default function App() {
         }
       `}</style>
 
-      {/* Announce Bar */}
+      {/* ── Announce Bar ── */}
       <div
         className="announce-bar"
         style={{
@@ -199,16 +203,15 @@ export default function App() {
       >
         🌿{" "}
         <span className="full-text" style={{ opacity: 0.7 }}>
-          LIVING MEMORY PROJECT —
+          LIVING MEMORY PROJECT —{" "}
         </span>
         <span className="full-text">
-          {" "}
           PRESERVING THE WISDOM OF ODISHA BEFORE IT IS LOST FOREVER
         </span>
         <span className="short-text">LIVING MEMORY PROJECT</span>
       </div>
 
-      {/* Header */}
+      {/* ── Header ── */}
       <header className="header">
         <div className="header-top">
           <button className="hamburger" onClick={() => setSidebarOpen(true)}>
@@ -237,8 +240,6 @@ export default function App() {
               </span>
             </a>
           </div>
-
-          {/* Profile Button */}
           <button
             className="profile-btn"
             onClick={() => setShowProfile(true)}
@@ -291,7 +292,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── CENTERED GLOWING NAV TABS ── */}
+      {/* ── Main Nav Tabs ── */}
       <div
         style={{
           background:
@@ -340,7 +341,7 @@ export default function App() {
         ))}
       </div>
 
-      {/* ── COMMUNITY TAB ── */}
+      {/* ── Community Tab ── */}
       {mainTab === "community" && (
         <div
           className="tab-content community-tab-wrap"
@@ -350,7 +351,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ── HOME / ARCHIVE TAB ── */}
+      {/* ── Home / Archive Tab ── */}
       {mainTab === "home" && (
         <div className="tab-content">
           <div className="archive-scroll">
@@ -387,104 +388,60 @@ export default function App() {
 
                 {/* Sticky Notes */}
                 <div className="sticky-grid">
-                  <div
-                    onClick={() => openSidebarForDomain("agriculture")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <StickyNote
-                      color="green"
-                      title="🌾 Agriculture"
-                      animated={true}
+                  {[
+                    {
+                      domain: "agriculture",
+                      color: "green",
+                      title: "🌾 Agriculture",
+                      desc: "Indigenous cultivation, seed preservation, soil knowledge, and weather reading.",
+                      count: "78 entries · A–Z",
+                    },
+                    {
+                      domain: "health",
+                      color: "blue",
+                      title: "🏥 Health",
+                      desc: "Tribal herbal medicine, forest plant pharmacology, and ancestral healing practices.",
+                      count: "64 entries · A–Z",
+                    },
+                    {
+                      domain: "art-craft",
+                      color: "yellow",
+                      title: "🎨 Art & Craft",
+                      desc: "Pattachitra, Dhokra, Sambalpuri weaving, and hundreds of craft traditions.",
+                      count: "60 entries · A–Z",
+                    },
+                  ].map(({ domain, color, title, desc, count }) => (
+                    <div
+                      key={domain}
+                      onClick={() => openSidebarForDomain(domain)}
+                      style={{ cursor: "pointer" }}
                     >
-                      <p
-                        style={{
-                          textAlign: "center",
-                          fontSize: "16px",
-                          color: "#2a1a08",
-                          marginBottom: "16px",
-                          fontFamily: "Cormorant Garamond,serif",
-                        }}
-                      >
-                        Indigenous cultivation, seed preservation, soil
-                        knowledge, and weather reading.
-                      </p>
-                      <div
-                        style={{
-                          borderTop: "1px solid rgba(0,0,0,0.1)",
-                          paddingTop: "10px",
-                          textAlign: "center",
-                          fontSize: "12px",
-                          fontFamily: "Space Mono",
-                        }}
-                      >
-                        78 entries · A–Z
-                      </div>
-                    </StickyNote>
-                  </div>
-                  <div
-                    onClick={() => openSidebarForDomain("health")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <StickyNote color="blue" title="🏥 Health" animated={true}>
-                      <p
-                        style={{
-                          textAlign: "center",
-                          fontSize: "16px",
-                          color: "#2a1a08",
-                          marginBottom: "16px",
-                          fontFamily: "Cormorant Garamond,serif",
-                        }}
-                      >
-                        Tribal herbal medicine, forest plant pharmacology, and
-                        ancestral healing practices.
-                      </p>
-                      <div
-                        style={{
-                          borderTop: "1px solid rgba(0,0,0,0.1)",
-                          paddingTop: "10px",
-                          textAlign: "center",
-                          fontSize: "12px",
-                          fontFamily: "Space Mono",
-                        }}
-                      >
-                        64 entries · A–Z
-                      </div>
-                    </StickyNote>
-                  </div>
-                  <div
-                    onClick={() => openSidebarForDomain("art-craft")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <StickyNote
-                      color="yellow"
-                      title="🎨 Art & Craft"
-                      animated={true}
-                    >
-                      <p
-                        style={{
-                          textAlign: "center",
-                          fontSize: "16px",
-                          color: "#2a1a08",
-                          marginBottom: "16px",
-                          fontFamily: "Cormorant Garamond,serif",
-                        }}
-                      >
-                        Pattachitra, Dhokra, Sambalpuri weaving, and hundreds of
-                        craft traditions.
-                      </p>
-                      <div
-                        style={{
-                          borderTop: "1px solid rgba(0,0,0,0.1)",
-                          paddingTop: "10px",
-                          textAlign: "center",
-                          fontSize: "12px",
-                          fontFamily: "Space Mono",
-                        }}
-                      >
-                        60 entries · A–Z
-                      </div>
-                    </StickyNote>
-                  </div>
+                      <StickyNote color={color} title={title} animated={true}>
+                        <p
+                          style={{
+                            textAlign: "center",
+                            fontSize: "16px",
+                            color: "#2a1a08",
+                            marginBottom: "16px",
+                            fontFamily: "Cormorant Garamond,serif",
+                          }}
+                        >
+                          {desc}
+                        </p>
+                        <div
+                          style={{
+                            borderTop: "1px solid rgba(0,0,0,0.1)",
+                            paddingTop: "10px",
+                            textAlign: "center",
+                            fontSize: "12px",
+                            fontFamily: "Space Mono",
+                          }}
+                        >
+                          {count}
+                        </div>
+                      </StickyNote>
+                    </div>
+                  ))}
                 </div>
               </div>
             </main>
@@ -492,10 +449,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Profile Modal */}
+      {/* ── Profile Modal ── */}
       {showProfile && <ProfileModal onClose={() => setShowProfile(false)} />}
 
-      {/* OVERLAYS */}
+      {/* ── Overlay ── */}
       {(isSidebarOpen || modalState.isOpen) && (
         <div
           onClick={() => {
@@ -512,7 +469,7 @@ export default function App() {
         />
       )}
 
-      {/* A-Z SIDEBAR */}
+      {/* ── A-Z Sidebar ── */}
       <aside
         style={{
           position: "fixed",
@@ -696,7 +653,7 @@ export default function App() {
                                     (e.target.style.color = "#5a4a3a")
                                   }
                                 >
-                                  {title}{" "}
+                                  {title}
                                   {hasSample && (
                                     <span
                                       style={{
@@ -723,7 +680,7 @@ export default function App() {
         </div>
       </aside>
 
-      {/* ENTRY MODAL */}
+      {/* ── Entry Modal ── */}
       <div
         style={{
           position: "fixed",
@@ -740,12 +697,13 @@ export default function App() {
             style={{
               width: "100%",
               maxWidth: "min(850px, 95vw)",
-              maxHeight: "min(90vh, 90vh)",
+              maxHeight: "90vh",
               overflowY: "auto",
               padding: "0",
               borderRadius: "4px",
             }}
           >
+            {/* Modal Header */}
             <div
               style={{
                 padding: "max(16px, 2vw)",
@@ -795,6 +753,8 @@ export default function App() {
                 ✕ Close
               </button>
             </div>
+
+            {/* Modal Tabs */}
             <div
               style={{
                 display: "flex",
@@ -834,191 +794,96 @@ export default function App() {
                 </button>
               ))}
             </div>
-            <div style={{ padding: "max(16px, 2vw)" }}>
-              {activeTab === "record" && (
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      border: "2px dashed rgba(212,171,99,0.4)",
-                      padding: "48px",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      background: "rgba(212,171,99,0.05)",
-                      marginBottom: "24px",
-                    }}
-                  >
-                    <div style={{ fontSize: "48px", marginBottom: "16px" }}>
-                      🎙
-                    </div>
-                    <h3
-                      style={{
-                        fontFamily: "IM Fell DW Pica,serif",
-                        fontSize: "24px",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      Upload Interview
-                    </h3>
-                    <p
-                      style={{
-                        color: "#7b6b5a",
-                        fontSize: "16px",
-                        fontFamily: "Cormorant Garamond,serif",
-                        marginBottom: "24px",
-                      }}
-                    >
-                      Video or audio recording of the knowledge holder
-                    </p>
-                    <button
-                      className="btn btn-primary"
-                      style={{ fontFamily: "IM Fell DW Pica,serif" }}
-                    >
-                      Choose File
-                    </button>
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "IM Fell DW Pica,serif",
-                      color: "#7b6b5a",
-                      margin: "24px 0",
-                    }}
-                  >
-                    — OR —
-                  </div>
-                  <button
-                    className="mic"
-                    style={{
-                      width: "100%",
-                      maxWidth: "300px",
-                      margin: "0 auto",
-                      display: "block",
-                      fontFamily: "IM Fell DW Pica,serif",
-                    }}
-                  >
-                    Record Live Interview
-                  </button>
-                </div>
-              )}
-              {activeTab === "knowledge" && (
-                <div>
-                  {sampleKnowledge[modalState.domain]?.[modalState.entry] ? (
-                    sampleKnowledge[modalState.domain][
-                      modalState.entry
-                    ].blocks.map((b, i) => (
+
+            {/* ── Record Tab — stays mounted, hidden via CSS when inactive ── */}
+            <div
+              style={{ display: activeTab === "record" ? "block" : "none" }}
+              className="modal-tab-content"
+            >
+              <AIInterview
+                topic={modalState.entry}
+                domain={modalState.domain}
+                userName={user?.name}
+                onSave={(data) => console.log("Interview saved:", data)}
+              />
+            </div>
+
+            {/* ── Knowledge Tab — interview history & archive ── */}
+            {activeTab === "knowledge" && (
+              <KnowledgeSection
+                topic={modalState.entry}
+                domain={modalState.domain}
+              />
+            )}
+
+            {/* ── Analysis Tab ── */}
+            {activeTab === "analysis" && (
+              <div className="modal-tab-content">
+                {sampleAnalysis[modalState.domain]?.[modalState.entry] ? (
+                  sampleAnalysis[modalState.domain][modalState.entry].map(
+                    (p, i) => (
                       <div
                         key={i}
                         style={{
-                          background: "rgba(212,171,99,0.08)",
+                          background: "rgba(255,255,255,0.5)",
+                          border: "1px solid rgba(212,171,99,0.3)",
                           borderLeft: `4px solid ${DOMAIN_CONFIG[modalState.domain].color}`,
-                          padding: "16px 24px",
+                          padding: "16px",
                           marginBottom: "16px",
-                          borderRadius: "0 8px 8px 0",
                         }}
                       >
                         <div
                           style={{
                             fontFamily: "Space Mono",
                             fontSize: "11px",
-                            color: "#7b6b5a",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.1em",
+                            color: DOMAIN_CONFIG[modalState.domain].color,
                             marginBottom: "8px",
                           }}
                         >
-                          {b.label}
+                          {p.time} · {p.title}
                         </div>
                         <div
                           style={{
-                            fontSize: "18px",
+                            fontSize: "17px",
                             fontFamily: "Cormorant Garamond,serif",
-                            color: "#2a1a08",
-                            lineHeight: "1.6",
+                            color: "#353535",
+                            marginBottom: "8px",
                           }}
                         >
-                          {b.text}
+                          {p.desc}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: "Space Mono",
+                            fontSize: "11px",
+                            color: "#d05e52",
+                          }}
+                        >
+                          {p.critical}
                         </div>
                       </div>
-                    ))
-                  ) : (
-                    <div
-                      style={{
-                        textAlign: "center",
-                        padding: "48px",
-                        color: "#7b6b5a",
-                        fontStyle: "italic",
-                        fontFamily: "Cormorant Garamond,serif",
-                        fontSize: "18px",
-                      }}
-                    >
-                      No interview has been recorded for this entry yet.
-                    </div>
-                  )}
-                </div>
-              )}
-              {activeTab === "analysis" && (
-                <div>
-                  {sampleAnalysis[modalState.domain]?.[modalState.entry] ? (
-                    sampleAnalysis[modalState.domain][modalState.entry].map(
-                      (p, i) => (
-                        <div
-                          key={i}
-                          style={{
-                            background: "rgba(255,255,255,0.5)",
-                            border: "1px solid rgba(212,171,99,0.3)",
-                            borderLeft: `4px solid ${DOMAIN_CONFIG[modalState.domain].color}`,
-                            padding: "16px",
-                            marginBottom: "16px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontFamily: "Space Mono",
-                              fontSize: "11px",
-                              color: DOMAIN_CONFIG[modalState.domain].color,
-                              marginBottom: "8px",
-                            }}
-                          >
-                            {p.time} · {p.title}
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "17px",
-                              fontFamily: "Cormorant Garamond,serif",
-                              color: "#353535",
-                              marginBottom: "8px",
-                            }}
-                          >
-                            {p.desc}
-                          </div>
-                          <div
-                            style={{
-                              fontFamily: "Space Mono",
-                              fontSize: "11px",
-                              color: "#d05e52",
-                            }}
-                          >
-                            {p.critical}
-                          </div>
-                        </div>
-                      ),
-                    )
-                  ) : (
-                    <div
-                      style={{
-                        textAlign: "center",
-                        padding: "48px",
-                        color: "#7b6b5a",
-                        fontStyle: "italic",
-                        fontFamily: "Cormorant Garamond,serif",
-                        fontSize: "18px",
-                      }}
-                    >
-                      Upload a technique video to generate AI movement analysis.
-                    </div>
-                  )}
-                </div>
-              )}
-              {activeTab === "graph" && (
+                    ),
+                  )
+                ) : (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "48px",
+                      color: "#7b6b5a",
+                      fontStyle: "italic",
+                      fontFamily: "Cormorant Garamond,serif",
+                      fontSize: "18px",
+                    }}
+                  >
+                    Upload a technique video to generate AI movement analysis.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Graph Tab ── */}
+            {activeTab === "graph" && (
+              <div className="modal-tab-content">
                 <div
                   style={{
                     height: "400px",
@@ -1111,8 +976,12 @@ export default function App() {
                     </div>
                   )}
                 </div>
-              )}
-              {activeTab === "chat" && (
+              </div>
+            )}
+
+            {/* ── Mentor / Chat Tab ── */}
+            {activeTab === "chat" && (
+              <div className="modal-tab-content">
                 <div
                   style={{
                     display: "flex",
@@ -1219,8 +1088,8 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </PaperCard>
         )}
       </div>

@@ -10,7 +10,6 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT || 5000;
 
-// Allowed frontend domains
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
@@ -19,12 +18,10 @@ const allowedOrigins = [
   "https://living-memory-aivolution.vercel.app",
 ];
 
-// CORS
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } else {
@@ -32,22 +29,20 @@ app.use(
       }
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    credentials: true
-  })
+    credentials: true,
+  }),
 );
 
 app.use(express.json());
 
-// Socket.io
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
-// MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
@@ -57,18 +52,15 @@ mongoose
 app.use("/api/auth", require("./routes/auth"));
 app.use("/uploads", express.static("uploads"));
 app.use("/api/upload", require("./routes/upload"));
+app.use("/api/interviews", require("./routes/Interviews"));
+app.use("/api/ai", require("./routes/Ai")); // ← Gemini AI proxy
 
-// Root test route
 app.get("/", (req, res) => {
-  res.json({
-    status: "🌿 Living Memory API is running"
-  });
+  res.json({ status: "🌿 Living Memory API is running" });
 });
 
-// Socket handler
 require("./socket/chatHandler")(io);
 
-// Start server
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
