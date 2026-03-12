@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000";
 const AI_PROXY = `${BASE_URL}/api/ai`;
 
 const getToken = () => {

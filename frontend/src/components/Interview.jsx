@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000";
 const AI_PROXY = `${BASE_URL}/api/ai`;
 
 // ── TTS ───────────────────────────────────────────────────────────────────────
@@ -178,9 +178,9 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
           const data = await res.json();
           if (data?.questions?.length > 0 && data.entries?.length > 0) {
             setCoreQuestions(data.questions); setEntries(data.entries);
-            setCoreIndex(data.coreIndex || 0); setFollowupCount(data.followupCount || 0); setFinalCount(data.finalCount || 0);
+            setCoreIndex(data.currentQuestionIndex || 0); setFollowupCount(data.followupCount || 0); setFinalCount(data.finalCount || 0);
             setSavedId(data._id || null);
-            sessionStorage.setItem(sKey(topic), JSON.stringify({ coreIndex: data.coreIndex || 0, followupCount: data.followupCount || 0, finalCount: data.finalCount || 0, entries: data.entries, phase: data.completed ? PHASE.DONE : PHASE.PAUSED }));
+            sessionStorage.setItem(sKey(topic), JSON.stringify({ coreIndex: data.currentQuestionIndex || 0, followupCount: data.followupCount || 0, finalCount: data.finalCount || 0, entries: data.entries, phase: data.completed ? PHASE.DONE : PHASE.PAUSED }));
             sessionStorage.setItem(qKey(topic), JSON.stringify(data.questions));
             fetchImages(topic);
             setCurrentEntry(data.entries.find(e => e.answer === null) || null);
