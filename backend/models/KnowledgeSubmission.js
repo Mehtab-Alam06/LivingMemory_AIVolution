@@ -49,6 +49,7 @@ const KnowledgeSubmissionSchema = new mongoose.Schema({
   useCase: { type: String },
   problemSolved: { type: String },
   materials: { type: String },
+  queryForTeam: { type: String },
   mediaFiles: [{ type: String }],
 
   // Ownership & Permissions

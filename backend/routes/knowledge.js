@@ -22,7 +22,7 @@ router.post('/submit', authMiddleware, async (req, res) => {
       name, email, phone, country, stateRegion, community, ageGroup,
       knowledgeTitle, description, domain, ownershipType,
       knowledgeRegion, knowledgeAge,
-      explanation, useCase, problemSolved, materials, mediaFiles,
+      explanation, useCase, problemSolved, materials, queryForTeam, mediaFiles,
       permissionStatus, confirmAccuracy, creditedAuthor
     } = req.body;
 
@@ -48,7 +48,7 @@ router.post('/submit', authMiddleware, async (req, res) => {
       domain, ownershipType,
       knowledgeRegion, knowledgeAge,
       explanation: explanation.trim(),
-      useCase, problemSolved, materials,
+      useCase, problemSolved, materials, queryForTeam,
       mediaFiles: mediaFiles || [],
       permissionStatus: permissionStatus || 'yes',
       confirmAccuracy: !!confirmAccuracy,
@@ -119,6 +119,66 @@ router.get('/submission/:id', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('❌ SUBMISSION DETAIL ERROR:', err);
     res.status(500).json({ error: 'Failed to fetch submission' });
+  }
+});
+
+// ─────────────────────────────────────────────
+// PUT /api/knowledge/edit/:id
+// ─────────────────────────────────────────────
+router.put('/edit/:id', authMiddleware, async (req, res) => {
+  try {
+    const {
+      name, email, phone, country, stateRegion, community, ageGroup,
+      knowledgeTitle, description, domain, ownershipType,
+      knowledgeRegion, knowledgeAge,
+      explanation, useCase, problemSolved, materials, queryForTeam, mediaFiles,
+      permissionStatus, confirmAccuracy, creditedAuthor
+    } = req.body;
+
+    const submission = await KnowledgeSubmission.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.userId },
+      {
+        name, email, phone, country, stateRegion, community, ageGroup,
+        knowledgeTitle: knowledgeTitle?.trim(),
+        description: description?.trim(),
+        domain, ownershipType,
+        knowledgeRegion, knowledgeAge,
+        explanation: explanation?.trim(),
+        useCase, problemSolved, materials, queryForTeam,
+        mediaFiles: mediaFiles || [],
+        permissionStatus: permissionStatus || 'yes',
+        confirmAccuracy: !!confirmAccuracy,
+        creditedAuthor: !!creditedAuthor,
+        submissionStatus: 'Pending' // Reset to pending after edit
+      },
+      { new: true }
+    );
+
+    if (!submission) return res.status(404).json({ error: 'Submission not found or unauthorized' });
+
+    res.json({ message: 'Submission updated successfully', submission });
+  } catch (err) {
+    console.error('❌ KNOWLEDGE EDIT ERROR:', err);
+    res.status(500).json({ error: 'Failed to update submission' });
+  }
+});
+
+// ─────────────────────────────────────────────
+// DELETE /api/knowledge/delete/:id
+// ─────────────────────────────────────────────
+router.delete('/delete/:id', authMiddleware, async (req, res) => {
+  try {
+    const deleted = await KnowledgeSubmission.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.userId
+    });
+    
+    if (!deleted) return res.status(404).json({ error: 'Submission not found or unauthorized' });
+    
+    res.json({ message: 'Submission deleted successfully' });
+  } catch (err) {
+    console.error('❌ KNOWLEDGE DELETE ERROR:', err);
+    res.status(500).json({ error: 'Failed to delete submission' });
   }
 });
 

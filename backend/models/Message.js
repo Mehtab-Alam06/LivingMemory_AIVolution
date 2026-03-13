@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const MessageSchema = new mongoose.Schema({
   user: {
     name: { type: String },
-    email: { type: String }
+    email: { type: String },
+    role: { type: String, default: 'user' }
   },
   text: {
     type: String,

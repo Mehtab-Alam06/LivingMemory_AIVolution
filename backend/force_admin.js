@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 
 mongoose.connect(process.env.MONGO_URI).then(async () => {
-  const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+  const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "ayusmankar1012@gmail.com", "beherasarita475@gmail.com"];
   const result = await User.updateMany(
     { email: { $in: adminEmails } },
     { $set: { role: 'admin' } }

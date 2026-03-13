@@ -31,9 +31,10 @@ export default function ContributeKnowledge() {
   const [form, setForm] = useState({
     name: user?.name || "", email: user?.email || "", phone: "", country: "", stateRegion: "",
     knowledgeTitle: "", description: "", domain: "", ownershipType: "",
-    knowledgeRegion: "", knowledgeAge: "", explanation: "",
+    knowledgeRegion: "", knowledgeAge: "", explanation: "", useCase: "", problemSolved: "", materials: "", queryForTeam: "",
     permissionStatus: "yes", confirmAccuracy: false, creditedAuthor: false,
   });
+  const [editId, setEditId] = useState(null);
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -75,17 +76,49 @@ export default function ContributeKnowledge() {
     const e = validate(); if (e) { setError(e); return; }
     setSubmitting(true); setError("");
     try {
-      const { data } = await axios.post(`${API}/knowledge/submit`, form, { headers });
-      setTrackingId(data.trackingId); setView("success");
-      fetchStats(); fetchSubmissions();
+      if (editId) {
+        await axios.put(`${API}/knowledge/edit/${editId}`, form, { headers });
+        setEditId(null);
+        setView("landing");
+        fetchStats(); fetchSubmissions();
+      } else {
+        const { data } = await axios.post(`${API}/knowledge/submit`, form, { headers });
+        setTrackingId(data.trackingId); setView("success");
+        fetchStats(); fetchSubmissions();
+      }
     } catch (err) { setError(err.response?.data?.errors?.[0] || err.response?.data?.error || "Submission failed. Please try again."); }
     setSubmitting(false);
+  };
+
+  const handleEdit = async (e, id) => {
+    e.stopPropagation();
+    try {
+      const { data } = await axios.get(`${API}/knowledge/submission/${id}`, { headers });
+      setForm({ ...data });
+      setEditId(id);
+      setStep(0);
+      setView("form");
+    } catch {
+      alert("Failed to load submission for editing.");
+    }
+  };
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this contribution?")) return;
+    try {
+      await axios.delete(`${API}/knowledge/delete/${id}`, { headers });
+      fetchStats(); fetchSubmissions();
+    } catch {
+      alert("Failed to delete submission.");
+    }
   };
 
   const reset = () => {
     setForm({ name: user?.name || "", email: user?.email || "", phone: "", country: "", stateRegion: "",
       knowledgeTitle: "", description: "", domain: "", ownershipType: "", knowledgeRegion: "", knowledgeAge: "",
-      explanation: "", permissionStatus: "yes", confirmAccuracy: false, creditedAuthor: false });
+      explanation: "", useCase: "", problemSolved: "", materials: "", queryForTeam: "", permissionStatus: "yes", confirmAccuracy: false, creditedAuthor: false });
+    setEditId(null);
     setStep(0); setError(""); setView("landing");
   };
 
@@ -193,6 +226,7 @@ export default function ContributeKnowledge() {
                 {fieldRow("Country / State", [d.country, d.stateRegion].filter(Boolean).join(", ") || null)}
                 {fieldRow("Permission", d.permissionStatus === "yes" ? "Yes, publicly shareable" : d.permissionStatus === "no" ? "No" : "Needs community approval")}
                 {d.creditedAuthor && fieldRow("Credit", "Wants to be credited")}
+                {fieldRow("Query for Team", d.queryForTeam)}
               </div>
 
               <button className="ck-btn" onClick={() => setDetailItem(null)} style={{
@@ -310,6 +344,9 @@ export default function ContributeKnowledge() {
                 <label style={lbl}>Explain the knowledge step-by-step <span style={{ color: "#b03020" }}>*</span></label>
                 <textarea className="ck-inp" style={{ ...ta, minHeight: 120 }} value={form.explanation} onChange={e => set("explanation", e.target.value)} placeholder="Describe the knowledge, when it's used, what problem it solves, materials involved..." />
 
+                <label style={lbl}>Any Query for the Team? (Optional)</label>
+                <textarea className="ck-inp" style={{ ...ta, minHeight: 70 }} value={form.queryForTeam} onChange={e => set("queryForTeam", e.target.value)} placeholder="Leave any questions or comments for the verification team..." />
+
                 <label style={lbl}>Permission to share publicly</label>
                 <div style={{ marginBottom: 14 }}>
                   {[{ v: "yes", l: "Yes, I have permission" }, { v: "no", l: "No" }, { v: "needs-approval", l: "Needs community approval" }].map(o => (
@@ -418,7 +455,11 @@ export default function ContributeKnowledge() {
                       {s.trackingId} · {s.domain} · {new Date(s.createdAt).toLocaleDateString()}
                     </div>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <button onClick={(e) => handleEdit(e, s._id)} style={{ background: "rgba(212,171,99,.15)", border: "1px solid rgba(212,171,99,.3)", color: "#9b6b2f", borderRadius: 4, padding: "4px 8px", cursor: "pointer", fontFamily: "Space Mono,monospace", fontSize: 10 }}>Edit</button>
+                      <button onClick={(e) => handleDelete(e, s._id)} style={{ background: "rgba(208,94,82,.1)", border: "1px solid rgba(208,94,82,.3)", color: "#b03020", borderRadius: 4, padding: "4px 8px", cursor: "pointer", fontFamily: "Space Mono,monospace", fontSize: 10 }}>Delete</button>
+                    </div>
                     <span style={{
                       fontFamily: "Space Mono,monospace", fontSize: 9, letterSpacing: ".08em", textTransform: "uppercase",
                       padding: "4px 10px", borderRadius: 3, border: `1px solid ${sc}40`, background: `${sc}15`, color: sc

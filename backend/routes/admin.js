@@ -50,7 +50,6 @@ router.delete('/users/:id', async (req, res) => {
 router.get('/chat', async (req, res) => {
   try {
     const messages = await Message.find()
-      .populate('senderId', 'name email role')
       .sort({ createdAt: -1 })
       .limit(200);
     res.json(messages);

@@ -5,9 +5,11 @@ import { useAuth } from "../../context/AuthContext";
 export default function AdminDashboard({ domainData }) {
   const { token } = useAuth();
   const [activeTab, setActiveTab] = useState("users");
+  const [contributionTab, setContributionTab] = useState("Pending");
   const [data, setData] = useState({ users: [], chat: [], contributions: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [expandedId, setExpandedId] = useState(null);
 
   const API = import.meta.env.VITE_BACKEND_URL 
   ? `${import.meta.env.VITE_BACKEND_URL}/api/admin` 
@@ -140,26 +142,132 @@ export default function AdminDashboard({ domainData }) {
 
       {/* CONTRIBUTIONS TAB */}
       {!loading && activeTab === "contributions" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {data.contributions.map(c => (
-            <div key={c._id} style={{ ...S.card, padding: "20px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                <span style={{ fontSize: "20px", fontWeight: "bold" }}>{c.knowledgeTitle} <span style={{fontSize:"14px", fontWeight:"normal", fontStyle:"italic"}}>by {c.name || c.userId?.name}</span></span>
-                <span style={{ fontFamily: "Space Mono", fontSize: "11px", padding: "4px 8px", borderRadius: "4px", background: c.submissionStatus === "Pending" ? "rgba(212,171,99,0.2)" : c.submissionStatus === "Approved" ? "rgba(109,184,109,0.2)" : "rgba(208,94,82,0.2)", color: c.submissionStatus === "Pending" ? "#9b6b2f" : c.submissionStatus === "Approved" ? "#4a8a4a" : "#b84a3e" }}>
-                  {c.submissionStatus}
-                </span>
-              </div>
-              <div style={{ fontFamily: "Space Mono", fontSize: "11px", color: "rgba(100,100,100,0.8)", marginBottom: "12px" }}>Domain: {c.domain} | ID: {c.trackingId}</div>
-              <p style={{ fontSize: "15px", lineHeight: "1.5" }}>{c.description}</p>
-              
-              <div style={{ ...S.btnRow, marginTop: "16px", borderTop: "1px solid rgba(212,171,99,0.2)", paddingTop: "12px" }}>
-                <button onClick={() => updateContributionStatus(c._id, "Approved")} disabled={c.submissionStatus === "Approved"} style={{ ...S.btn(c.submissionStatus === "Approved" ? "#eee" : "rgba(109,184,109,0.15)", c.submissionStatus === "Approved" ? "#aaa" : "#4a8a4a"), cursor: c.submissionStatus === "Approved" ? "not-allowed" : "pointer" }}>Approve</button>
-                <button onClick={() => updateContributionStatus(c._id, "Rejected")} disabled={c.submissionStatus === "Rejected"} style={{ ...S.btn(c.submissionStatus === "Rejected" ? "#eee" : "rgba(208,94,82,0.15)", c.submissionStatus === "Rejected" ? "#aaa" : "#b84a3e"), cursor: c.submissionStatus === "Rejected" ? "not-allowed" : "pointer" }}>Reject</button>
-                <button onClick={() => updateContributionStatus(c._id, "Pending")} disabled={c.submissionStatus === "Pending"} style={{ ...S.btn(c.submissionStatus === "Pending" ? "#eee" : "rgba(212,171,99,0.15)", c.submissionStatus === "Pending" ? "#aaa" : "#9b6b2f"), cursor: c.submissionStatus === "Pending" ? "not-allowed" : "pointer" }}>Set Pending</button>
-              </div>
-            </div>
-          ))}
-          {data.contributions.length === 0 && <p>No contributions found.</p>}
+        <div>
+          {/* Sub-tabs for contributions */}
+          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+            {["Pending", "Approved", "Rejected"].map(status => (
+              <button
+                key={status}
+                onClick={() => setContributionTab(status)}
+                style={{
+                  padding: "6px 16px",
+                  borderRadius: "20px",
+                  border: contributionTab === status ? "2px solid #9b6b2f" : "1px solid rgba(212,171,99,0.3)",
+                  background: contributionTab === status ? "rgba(212,171,99,0.15)" : "transparent",
+                  color: contributionTab === status ? "#2a1a08" : "rgba(100,100,100,0.8)",
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: "11px",
+                  cursor: "pointer",
+                  fontWeight: contributionTab === status ? "bold" : "normal"
+                }}
+              >
+                {status} ({data.contributions.filter(c => c.submissionStatus === status).length})
+              </button>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {data.contributions.filter(c => c.submissionStatus === contributionTab).map(c => {
+              const isExpanded = expandedId === c._id;
+              return (
+                <div key={c._id} style={{ ...S.card, padding: "20px", borderLeft: "4px solid " + (c.submissionStatus === "Pending" ? "#c4922a" : c.submissionStatus === "Approved" ? "#4a8c4a" : "#b03020") }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", alignItems: "flex-start" }}>
+                    <div>
+                      <span style={{ fontSize: "20px", fontWeight: "bold" }}>{c.knowledgeTitle}</span>
+                      <div style={{ fontFamily: "Space Mono", fontSize: "11px", color: "rgba(100,100,100,0.8)", marginTop: "4px" }}>
+                        Submitted by: <strong style={{ color: "#2a1a08" }}>{c.name || c.userId?.name || "Unknown"}</strong> | Domain: {c.domain} | ID: {c.trackingId} | Date: {new Date(c.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
+                      <span style={{ fontFamily: "Space Mono", fontSize: "11px", padding: "4px 8px", borderRadius: "4px", background: c.submissionStatus === "Pending" ? "rgba(212,171,99,0.2)" : c.submissionStatus === "Approved" ? "rgba(109,184,109,0.2)" : "rgba(208,94,82,0.2)", color: c.submissionStatus === "Pending" ? "#9b6b2f" : c.submissionStatus === "Approved" ? "#4a8a4a" : "#b84a3e" }}>
+                        {c.submissionStatus}
+                      </span>
+                      <button onClick={() => setExpandedId(isExpanded ? null : c._id)} style={{ ...S.btn("rgba(0,0,0,0.05)", "#2a1a08"), padding: "4px 8px" }}>
+                        {isExpanded ? "Collapse Details" : "View Full Details"}
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <p style={{ fontSize: "15px", lineHeight: "1.5", marginBottom: isExpanded ? "16px" : "0", color: "#444" }}>{c.description}</p>
+                  
+                  {isExpanded && (
+                    <div style={{ background: "rgba(255,255,255,0.7)", borderRadius: "8px", padding: "20px", marginBottom: "16px", fontSize: "14px", border: "1px solid rgba(212,171,99,0.2)" }}>
+                      <h4 style={{ margin: "0 0 16px", fontFamily: "'IM Fell DW Pica', serif", color: "#3a2010", fontSize: "20px", borderBottom: "1px solid rgba(212,171,99,0.2)", paddingBottom: "8px" }}>Complete Submission Details</h4>
+                      
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "20px" }}>
+                        <div>
+                          <strong style={{ color: "#7b6b5a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "2px" }}>Submitter Contact</strong>
+                          <div>Name: {c.name || "N/A"}</div>
+                          <div>Email: {c.email || "N/A"}</div>
+                          {c.phone && <div>Phone: {c.phone}</div>}
+                        </div>
+                        <div>
+                          <strong style={{ color: "#7b6b5a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "2px" }}>Location & Region</strong>
+                          {c.country && <div>Country: {c.country}</div>}
+                          {c.stateRegion && <div>State/Region: {c.stateRegion}</div>}
+                          {c.knowledgeRegion && <div>Knowledge Region: {c.knowledgeRegion}</div>}
+                        </div>
+                        <div>
+                          <strong style={{ color: "#7b6b5a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "2px" }}>Knowledge Attributes</strong>
+                          <div>Domain: {c.domain}</div>
+                          <div style={{ textTransform: "capitalize" }}>Ownership: {c.ownershipType}</div>
+                          {c.knowledgeAge && <div>Age of Knowledge: {c.knowledgeAge}</div>}
+                        </div>
+                        <div>
+                          <strong style={{ color: "#7b6b5a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "2px" }}>Permissions & Accreditations</strong>
+                          <div>Publicly Shareable: {c.permissionStatus === 'yes' ? 'Yes' : c.permissionStatus === 'needs-approval' ? 'Needs community approval' : 'No'}</div>
+                          <div>Confirmed Accuracy: {c.confirmAccuracy ? 'Yes' : 'No'}</div>
+                          <div>Requests Credit: {c.creditedAuthor ? 'Yes' : 'No'}</div>
+                        </div>
+                      </div>
+
+                      <div style={{ background: "rgba(196,146,42,0.05)", border: "1px solid rgba(196,146,42,0.1)", borderRadius: "6px", padding: "16px", marginBottom: "16px" }}>
+                        <strong style={{ color: "#7b6b5a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "8px" }}>Detailed Explanation</strong>
+                        <p style={{ margin: 0, color: "#2a1a08", whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{c.explanation}</p>
+                      </div>
+
+                      {c.queryForTeam && (
+                        <div style={{ background: "rgba(208,94,82,0.05)", border: "1px solid rgba(208,94,82,0.2)", borderRadius: "6px", padding: "16px", marginBottom: "16px" }}>
+                          <strong style={{ color: "#b03020", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "8px" }}>Query / Message for Team</strong>
+                          <p style={{ margin: 0, color: "#b03020", whiteSpace: "pre-wrap", fontStyle: "italic" }}>"{c.queryForTeam}"</p>
+                        </div>
+                      )}
+
+                      {c.mediaFiles && c.mediaFiles.length > 0 && (
+                        <div>
+                          <strong style={{ color: "#7b6b5a", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "8px" }}>Attached Media Files</strong>
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            {c.mediaFiles.map((file, idx) => (
+                              <a key={idx} href={file.startsWith('http') ? file : `${import.meta.env.VITE_BACKEND_URL}${file}`} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", background: "#fff", border: "1px solid #c4922a", padding: "6px 12px", borderRadius: "4px", fontSize: "13px", color: "#9b6b2f", textDecoration: "none", fontWeight: "bold", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
+                                📎 View Attachment {idx + 1}
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div style={{ ...S.btnRow, marginTop: isExpanded ? "0" : "16px", borderTop: "1px solid rgba(212,171,99,0.2)", paddingTop: "12px", justifyContent: "flex-end" }}>
+                    {c.submissionStatus !== "Approved" && (
+                      <button onClick={() => updateContributionStatus(c._id, "Approved")} style={{ ...S.btn("rgba(109,184,109,0.15)", "#4a8a4a"), padding: "8px 16px", fontSize: "13px", fontWeight: "bold" }}>Approve Contribution</button>
+                    )}
+                    {c.submissionStatus !== "Rejected" && (
+                      <button onClick={() => updateContributionStatus(c._id, "Rejected")} style={{ ...S.btn("rgba(208,94,82,0.15)", "#b84a3e"), padding: "8px 16px", fontSize: "13px", fontWeight: "bold" }}>Reject</button>
+                    )}
+                    {c.submissionStatus !== "Pending" && (
+                      <button onClick={() => updateContributionStatus(c._id, "Pending")} style={{ ...S.btn("rgba(212,171,99,0.15)", "#9b6b2f"), padding: "8px 16px", fontSize: "13px", fontWeight: "bold" }}>Move to Pending</button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+            {data.contributions.filter(c => c.submissionStatus === contributionTab).length === 0 && (
+              <p style={{ textAlign: "center", fontStyle: "italic", color: "rgba(100,100,100,0.8)", padding: "40px 0" }}>
+                No {contributionTab.toLowerCase()} contributions found.
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>

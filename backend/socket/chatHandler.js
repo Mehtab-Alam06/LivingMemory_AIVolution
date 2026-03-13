@@ -53,7 +53,8 @@ module.exports = (io) => {
         let msg = await Message.create({
           user: {
             name: socket.user.name || socket.user.email.split('@')[0],
-            email: socket.user.email
+            email: socket.user.email,
+            role: socket.user.role || 'user'
           },
           text: text.trim(),
           replyTo: replyTo

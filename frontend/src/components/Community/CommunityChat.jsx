@@ -21,9 +21,9 @@ const colorFor = (emailOrName) => {
 };
 
 const resolveUser = (u) => {
-  if (!u) return { name: 'Unknown', email: '' };
-  if (typeof u === 'string') return { name: u, email: '' };
-  return { name: u.name || 'Unknown', email: u.email || '' };
+  if (!u) return { name: 'Unknown', email: '', role: 'user' };
+  if (typeof u === 'string') return { name: u, email: '', role: 'user' };
+  return { name: u.name || 'Unknown', email: u.email || '', role: u.role || 'user' };
 };
 
 const formatTime = (iso) => {
@@ -136,6 +136,7 @@ const ReplyThread = ({ replies, currentUserEmail, onReact }) => {
                 <span style={{ fontFamily:"'IM Fell DW Pica',serif", fontSize:12, fontWeight:700,
                   color: ru.email===currentUserEmail ? '#c4922a' : '#5a4a3a' }}>
                   {ru.email===currentUserEmail ? "You" : ru.name}
+                  {ru.role === 'admin' && <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, background:"rgba(196,146,42,0.15)", color:"#c4922a", padding:"2px 4px", borderRadius:4, marginLeft:6, verticalAlign:"middle" }}>ADMIN</span>}
                 </span>
                 <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:'#9b8b7a', opacity:0.7 }}>
                   {formatTime(r.timestamp)}
@@ -172,8 +173,9 @@ const MessageCard = ({ msg, currentUserEmail, onReact, onReply, onDelete, resolv
       style={{ display:'flex', flexDirection:'column', alignItems: isMe ? 'flex-end' : 'flex-start', marginBottom:18 }}>
       <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexDirection: isMe ? 'row-reverse' : 'row' }}>
         <Avatar name={u.name} email={u.email} size={26} />
-        <span style={{ fontFamily:"'IM Fell DW Pica',serif", fontSize:13, fontWeight:700, color: isMe ? '#c4922a' : '#5a4a3a' }}>
+        <span style={{ fontFamily:"'IM Fell DW Pica',serif", fontSize:13, fontWeight:700, color: isMe ? '#c4922a' : '#5a4a3a', display: 'flex', alignItems: 'center' }}>
           {isMe ? displayName : u.name}
+          {u.role === 'admin' && <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, background:isMe ? "rgba(255,255,255,0.3)" : "rgba(196,146,42,0.15)", color:isMe ? "#7a5417" : "#c4922a", padding:"2px 4px", borderRadius:4, marginLeft:8, letterSpacing: '0.05em' }}>ADMIN</span>}
         </span>
         <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:'#9b8b7a', opacity:0.7 }}>
           {formatTime(msg.timestamp)}
