@@ -215,8 +215,7 @@ router.post("/register", async (req, res) => {
         error: "Account already exists"
       });
 
-    // Hardcoded initial admins
-    const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()) : [];
     const isInitialAdmin = adminEmails.includes(email.toLowerCase());
 
     const user = await User.create({
@@ -280,8 +279,8 @@ router.post("/verify-otp", async (req, res) => {
       });
     }
 
-    // Auto-promote hardcoded admin emails during login if they aren't admin yet
-    const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+    // Auto-promote admin emails during login if they aren't admin yet
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()) : [];
     if (adminEmails.includes(user.email) && user.role !== 'admin') {
       user.role = 'admin';
       await user.save();
@@ -321,7 +320,7 @@ router.patch("/profile", authMiddleware, async (req, res) => {
     const user = await User.findByIdAndUpdate(
       req.user.userId,
       { name },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     res.json(user);
@@ -349,7 +348,7 @@ router.get("/me", authMiddleware, async (req, res) => {
 
     let user = await User.findById(req.user.userId);
 
-    const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()) : [];
     if (user && adminEmails.includes(user.email) && user.role !== 'admin') {
       user.role = 'admin';
       await user.save();

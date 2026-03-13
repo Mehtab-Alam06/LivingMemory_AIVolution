@@ -164,7 +164,7 @@ router.patch("/:id/summary", async (req, res) => {
     const iv = await Interview.findByIdAndUpdate(
       req.params.id,
       { $set: update },
-      { new: true },
+      { returnDocument: 'after' },
     );
     if (!iv) return res.status(404).json({ error: "Not found" });
     res.json({ success: true });

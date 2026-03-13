@@ -1,9 +1,10 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const User = require('./models/User');
+const User = require('../models/User');
 
 mongoose.connect(process.env.MONGO_URI).then(async () => {
-  const users = await User.find({ email: { $in: ['mehtab2023@gift.edu.in', 'livingmemory104@gmail.com', 'satpathyrajkishore777@gmail.com'] } });
+  const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()) : [];
+  const users = await User.find({ email: { $in: adminEmails } });
   console.log("DB Users:");
   console.log(users);
   process.exit(0);

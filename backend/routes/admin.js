@@ -102,7 +102,7 @@ router.patch('/contributions/:id/status', async (req, res) => {
     const submission = await KnowledgeSubmission.findByIdAndUpdate(
       req.params.id,
       { submissionStatus: status },
-      { new: true }
+      { returnDocument: 'after' }
     ).populate('userId', 'name email');
 
     if (!submission) return res.status(404).json({ error: 'Submission not found' });
