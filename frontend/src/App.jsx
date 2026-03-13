@@ -15,6 +15,7 @@ import ProfileModal from "./components/Auth/ProfileModal";
 import CommunityChat from "./components/Community/CommunityChat";
 import ContributeKnowledge from "./components/ContributeKnowledge/ContributeKnowledge";
 import LandingPage from "./components/LandingPage/LandingPage";
+import AdminDashboard from "./components/Admin/AdminDashboard";
 import { useAuth } from "./context/AuthContext";
 
 const DOMAIN_CONFIG = {
@@ -41,7 +42,8 @@ const colorFor = (email) => {
 };
 
 export default function App() {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
+  console.log("APP RENDER: Current User:", user);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState({});
   const [modalState, setModalState] = useState({
@@ -318,6 +320,7 @@ export default function App() {
           { id: "home", label: "🏛", text: "Archive" },
           { id: "community", label: "🌿", text: "Community" },
           { id: "contribute", label: "📜", text: "Contribute" },
+          ...(user?.role === 'admin' ? [{ id: "admin", label: "⚙️", text: "Admin" }] : [])
         ].map((tab) => (
           <button
             key={tab.id}
@@ -362,6 +365,13 @@ export default function App() {
       {mainTab === "contribute" && (
         <div className="tab-content contribute-fill">
           <ContributeKnowledge />
+        </div>
+      )}
+
+      {/* ── ADMIN TAB ── */}
+      {mainTab === "admin" && user?.role === "admin" && (
+        <div className="tab-content" style={{ background: "linear-gradient(135deg, #fdf8ec, #f5edd6)" }}>
+          <AdminDashboard domainData={domainData} />
         </div>
       )}
 

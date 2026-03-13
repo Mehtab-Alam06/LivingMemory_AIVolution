@@ -215,13 +215,18 @@ router.post("/register", async (req, res) => {
         error: "Account already exists"
       });
 
+    // Hardcoded initial admins
+    const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+    const isInitialAdmin = adminEmails.includes(email.toLowerCase());
+
     const user = await User.create({
       email: email.toLowerCase(),
-      name: name.trim()
+      name: name.trim(),
+      role: isInitialAdmin ? 'admin' : 'user'
     });
 
     const token = jwt.sign(
-      { userId: user._id, email: user.email, name: user.name },
+      { userId: user._id, email: user.email, name: user.name, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -265,17 +270,25 @@ router.post("/verify-otp", async (req, res) => {
       email: email.toLowerCase()
     });
 
-    const user = await User.findOne({
+    let user = await User.findOne({
       email: email.toLowerCase()
     });
 
-    if (!user)
+    if (!user) {
       return res.status(404).json({
         error: "User not found"
       });
+    }
+
+    // Auto-promote hardcoded admin emails during login if they aren't admin yet
+    const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+    if (adminEmails.includes(user.email) && user.role !== 'admin') {
+      user.role = 'admin';
+      await user.save();
+    }
 
     const token = jwt.sign(
-      { userId: user._id, email: user.email, name: user.name },
+      { userId: user._id, email: user.email, name: user.name, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -334,7 +347,13 @@ router.get("/me", authMiddleware, async (req, res) => {
 
   try {
 
-    const user = await User.findById(req.user.userId);
+    let user = await User.findById(req.user.userId);
+
+    const adminEmails = ["livingmemory104@gmail.com", "mehtab2023@gift.edu.in", "satpathyrajkishore777@gmail.com"];
+    if (user && adminEmails.includes(user.email) && user.role !== 'admin') {
+      user.role = 'admin';
+      await user.save();
+    }
 
     res.json(user);
 

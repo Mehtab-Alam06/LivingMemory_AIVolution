@@ -50,6 +50,7 @@ mongoose
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/admin", require("./routes/admin")); // Admin logic
 app.use("/uploads", express.static("uploads"));
 app.use("/api/upload", require("./routes/upload"));
 app.use("/api/interviews", require("./routes/Interviews"));
