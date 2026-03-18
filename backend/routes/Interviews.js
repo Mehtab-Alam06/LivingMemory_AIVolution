@@ -35,31 +35,38 @@ router.post("/", async (req, res) => {
       _id,
       knowledgeSummary,
       knowledgeMap,
+      knowledgePortrait,
+      layerCoverage,
+      completenessScore,
+      followUpNeeded,
     } = req.body;
     const userId = getUserId(req);
+
+    function applyUpdates(ex) {
+      if (questions !== undefined) ex.questions = questions;
+      if (entries !== undefined) ex.entries = entries;
+      if (answers !== undefined) ex.answers = answers;
+      if (messages !== undefined) ex.messages = messages;
+      if (currentQuestionIndex !== undefined) ex.currentQuestionIndex = currentQuestionIndex;
+      if (followupCount !== undefined) ex.followupCount = followupCount;
+      if (finalCount !== undefined) ex.finalCount = finalCount;
+      if (questionCount !== undefined) ex.questionCount = questionCount;
+      if (completed !== undefined) ex.completed = completed;
+      if (closingMessage) ex.closingMessage = closingMessage;
+      if (knowledgeSummary) ex.knowledgeSummary = knowledgeSummary;
+      if (knowledgeMap) ex.knowledgeMap = knowledgeMap;
+      if (knowledgePortrait) ex.knowledgePortrait = knowledgePortrait;
+      if (layerCoverage) ex.layerCoverage = layerCoverage;
+      if (completenessScore !== undefined) ex.completenessScore = completenessScore;
+      if (followUpNeeded !== undefined) ex.followUpNeeded = followUpNeeded;
+      if (completed) ex.completedAt = completedAt ? new Date(completedAt) : new Date();
+    }
 
     // Update by _id if provided
     if (_id) {
       const ex = await Interview.findById(_id);
       if (ex) {
-        const upd = (ex) => {
-          if (questions !== undefined) ex.questions = questions;
-          if (entries !== undefined) ex.entries = entries;
-          if (answers !== undefined) ex.answers = answers;
-          if (messages !== undefined) ex.messages = messages;
-          if (currentQuestionIndex !== undefined)
-            ex.currentQuestionIndex = currentQuestionIndex;
-          if (followupCount !== undefined) ex.followupCount = followupCount;
-          if (finalCount !== undefined) ex.finalCount = finalCount;
-          if (questionCount !== undefined) ex.questionCount = questionCount;
-          if (completed !== undefined) ex.completed = completed;
-          if (closingMessage) ex.closingMessage = closingMessage;
-          if (knowledgeSummary) ex.knowledgeSummary = knowledgeSummary;
-          if (knowledgeMap) ex.knowledgeMap = knowledgeMap;
-          if (completed)
-            ex.completedAt = completedAt ? new Date(completedAt) : new Date();
-        };
-        upd(ex);
+        applyUpdates(ex);
         await ex.save();
         return res.json({ success: true, id: ex._id, updated: true });
       }
@@ -73,7 +80,7 @@ router.post("/", async (req, res) => {
         completed: false,
       }).sort({ createdAt: -1 });
       if (ex) {
-        upd(ex);
+        applyUpdates(ex);
         await ex.save();
         return res.json({ success: true, id: ex._id, updated: true });
       }
@@ -90,6 +97,10 @@ router.post("/", async (req, res) => {
       messages: messages || [],
       knowledgeSummary: knowledgeSummary || [],
       knowledgeMap: knowledgeMap || null,
+      knowledgePortrait: knowledgePortrait || null,
+      layerCoverage: layerCoverage || {},
+      completenessScore: completenessScore || 0,
+      followUpNeeded: followUpNeeded || false,
       closingMessage: closingMessage || "",
       questionCount: questionCount || 0,
       currentQuestionIndex: currentQuestionIndex || 0,
@@ -128,6 +139,8 @@ router.get("/resume", async (req, res) => {
       followupCount: iv.followupCount,
       finalCount: iv.finalCount,
       completed: iv.completed,
+      layerCoverage: iv.layerCoverage,
+      completenessScore: iv.completenessScore,
     });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch session" });
@@ -145,7 +158,7 @@ router.get("/history", async (req, res) => {
     const list = await Interview.find({ userId, topic })
       .sort({ createdAt: -1 })
       .select(
-        "topic domain questionCount completed completedAt createdAt knowledgeSummary knowledgeMap entries answers questions",
+        "topic domain questionCount completed completedAt createdAt knowledgeSummary knowledgeMap knowledgePortrait layerCoverage completenessScore followUpNeeded entries answers questions",
       );
 
     res.json(list);
@@ -157,10 +170,14 @@ router.get("/history", async (req, res) => {
 // ── PATCH /api/interviews/:id/summary — save extracted knowledge summary ─────
 router.patch("/:id/summary", async (req, res) => {
   try {
-    const { knowledgeSummary, knowledgeMap } = req.body;
+    const { knowledgeSummary, knowledgeMap, knowledgePortrait, completenessScore, followUpNeeded, layerCoverage } = req.body;
     const update = {};
     if (knowledgeSummary) update.knowledgeSummary = knowledgeSummary;
     if (knowledgeMap) update.knowledgeMap = knowledgeMap;
+    if (knowledgePortrait) update.knowledgePortrait = knowledgePortrait;
+    if (completenessScore !== undefined) update.completenessScore = completenessScore;
+    if (followUpNeeded !== undefined) update.followUpNeeded = followUpNeeded;
+    if (layerCoverage) update.layerCoverage = layerCoverage;
     const iv = await Interview.findByIdAndUpdate(
       req.params.id,
       { $set: update },

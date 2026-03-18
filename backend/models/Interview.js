@@ -6,6 +6,7 @@ const entrySchema = new mongoose.Schema(
     question: { type: String, required: true },
     answer: { type: String, default: null },
     parentIndex: { type: Number, default: null },
+    layer: { type: Number, default: null }, // 1-5 knowledge layer
   },
   { _id: false },
 );
@@ -34,6 +35,10 @@ const interviewSchema = new mongoose.Schema(
     answers: [{ type: String }], // flat answers list
     knowledgeSummary: [{ type: String }], // bullet points
     knowledgeMap: { type: mongoose.Schema.Types.Mixed, default: null }, // structured map
+    knowledgePortrait: { type: mongoose.Schema.Types.Mixed, default: null }, // rich portrait (sensory, failures, secrets, etc.)
+    layerCoverage: { type: mongoose.Schema.Types.Mixed, default: {} }, // {1: true/false, 2: true/false, ...}
+    completenessScore: { type: Number, default: 0 }, // 0-100
+    followUpNeeded: { type: Boolean, default: false },
     messages: [messageSchema],
     closingMessage: { type: String, default: "" },
     questionCount: { type: Number, default: 0 },

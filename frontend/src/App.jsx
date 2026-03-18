@@ -721,8 +721,10 @@ export default function App() {
             style={{
               width: "100%",
               maxWidth: "min(850px, 95vw)",
-              maxHeight: "90vh",
-              overflowY: "auto",
+              height: "90vh",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
               padding: "0",
               borderRadius: "4px",
             }}
@@ -734,6 +736,7 @@ export default function App() {
                 borderBottom: "1px solid rgba(212,171,99,0.3)",
                 background: "linear-gradient(to bottom,#f5f0e1,#ede0be)",
                 position: "relative",
+                flexShrink: 0,
               }}
             >
               <div
@@ -786,6 +789,7 @@ export default function App() {
                 background: "rgba(212,171,99,0.08)",
                 padding: "0 max(16px, 2vw)",
                 flexWrap: "wrap",
+                flexShrink: 0,
               }}
             >
               {[
@@ -821,8 +825,8 @@ export default function App() {
 
             {/* ── Record Tab — stays mounted, hidden via CSS when inactive ── */}
             <div
-              style={{ display: activeTab === "record" ? "block" : "none" }}
-              className="modal-tab-content"
+              style={{ display: activeTab === "record" ? "flex" : "none", flex: 1, minHeight: 0, overflow: "hidden" }}
+              className="modal-tab-content-wrapper"
             >
               <AIInterview
                 topic={modalState.entry}
