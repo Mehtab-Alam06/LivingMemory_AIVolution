@@ -225,7 +225,7 @@ function KnowledgeGapsPanel({ gaps, layerCoverage }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-export default function KnowledgeSection({ topic, domain }) {
+export default function KnowledgeSection({ topic, domain, onResumeRequest }) {
   const [interviews, setInterviews] = useState([]);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -340,7 +340,12 @@ export default function KnowledgeSection({ topic, domain }) {
               <span style={S.mono("9px", score >= 80 ? "#2a7a2a" : score >= 50 ? "#7a5500" : "#8a3028")}>{score}% depth</span>
             </div>
           </div>
-          <button onClick={() => downloadPDF(selected, topic)} style={{ ...S.btn("linear-gradient(135deg,#9b6b2f,#7a4f1f)", "#f4edd6", "#7a4f1f"), padding: "7px 14px" }}>⬇ PDF</button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            {!selected.completed && onResumeRequest && (
+              <button title={`Resume Interview ${selected.interviewNumber || ""}`} onClick={() => onResumeRequest(selected)} style={{ ...S.btn("linear-gradient(135deg,#6db86d,#4a8c4a)", "#fff", "#4a8c4a"), padding: "7px 14px", fontWeight: "bold" }}>▶ Resume</button>
+            )}
+            <button onClick={() => downloadPDF(selected, topic)} style={{ ...S.btn("linear-gradient(135deg,#9b6b2f,#7a4f1f)", "#f4edd6", "#7a4f1f"), padding: "7px 14px" }}>⬇ PDF</button>
+          </div>
         </div>
         {/* Layer coverage bar */}
         <div style={{ display: "flex", gap: "4px" }}>

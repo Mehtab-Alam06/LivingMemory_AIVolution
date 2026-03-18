@@ -51,6 +51,7 @@ export default function App() {
     domain: null,
     entry: null,
   });
+  const [resumeData, setResumeData] = useState(null);
   const [activeTab, setActiveTab] = useState("record");
   const [showProfile, setShowProfile] = useState(false);
   const [mainTab, setMainTab] = useState("home");
@@ -717,7 +718,7 @@ export default function App() {
         }}
       >
         {modalState.isOpen && (
-          <PaperCard
+            <PaperCard
             style={{
               width: "100%",
               maxWidth: "min(850px, 95vw)",
@@ -761,6 +762,11 @@ export default function App() {
                 }}
               >
                 {modalState.entry}
+                {activeTab === "record" && resumeData?.interviewNumber && (
+                  <span style={{ fontSize: "0.6em", opacity: 0.6, marginLeft: "12px", fontFamily: "Space Mono" }}>
+                    · INT {resumeData.interviewNumber}
+                  </span>
+                )}
               </h2>
               <button
                 onClick={() => setModalState({ isOpen: false })}
@@ -833,19 +839,25 @@ export default function App() {
                 domain={modalState.domain}
                 userName={user?.name}
                 onSave={(data) => console.log("Interview saved:", data)}
+                resumeData={resumeData}
+                clearResumeData={() => setResumeData(null)}
               />
             </div>
 
             {/* ── Knowledge Tab — interview history & archive ── */}
-            {activeTab === "knowledge" && (
+            <div style={{ display: activeTab === "knowledge" ? "flex" : "none", flex: 1, flexDirection: "column", minHeight: 0, overflow: "hidden" }} className="modal-tab-content-wrapper">
               <KnowledgeSection
                 topic={modalState.entry}
                 domain={modalState.domain}
+                onResumeRequest={(iv) => {
+                  setResumeData(iv);
+                  setActiveTab("record");
+                }}
               />
-            )}
+            </div>
 
             {/* ── Analysis Tab ── */}
-            {activeTab === "analysis" && (
+            <div style={{ display: activeTab === "analysis" ? "block" : "none", flex: 1, minHeight: 0, overflowY: "auto", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
               <div className="modal-tab-content">
                 {sampleAnalysis[modalState.domain]?.[modalState.entry] ? (
                   sampleAnalysis[modalState.domain][modalState.entry].map(
@@ -863,7 +875,7 @@ export default function App() {
                         <div
                           style={{
                             fontFamily: "Space Mono",
-                            fontSize: "11px",
+                            fontSize: "13px",
                             color: DOMAIN_CONFIG[modalState.domain].color,
                             marginBottom: "8px",
                           }}
@@ -872,7 +884,7 @@ export default function App() {
                         </div>
                         <div
                           style={{
-                            fontSize: "17px",
+                            fontSize: "21px",
                             fontFamily: "Cormorant Garamond,serif",
                             color: "#353535",
                             marginBottom: "8px",
@@ -907,10 +919,10 @@ export default function App() {
                   </div>
                 )}
               </div>
-            )}
+            </div>
 
             {/* ── Graph Tab ── */}
-            {activeTab === "graph" && (
+            <div style={{ display: activeTab === "graph" ? "block" : "none", flex: 1, minHeight: 0, overflowY: "auto", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
               <div className="modal-tab-content">
                 <div
                   style={{
@@ -1005,16 +1017,17 @@ export default function App() {
                   )}
                 </div>
               </div>
-            )}
+            </div>
 
             {/* ── Mentor / Chat Tab ── */}
-            {activeTab === "chat" && (
-              <div className="modal-tab-content">
+            <div style={{ display: activeTab === "chat" ? "flex" : "none", flex: 1, minHeight: 0, overflow: "hidden", flexDirection: "column", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
+              <div className="modal-tab-content" style={{ display: "flex", flex: 1, minHeight: 0 }}>
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "min(400px, 50vh)",
+                    flex: 1,
+                    minHeight: 0
                   }}
                 >
                   <div
@@ -1117,7 +1130,7 @@ export default function App() {
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </PaperCard>
         )}
       </div>

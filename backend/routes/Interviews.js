@@ -130,8 +130,12 @@ router.get("/resume", async (req, res) => {
     });
     if (!iv) return res.status(404).json({ error: "No session" });
 
+    // Grab the chronological numerical id count
+    const totalCount = await Interview.countDocuments({ userId, topic });
+
     res.json({
       _id: iv._id,
+      interviewNumber: totalCount,
       questions: iv.questions,
       entries: iv.entries,
       answers: iv.answers,

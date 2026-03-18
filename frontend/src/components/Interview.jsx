@@ -74,7 +74,7 @@ async function callAI(system, user, maxTokens = 800) {
   return data.content?.filter(b => b.type === "text").map(b => b.text).join("") || "";
 }
 
-export default function AIInterview({ topic, domain, userName, onSave }) {
+export default function AIInterview({ topic, domain, userName, onSave, resumeData, clearResumeData }) {
   const [phase, setPhase] = useState(PHASE.INIT);
   const [coreQuestions, setCoreQuestions] = useState([]);
   const [entries, setEntries] = useState([]);
@@ -98,6 +98,12 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
   
   // Custom Prompt State
   const [initialPromptReady, setInitialPromptReady] = useState(false);
+
+  const abortRef = useRef(false);
+  useEffect(() => { 
+    if (phase === PHASE.PAUSED || phase === PHASE.DONE || phase === PHASE.INIT || phase === PHASE.SETUP) abortRef.current = true;
+    else abortRef.current = false;
+  }, [phase]);
   const [initialContext, setInitialContext] = useState("");
 
   const recRef = useRef(null);
@@ -213,10 +219,23 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
     if (lc) setLayerCoverage(lc);
     if (_id) setSavedId(_id);
     setCurrentEntry(ent?.find(e => e.answer === null) || null);
-    setGreeting(`Namaskar ${userName || ""}. Welcome back. Continuing your interview on "${topic}".`);
+    const ivNum = existingSession.interviewNumber ? `Interview ${existingSession.interviewNumber}` : "Paused Session";
+    setGreeting(`Namaskar ${userName || ""}. Welcome back. Continuing your ${ivNum} on "${topic}".`);
     if (ph === PHASE.DONE || existingSession.completed) setPhase(PHASE.DONE);
     else setPhase(PHASE.PAUSED);
   }
+
+  // Cross-Tab Resume Hot-Swap Pipeline — decisive hot-swap on state change
+  useEffect(() => {
+    if (resumeData) {
+      console.log("Hot-swapping to resumeData ID:", resumeData._id, "number:", resumeData.interviewNumber);
+      setExistingSession(resumeData);
+      setPhase(PHASE.SETUP);
+      setCurrentEntry(null);
+      setGreeting(""); 
+      clearResumeData?.();
+    }
+  }, [resumeData, clearResumeData]);
 
   // Generate Questions tailored to the initial context
   async function generateContextualQuestions(contextStr) {
@@ -239,6 +258,7 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
          Return ONLY a valid JSON array of objects: [{"q":"question in native script","layer":1},...]`,
         `Topic: "${topic}", Domain: ${domain}, Language: ${language}\nPool:\n${poolText}\nReturn 15 tailored questions as JSON array:`, 2500
       );
+      if (abortRef.current) { setIsThinking(false); return; }
       
       let parsed = [];
       try { parsed = JSON.parse(raw.match(/\[[\s\S]*\]/)?.[0] || "[]"); } catch {}
@@ -298,6 +318,7 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
         `Completing interview regarding "${topic}".\nUncovered layers: ${missingLayers.length > 0 ? missingLayers.join(", ") : "all covered"}.\nSTRICT INSTRUCTION: YOU MUST RESPOND ONLY IN ${language}. Use the native script for ${language}. DO NOT output English unless ${language} is English.\nAsk ONE final question. Max 30 words. No yes/no.`,
         `Topic: "${topic}", Language: ${language}\nInterview:\n${histStr.substring(0, 1000)}\nFinal question ${fnCount + 1} of ${FINAL_Q}:`
       );
+      if (abortRef.current) { setIsThinking(false); return; }
       const q = finalQ?.trim() || `What is the one thing about ${topic} that you have never been asked before?`;
       const newEntry = { type: "final", question: q, answer: null, parentIndex: null, layer: missingLayers[0] || 5 };
       setEntries(prev => [...prev, newEntry]); setCurrentEntry(newEntry);
@@ -312,6 +333,7 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
           `Probing tacit knowledge about "${topic}". Elder used vague phrase. Ask what it means.\nSTRICT INSTRUCTION: YOU MUST RESPOND ONLY IN ${language}. Use the native script for ${language}. DO NOT output English unless ${language} is English. Max 30 words.`,
           `Answer: "${answer}"\nVague phrase: "${vagueWord}"\nLanguage: ${language}\nGenerate probing question:`
         );
+        if (abortRef.current) { setIsThinking(false); return; }
         const q = vagueQ?.trim() || `You said "${vagueWord}" — can you describe exactly what that means?`;
         const newEntry = { type: "followup", question: q, answer: null, parentIndex: coreIdx, layer: 2 };
         setEntries(prev => [...prev, newEntry]); setCurrentEntry(newEntry);
@@ -327,6 +349,7 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
         `Documenting "${topic}". Current layer: ${currentLayer}. Next priority: ${lowestMissing}.\nSTRICT INSTRUCTION: YOU MUST RESPOND ONLY IN ${language}. Use the native script for ${language}. DO NOT output English unless ${language} is English.\nReturn ONLY JSON: {"decision":"FOLLOWUP"|"NEXT","question":"...","layer":${lowestMissing}}`,
         `Topic: "${topic}", Language: ${language}\nQ: "${entrySnapshot.question}"\nA: "${answer}"\nHistory:\n${histStr.substring(0, 700)}`
       );
+      if (abortRef.current) { setIsThinking(false); return; }
       try {
         const parsed = JSON.parse(decision.match(/\{[\s\S]*?\}/)?.[0] || "{}");
         if (parsed.decision === "FOLLOWUP" || parsed.decision === "CLARIFY") {
@@ -384,6 +407,7 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
     if (!answer || isThinking || isSpeaking || !currentEntry) return;
     setIsThinking(true); setValidMsg("");
     const ok = await validate(answer);
+    if (abortRef.current) { setIsThinking(false); return; }
     if (!ok) { setValidMsg(`Please share something about ${topic} itself.`); setIsThinking(false); return; }
     const updatedEntries = entries.map(e => e === currentEntry ? { ...e, answer } : e);
     setEntries(updatedEntries); setInputText(""); setValidMsg(""); setAck("");
@@ -494,7 +518,7 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
   };
 
   // UI Scaling Wrapper
-  const wrapperStyle = { height: "100%", overflowY: "auto", boxSizing: "border-box", display: "flex", flexDirection: "column" };
+  const wrapperStyle = { width: "100%", height: "100%", overflowY: "auto", boxSizing: "border-box", display: "flex", flexDirection: "column" };
 
   if (phase === PHASE.INIT || phase === PHASE.CHECKING || phase === PHASE.LOADING) return (
     <div style={{ ...wrapperStyle, alignItems: "center", justifyContent: "center", padding: "48px 24px" }}>
@@ -508,12 +532,18 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
   );
 
   if (phase === PHASE.SETUP) return (
-    <div style={{ ...wrapperStyle, padding: "30px 24px", alignItems: "center", gap: "24px" }}>
+    <div key={existingSession?._id || "new-session"} style={{ ...wrapperStyle, padding: "20px 24px", alignItems: "center", justifyContent: "center", gap: "16px" }}>
+      {existingSession && existingSession.interviewNumber && (
+        <div style={{ padding: "4px 12px", background: "#6688cc22", border: "1px solid #6688cc44", borderRadius: "100px", position: "absolute", top: "12px", right: "12px" }}>
+          <span style={S.mono("9px", "#6688cc")}>SELECTED SESSION: INT {existingSession.interviewNumber}</span>
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-        <div style={{ fontSize: "56px", marginBottom: "16px", filter: "drop-shadow(0 0 12px rgba(212,171,99,0.3))" }}>📜</div>
-        <div style={{ ...S.mono("11px", "#c4922a"), textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "8px" }}>Interview Setup</div>
-        <h2 style={{ ...S.title, fontSize: "28px", maxWidth: "500px", margin: "0 auto" }}>Knowledge Preservation: {topic}</h2>
-        <div style={{ height: "2px", width: "80px", background: "linear-gradient(90deg, transparent, #c4922a, transparent)", margin: "16px 0" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "8px" }}>
+          <span style={{ fontSize: "32px", filter: "drop-shadow(0 0 8px rgba(212,171,99,0.2))" }}>📜</span>
+          <h2 style={{ ...S.title, fontSize: "22px", margin: 0 }}>Knowledge Preservation</h2>
+        </div>
+        <div style={{ ...S.mono("9px", "#c4922a"), textTransform: "uppercase", letterSpacing: "0.2em" }}>Interview Setup & Config</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "center", background: "rgba(212,171,99,0.08)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(212,171,99,0.15)" }}>
         <div style={S.mono("10px", "#c4922a")}>CHOOSE INTERVIEW LANGUAGE</div>
@@ -526,22 +556,24 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
           ))}
         </div>
       </div>
-      <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyItems: "stretch", width: "100%", maxWidth: "600px" }}>
+      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyItems: "stretch", width: "100%", maxWidth: "600px" }}>
         {existingSession && (
-          <div style={{ flex: 1, minWidth: "260px", padding: "20px", background: "rgba(255,255,255,0.6)", border: "1px solid rgba(212,171,99,0.2)", borderRadius: "12px", display: "flex", flexDirection: "column", gap: "12px", cursor: "pointer" }} onClick={resumeExistingInterview}>
+          <div style={{ flex: 1, minWidth: "240px", padding: "16px", background: "rgba(255,255,255,0.7)", border: "1.5px solid #6688cc44", borderRadius: "12px", display: "flex", flexDirection: "column", gap: "10px", cursor: "pointer", boxShadow: "0 4px 12px rgba(102,136,204,0.1)" }} onClick={resumeExistingInterview}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={S.mono("10px", "#c4922a")}>PAUSED SESSION</div>
-              <div style={{ background: "#6db86d22", color: "#2a5a2a", padding: "4px 8px", borderRadius: "4px", fontSize: "10px", fontWeight: "bold" }}>{Math.round(((existingSession.currentQuestionIndex || existingSession.coreIndex || 0) / CORE_Q) * 100)}% DONE</div>
+              <div style={S.mono("10px", "#6688cc")}>
+                {existingSession.completed ? "COMPLETED" : "PAUSED"} · INT {existingSession.interviewNumber || "???"}
+              </div>
+              <div style={{ background: "#6db86d22", color: "#2a5a2a", padding: "3px 6px", borderRadius: "4px", fontSize: "9px", fontWeight: "bold" }}>{existingSession.completed ? "100% DONE" : `${Math.round(((existingSession.currentQuestionIndex || existingSession.coreIndex || 0) / CORE_Q) * 100)}% DONE`}</div>
             </div>
-            <div style={{ ...S.serif("18px", "#2a1a08"), fontWeight: "bold" }}>Resume Conversation</div>
-            <button style={{ ...S.btn("linear-gradient(135deg,#6db86d,#4a8c4a)", "#fff", "#4a8c4a"), width: "100%", marginTop: "auto" }}>Continue</button>
+            <div style={{ ...S.serif("16px", "#2a1a08"), fontWeight: "bold" }}>{existingSession.completed ? "View Results" : `Resume Interview ${existingSession.interviewNumber || ""}`}</div>
+            <button style={{ ...S.btn("linear-gradient(135deg,#6688cc,#4668aa)", "#fff", "#4668aa"), width: "100%", padding: "8px", fontSize: "13px", marginTop: "auto" }}>{existingSession.completed ? "View Analysis" : "Resume Session"}</button>
           </div>
         )}
-        <div style={{ flex: 1, minWidth: "260px", padding: "20px", background: "rgba(212,171,99,0.05)", border: "2px dashed rgba(212,171,99,0.2)", borderRadius: "12px", display: "flex", flexDirection: "column", gap: "12px", cursor: "pointer" }} onClick={startNewInterview}>
+        <div style={{ flex: 1, minWidth: "240px", padding: "16px", background: "rgba(212,171,99,0.05)", border: "2px dashed rgba(212,171,99,0.2)", borderRadius: "12px", display: "flex", flexDirection: "column", gap: "10px", cursor: "pointer" }} onClick={startNewInterview}>
           <div style={S.mono("10px", "#c4922a")}>NEW SESSION</div>
-          <div style={{ ...S.serif("18px", "#2a1a08"), fontWeight: "bold" }}>Start Fresh Interview</div>
-          <div style={S.mono("11px", "#8b7a60")}>Context-driven AI interview.</div>
-          <button style={{ ...S.btn("transparent", "#9b6b2f", "#9b6b2f"), width: "100%", marginTop: "auto" }}>Initialize AI</button>
+          <div style={{ ...S.serif("16px", "#2a1a08"), fontWeight: "bold" }}>Start Fresh Interview</div>
+          <div style={S.mono("10px", "#8b7a60")}>Context-driven AI interview.</div>
+          <button style={{ ...S.btn("transparent", "#9b6b2f", "#9b6b2f"), width: "100%", padding: "8px", fontSize: "13px", marginTop: "auto" }}>Begin New</button>
         </div>
       </div>
     </div>
@@ -599,12 +631,42 @@ export default function AIInterview({ topic, domain, userName, onSave }) {
     );
   }
 
+  if (phase === PHASE.PAUSED) return (
+    <div style={{ ...wrapperStyle, padding: "clamp(12px, 3vh, 32px)", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "16px" }}>
+        <button onClick={() => setPhase(PHASE.SETUP)} style={{ background: "none", border: "none", color: "#c4922a", fontSize: "12px", fontFamily: "Space Mono", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", padding: 0 }}>
+          ← Back
+        </button>
+      </div>
+      <div style={{ fontSize: "36px", marginBottom: "12px" }}>⏸</div>
+      <div style={{ ...S.title, fontSize: "20px", marginBottom: "8px" }}>
+        {existingSession?.interviewNumber ? `Interview ${existingSession.interviewNumber}` : "Interview"} Paused
+      </div>
+      <div style={{ ...S.serif("16px", "#5a4a3a"), maxWidth: "360px", textAlign: "center", margin: "0 auto 12px" }}>
+        {greeting || `Your interview on "${topic}" has been paused. Continue anytime.`}
+      </div>
+      <div style={{ ...S.mono("11px", "#9b7a50"), marginBottom: "8px" }}>{answeredCount} questions answered · {phaseLabel()}</div>
+      <button onClick={() => { 
+          setPhase(PHASE.ACTIVE); 
+          if (currentEntry?.answer) {
+             setIsThinking(true);
+             analyzeAndDecideNext(currentEntry.answer, currentEntry, coreIndex, followupCount, finalCount, entries, currentEntry.layer || 1);
+          } else {
+             setTimeout(() => { if (currentEntry?.question) speakQuestion(currentEntry.question); }, 300); 
+          }
+        }}
+        style={{ ...S.btn("linear-gradient(135deg,#9b6b2f,#7a4f1f)", "#f4edd6", "#7a4f1f"), fontSize: "16px", padding: "12px 32px", marginTop: "20px" }}>
+        Continue Interview
+      </button>
+    </div>
+  );
+
   if (phase === PHASE.DONE) {
     const KV = { techniques: { label: "Techniques", icon: "⚙️" }, materials: { label: "Materials", icon: "🌿" }, tools: { label: "Tools", icon: "🔧" } };
     const coveredCount = Object.values(layerCoverage).filter(Boolean).length;
     const completenessScore = Math.round((coveredCount / 5) * 100);
     return (
-      <div style={{ ...wrapperStyle, padding: "clamp(12px, 3vh, 32px)", gap: "16px" }}>
+      <div style={{ ...wrapperStyle, padding: "clamp(12px, 3vh, 32px)", gap: "16px", alignItems: "center", justifyContent: "center" }}>
         <div style={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "4px" }}>
           <button onClick={() => setPhase(PHASE.SETUP)} style={{ background: "none", border: "none", color: "#c4922a", fontSize: "12px", fontFamily: "Space Mono", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", padding: 0 }}>
             ← Back

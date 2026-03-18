@@ -10,12 +10,13 @@ import '../App.css';
 export default function PaperCard({ 
   variant = 'default',
   children, 
-  className = '' 
+  className = '',
+  style = {}
 }) {
   const classes = `paper-card ${variant === 'alt' ? 'alt' : ''} ${className}`;
   
   return (
-    <div className={classes}>
+    <div className={classes} style={style}>
       {children}
     </div>
   );
