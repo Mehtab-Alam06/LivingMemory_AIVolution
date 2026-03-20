@@ -5,8 +5,8 @@ import PaperCard from './PaperCard';
 
 // Force the new AI Analysis endpoints to hit the LOCAL development server parsing the Python models
 // API paths: dynamic detection for Dev vs Production (Render/Vercel)
-const LOCAL_API = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api';
-const BACKEND = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+const LOCAL_API = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : API;
+const BACKEND = window.location.hostname === 'localhost' ? 'http://localhost:5000' : (import.meta.env.VITE_BACKEND_URL || 'https://livingmemory-aivolution.onrender.com');
 
 const TechniqueAnalysis = ({ title, domain }) => {
     const [file, setFile] = useState(null);
