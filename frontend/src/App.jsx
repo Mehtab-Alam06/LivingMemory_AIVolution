@@ -17,6 +17,7 @@ import ContributeKnowledge from "./components/ContributeKnowledge/ContributeKnow
 import LandingPage from "./components/LandingPage/LandingPage";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import TechniqueAnalysis from "./components/TechniqueAnalysis";
+import KnowledgeGraph from "./components/KnowledgeGraph";
 import { useAuth } from "./context/AuthContext";
 
 const DOMAIN_CONFIG = {
@@ -906,101 +907,8 @@ export default function App() {
             </div>
 
             {/* ── Graph Tab ── */}
-            <div style={{ display: activeTab === "graph" ? "block" : "none", flex: 1, minHeight: 0, overflowY: "auto", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
-              <div className="modal-tab-content">
-                <div
-                  style={{
-                    height: "400px",
-                    background: "rgba(212,171,99,0.05)",
-                    border: "1px solid rgba(212,171,99,0.2)",
-                    borderRadius: "8px",
-                    position: "relative",
-                  }}
-                >
-                  {sampleKnowledge[modalState.domain]?.[modalState.entry]
-                    ?.graph ? (
-                    <svg width="100%" height="100%">
-                      <g transform="translate(400,200)">
-                        {sampleKnowledge[modalState.domain]?.[
-                          modalState.entry
-                        ]?.graph?.nodes?.map((node, i, arr) => {
-                          const angle =
-                            (i / arr.length) * 2 * Math.PI - Math.PI / 2;
-                          const nx = 150 * Math.cos(angle),
-                            ny = 150 * Math.sin(angle);
-                          return (
-                            <g key={i}>
-                              <line
-                                x1="0"
-                                y1="0"
-                                x2={nx}
-                                y2={ny}
-                                stroke="rgba(212,171,99,0.4)"
-                                strokeWidth="1"
-                              />
-                              <circle
-                                cx={nx}
-                                cy={ny}
-                                r="8"
-                                fill={`${DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63"}55`}
-                                stroke={DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63"}
-                                strokeWidth="2"
-                              />
-                              <text
-                                x={nx + (nx > 0 ? 15 : -15)}
-                                y={ny + 4}
-                                textAnchor={nx > 0 ? "start" : "end"}
-                                fontSize="14"
-                                fill="#5a4a3a"
-                                fontFamily="Cormorant Garamond,serif"
-                              >
-                                {node}
-                              </text>
-                            </g>
-                          );
-                        })}
-                        <circle
-                          cx="0"
-                          cy="0"
-                          r="30"
-                          fill="rgba(212,171,99,0.2)"
-                          stroke={DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63"}
-                          strokeWidth="2"
-                        />
-                        <text
-                          x="0"
-                          y="5"
-                          textAnchor="middle"
-                          fontSize="16"
-                          fill="#2a1a08"
-                          fontFamily="IM Fell DW Pica,serif"
-                        >
-                          {
-                            sampleKnowledge[modalState.domain]?.[
-                              modalState.entry
-                            ]?.graph?.center?.split(" ")[0] || "Center"
-                          }
-                        </text>
-                      </g>
-                    </svg>
-                  ) : (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%,-50%)",
-                        color: "#7b6b5a",
-                        fontStyle: "italic",
-                        fontFamily: "Cormorant Garamond,serif",
-                        fontSize: "18px",
-                      }}
-                    >
-                      Upload an interview to generate graph
-                    </div>
-                  )}
-                </div>
-              </div>
+            <div style={{ display: activeTab === "graph" ? "flex" : "none", flex: 1, minHeight: 0, overflow: "hidden", flexDirection: "column", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
+              <KnowledgeGraph title={modalState.entry} />
             </div>
 
             {/* ── Mentor / Chat Tab ── */}

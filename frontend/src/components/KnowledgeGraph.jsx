@@ -1,317 +1,306 @@
-import { useState, useEffect, useRef } from 'react';
-import PaperCard from './PaperCard.jsx';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import axios from 'axios';
+import { API } from '../context/AuthContext';
+import domainData from '../data/domainData.json';
+
+const ForceGraph2D = lazy(() => import('react-force-graph-2d'));
+
+const COLORS = {
+  craft: '#8c1c1c',
+  history: '#b8860b',
+  material: '#2E7D32',
+  technique: '#1e40af',
+  ritual: '#7e22ce',
+  community: '#d97706',
+  ecology: '#059669',
+  default: '#64748b'
+};
+
+const SIZES = { large: 16, medium: 10, small: 6 };
 
 const KnowledgeGraph = ({ title }) => {
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [filter, setFilter] = useState('all');
-  const [showFullNetwork, setShowFullNetwork] = useState(true);
-  const [region, setRegion] = useState('all');
-  const [traceMode, setTraceMode] = useState(false);
-  const [researchMode, setResearchMode] = useState(false);
-  const canvasRef = useRef(null);
-
-  // Sample knowledge graph data
-  const graphData = {
-    nodes: [
-      { id: 'pattachitra', label: 'Pattachitra', category: 'craft', x: 400, y: 200, size: 'large' },
-      { id: 'natural-indigo', label: 'Natural Indigo', category: 'material', x: 300, y: 300, size: 'medium' },
-      { id: 'palm-leaf', label: 'Palm Leaf', category: 'material', x: 500, y: 300, size: 'medium' },
-      { id: 'rath-yatra', label: 'Rath Yatra', category: 'ritual', x: 600, y: 200, size: 'medium' },
-      { id: 'dongria-kondh', label: 'Dongria Kondh', category: 'community', x: 200, y: 400, size: 'medium' },
-      { id: 'sacred-grove', label: 'Sacred Grove', category: 'ecology', x: 350, y: 400, size: 'medium' },
-      { id: 'wooden-loom', label: 'Wooden Loom', category: 'tool', x: 450, y: 350, size: 'small' },
-      { id: 'sambalpuri-ikat', label: 'Sambalpuri Ikat', category: 'craft', x: 250, y: 250, size: 'large' },
-      { id: 'sdg-4', label: 'Quality Education', category: 'sdg', x: 550, y: 450, size: 'small' },
-      { id: 'sdg-11', label: 'Sustainable Communities', category: 'sdg', x: 650, y: 400, size: 'small' },
-      { id: 'herbal-medicine', label: 'Herbal Medicine', category: 'craft', x: 150, y: 300, size: 'large' },
-      { id: 'medicinal-plants', label: 'Medicinal Plants', category: 'material', x: 100, y: 350, size: 'medium' },
-      { id: 'tribal-healing', label: 'Tribal Healing', category: 'ritual', x: 200, y: 450, size: 'medium' }
-    ],
-    edges: [
-      { from: 'pattachitra', to: 'natural-indigo', type: 'uses' },
-      { from: 'pattachitra', to: 'palm-leaf', type: 'uses' },
-      { from: 'pattachitra', to: 'rath-yatra', type: 'influences' },
-      { from: 'sambalpuri-ikat', to: 'natural-indigo', type: 'uses' },
-      { from: 'sambalpuri-ikat', to: 'wooden-loom', type: 'depends-on' },
-      { from: 'dongria-kondh', to: 'sacred-grove', type: 'preserves' },
-      { from: 'herbal-medicine', to: 'medicinal-plants', type: 'uses' },
-      { from: 'herbal-medicine', to: 'tribal-healing', type: 'originates-from' },
-      { from: 'sacred-grove', to: 'medicinal-plants', type: 'sustains' },
-      { from: 'pattachitra', to: 'sdg-4', type: 'supports' },
-      { from: 'sacred-grove', to: 'sdg-11', type: 'supports' }
-    ]
-  };
-
-  const nodeDetails = {
-    'natural-indigo': {
-      category: 'Material',
-      description: 'Traditional natural dye extracted from Indigofera tinctoria plants',
-      connectedTo: ['Pattachitra', 'Sambalpuri Ikat'],
-      sdgLinks: ['Responsible Consumption', 'Climate Action'],
-      interviewRefs: 12,
-      confidence: 0.95
-    },
-    'pattachitra': {
-      category: 'Craft',
-      description: 'Traditional cloth-based scroll painting from Odisha',
-      connectedTo: ['Natural Indigo', 'Palm Leaf', 'Rath Yatra'],
-      sdgLinks: ['Quality Education', 'Cultural Preservation'],
-      interviewRefs: 18,
-      confidence: 0.92
-    },
-    'sacred-grove': {
-      category: 'Ecology',
-      description: 'Community-protected forest patches with cultural significance',
-      connectedTo: ['Dongria Kondh', 'Medicinal Plants'],
-      sdgLinks: ['Sustainable Communities', 'Life on Land'],
-      interviewRefs: 8,
-      confidence: 0.88
-    }
-  };
+  const [mode, setMode] = useState('knowledge');
+  const [graphData, setGraphData] = useState({ nodes: [], links: [] });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [selected, setSelected] = useState(null);
+  const fgRef = useRef();
 
   useEffect(() => {
-    drawGraph();
-  }, [filter, showFullNetwork, region]);
+    if (!title) return;
+    let cancelled = false;
 
-  const drawGraph = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const load = async () => {
+      setLoading(true);
+      setError('');
+      setSelected(null);
+      try {
+        const endpoint = mode === 'knowledge'
+          ? `${API}/graph/knowledge/${encodeURIComponent(title)}`
+          : `${API}/graph/similarity`;
 
-    // Draw edges
-    graphData.edges.forEach(edge => {
-      const fromNode = graphData.nodes.find(n => n.id === edge.from);
-      const toNode = graphData.nodes.find(n => n.id === edge.to);
-      
-      if (fromNode && toNode) {
-        ctx.beginPath();
-        ctx.moveTo(fromNode.x, fromNode.y);
-        ctx.lineTo(toNode.x, toNode.y);
-        ctx.strokeStyle = 'rgba(139, 69, 19, 0.3)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        let res;
+        if (mode === 'knowledge') {
+          res = await axios.get(endpoint, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('lm_token')}` }
+          });
+        } else {
+          const allEntries = [];
+          Object.entries(domainData).forEach(([domain, lists]) => {
+            Object.values(lists).forEach(letterList => {
+               letterList.forEach(item => {
+                 allEntries.push({ title: item.title, domain: domain, description: item.description, tags: item.tags });
+               });
+            });
+          });
+
+          res = await axios.post(endpoint, {
+            selectedTitle: title,
+            allEntries: allEntries
+          }, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('lm_token')}` }
+          });
+        }
+
+        if (cancelled) return;
+
+        if (!res.data.nodes || res.data.nodes.length === 0) {
+          setError('No graph data yet. Record an interview or run an analysis first.');
+          setGraphData({ nodes: [], links: [] });
+        } else {
+          const scattered = res.data.nodes.map(n => ({
+            ...n,
+            x: (Math.random() - 0.5) * 200,
+            y: (Math.random() - 0.5) * 200
+          }));
+          setGraphData({ nodes: scattered, links: res.data.links });
+
+          setTimeout(() => {
+            if (fgRef.current) {
+              fgRef.current.d3Force('charge').strength(-1200);
+              fgRef.current.d3Force('link').distance(180);
+              fgRef.current.d3Force('center').strength(0.05);
+            }
+          }, 400);
+        }
+      } catch (err) {
+        if (!cancelled) setError('Failed to load graph data.');
+        console.error('Graph error:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    });
+    };
 
-    // Draw nodes
-    graphData.nodes.forEach(node => {
-      const colors = {
-        craft: '#8B4513',
-        material: '#2E7D32',
-        ritual: '#D32F2F',
-        ecology: '#1976D2',
-        community: '#7B1FA2',
-        tool: '#F57C00',
-        sdg: '#0097A7'
-      };
-
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.size === 'large' ? 20 : node.size === 'medium' ? 15 : 10, 0, 2 * Math.PI);
-      ctx.fillStyle = colors[node.category] || '#666';
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.fillStyle = '#333';
-      ctx.font = '12px serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(node.label, node.x, node.y + 35);
-    });
-  };
-
-  const handleCanvasClick = (e) => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // Find clicked node
-    const clickedNode = graphData.nodes.find(node => {
-      const distance = Math.sqrt(Math.pow(x - node.x, 2) + Math.pow(y - node.y, 2));
-      return distance <= (node.size === 'large' ? 20 : node.size === 'medium' ? 15 : 10);
-    });
-
-    setSelectedNode(clickedNode);
-  };
-
-  const insights = {
-    relationships: 42,
-    dependencies: 18,
-    influences: 6
-  };
+    load();
+    return () => { cancelled = true; };
+  }, [title, mode]);
 
   return (
-    <div className="knowledge-graph">
-      {/* Header */}
-      <div className="kg-header">
-        <h1>Knowledge Graph – Mapping Living Traditions</h1>
-        <p>Explore how Odisha's traditional systems connect across materials, rituals, ecology, and community.</p>
-        {title && <div className="graph-focus">Graph Focus: {title}</div>}
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '500px', fontFamily: 'Cormorant Garamond, serif' }}>
 
-      {/* Filters */}
-      <div className="kg-filters">
-        <div className="filter-group">
-          <label>Filter by:</label>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All Categories</option>
-            <option value="craft">Craft</option>
-            <option value="agriculture">Agriculture</option>
-            <option value="ritual">Ritual</option>
-            <option value="ecology">Ecology</option>
-            <option value="tribal">Tribal Systems</option>
-            <option value="architecture">Architecture</option>
-            <option value="sdg">SDG Alignment</option>
-          </select>
-        </div>
-        
-        <div className="toggle-group">
-          <label className="toggle-switch">
-            <input
-              type="checkbox"
-              checked={showFullNetwork}
-              onChange={(e) => setShowFullNetwork(e.target.checked)}
-            />
-            <span className="slider"></span>
-            <span className="toggle-label">
-              {showFullNetwork ? 'Show Full Network' : 'Show Only Direct Connections'}
-            </span>
-          </label>
+      {/* ── Tab Buttons ── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          {[
+            { key: 'knowledge', label: '🧬 Internal Structure' },
+            { key: 'similarity', label: '✨ Cross-Domain (AI)' }
+          ].map(t => (
+            <button
+              key={t.key}
+              onClick={() => setMode(t.key)}
+              style={{
+                padding: '8px 18px',
+                background: mode === t.key ? '#2a1a08' : 'transparent',
+                color: mode === t.key ? '#f5e6c8' : '#2a1a08',
+                border: '2px solid #2a1a08',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: '14px',
+                fontFamily: 'inherit',
+                transition: 'all 0.2s'
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
-        <div className="filter-group">
-          <button 
-            className={`btn ${traceMode ? 'active' : ''}`}
-            onClick={() => setTraceMode(!traceMode)}
-          >
-            Trace Knowledge Lineage
-          </button>
-          <button 
-            className={`btn ${researchMode ? 'active' : ''}`}
-            onClick={() => setResearchMode(!researchMode)}
-          >
-            Research View
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="kg-main">
-        {/* Graph Canvas */}
-        <div className="graph-container">
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={500}
-            className="graph-canvas"
-            onClick={handleCanvasClick}
-          />
-        </div>
-
-        {/* Side Panel */}
-        {selectedNode && (
-          <PaperCard variant="default">
-            <div className="node-panel">
-              <div className="panel-header">
-                <h3>{selectedNode.label}</h3>
-                <button className="close-btn" onClick={() => setSelectedNode(null)}>×</button>
-              </div>
-              
-              <div className="panel-content">
-                <div className="node-category">
-                  <span className="category-badge">{selectedNode.category}</span>
-                </div>
-                
-                {nodeDetails[selectedNode.id] && (
-                  <>
-                    <p className="node-description">{nodeDetails[selectedNode.id].description}</p>
-                    
-                    <div className="node-connections">
-                      <h4>Connected to:</h4>
-                      <ul>
-                        {nodeDetails[selectedNode.id].connectedTo.map((conn, idx) => (
-                          <li key={idx}>{conn}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="node-sdg">
-                      <h4>SDG Links:</h4>
-                      <ul>
-                        {nodeDetails[selectedNode.id].sdgLinks.map((sdg, idx) => (
-                          <li key={idx}>{sdg}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {researchMode && (
-                      <div className="research-info">
-                        <h4>Research Data:</h4>
-                        <p>Interview References: {nodeDetails[selectedNode.id].interviewRefs}</p>
-                        <p>Confidence Level: {(nodeDetails[selectedNode.id].confidence * 100).toFixed(0)}%</p>
-                        <p>Validation Status: Verified</p>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
-          </PaperCard>
+        {mode === 'similarity' && (
+          <span style={{ fontSize: '11px', color: '#8c6414', fontStyle: 'italic' }}>
+            ✨ Powered by Llama-3 AI
+          </span>
         )}
       </div>
 
-      {/* Intelligence Indicator */}
-      <div className="intelligence-panel">
-        <h4>Structured Insights Generated:</h4>
-        <div className="insights-grid">
-          <div className="insight-item">
-            <span className="insight-number">{insights.relationships}</span>
-            <span className="insight-label">relationships identified</span>
-          </div>
-          <div className="insight-item">
-            <span className="insight-number">{insights.dependencies}</span>
-            <span className="insight-label">material dependencies mapped</span>
-          </div>
-          <div className="insight-item">
-            <span className="insight-number">{insights.influences}</span>
-            <span className="insight-label">cross-domain influences detected</span>
-          </div>
+      {/* ── Graph + Inspector ── */}
+      <div style={{ display: 'flex', gap: '16px', flex: 1, minHeight: 0 }}>
+
+        {/* Canvas */}
+        <div style={{
+          flex: 1,
+          position: 'relative',
+          background: '#fcf6e9',
+          border: '3px double #d4ab63',
+          borderRadius: '8px',
+          overflow: 'hidden',
+          boxShadow: 'inset 0 0 60px rgba(140, 100, 20, 0.08), 0 4px 20px rgba(0,0,0,0.08)'
+        }}>
+          {/* Loading */}
+          {loading && (
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center', zIndex: 10 }}>
+              <div style={{ fontSize: '42px', animation: 'spin 2s linear infinite' }}>🏺</div>
+              <div style={{ marginTop: '12px', color: '#8c6414', fontWeight: 700, letterSpacing: '3px', fontSize: '12px' }}>
+                {mode === 'similarity' ? 'AI IS ANALYZING...' : 'LOADING GRAPH...'}
+              </div>
+            </div>
+          )}
+
+          {/* Error */}
+          {!loading && error && (
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center', padding: '30px' }}>
+              <div style={{ fontSize: '36px', marginBottom: '12px' }}>📜</div>
+              <p style={{ fontStyle: 'italic', color: '#8c6414', fontSize: '15px', maxWidth: '320px', lineHeight: 1.5 }}>{error}</p>
+            </div>
+          )}
+
+          {/* Force Graph */}
+          {!loading && !error && graphData.nodes.length > 0 && (
+            <Suspense fallback={<div style={{ textAlign: 'center', padding: '40px', color: '#8c6414' }}>Loading graph engine...</div>}>
+              <ForceGraph2D
+                ref={fgRef}
+                graphData={graphData}
+                backgroundColor="transparent"
+                cooldownTicks={180}
+                linkColor={() => 'rgba(140, 100, 20, 0.3)'}
+                linkWidth={2}
+                linkCurvature={0.15}
+                linkDirectionalParticles={2}
+                linkDirectionalParticleSpeed={0.003}
+                linkDirectionalParticleColor={() => '#d4ab63'}
+                onNodeClick={n => setSelected(n)}
+                linkCanvasObjectMode={() => 'after'}
+                linkCanvasObject={(link, ctx, globalScale) => {
+                  if (!link.type) return;
+                  // In knowledge mode, skip generic structural labels
+                  if (mode === 'knowledge') {
+                    const skip = ['analyzed','recorded','uses','material','domain','community','region'];
+                    if (skip.includes(link.type)) return;
+                  }
+                  const s = link.source, e = link.target;
+                  if (typeof s !== 'object' || typeof e !== 'object') return;
+                  const mx = s.x + (e.x - s.x) * 0.5;
+                  const my = s.y + (e.y - s.y) * 0.5;
+                  let angle = Math.atan2(e.y - s.y, e.x - s.x);
+                  if (angle > Math.PI/2 || angle < -Math.PI/2) angle += Math.PI;
+
+                  ctx.save();
+                  ctx.translate(mx, my);
+                  ctx.rotate(angle);
+                  const fs = Math.max(3, 10 / globalScale);
+                  ctx.font = `bold ${fs}px sans-serif`;
+                  const tw = ctx.measureText(link.type).width;
+                  ctx.fillStyle = 'rgba(252,246,233,0.92)';
+                  ctx.fillRect(-(tw+6)/2, -(fs+4)/2, tw+6, fs+4);
+                  ctx.textAlign = 'center';
+                  ctx.textBaseline = 'middle';
+                  ctx.fillStyle = '#8c1c1c';
+                  ctx.fillText(link.type, 0, 0);
+                  ctx.restore();
+                }}
+                nodeCanvasObject={(node, ctx, globalScale) => {
+                  const r = SIZES[node.size] || 6;
+                  const isSel = selected?.id === node.id;
+
+                  // Glow
+                  ctx.save();
+                  ctx.shadowColor = isSel ? 'rgba(140,28,28,0.5)' : 'rgba(0,0,0,0.12)';
+                  ctx.shadowBlur = (isSel ? 14 : 5) / globalScale;
+                  ctx.beginPath();
+                  ctx.arc(node.x, node.y, r, 0, 2 * Math.PI);
+                  ctx.fillStyle = COLORS[node.category] || COLORS.default;
+                  ctx.fill();
+                  ctx.shadowBlur = 0;
+                  ctx.strokeStyle = isSel ? '#fff' : '#1a0f08';
+                  ctx.lineWidth = (isSel ? 2.5 : 1) / globalScale;
+                  ctx.stroke();
+                  ctx.restore();
+
+                  // Label
+                  const fs = Math.max(3, 11 / globalScale);
+                  ctx.font = `${fs}px serif`;
+                  ctx.textAlign = 'center';
+                  ctx.textBaseline = 'middle';
+                  ctx.fillStyle = '#1a0f08';
+                  ctx.fillText(node.label, node.x, node.y + r + fs + 2);
+                }}
+              />
+            </Suspense>
+          )}
         </div>
+
+        {/* Inspector Panel */}
+        {selected && (
+          <div style={{
+            width: '280px',
+            background: '#fff9ef',
+            border: '1px solid #d4ab63',
+            borderRadius: '8px',
+            padding: '18px',
+            boxShadow: '-6px 0 24px rgba(0,0,0,0.04)',
+            overflowY: 'auto',
+            fontFamily: 'Cormorant Garamond, serif'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #d4ab63', paddingBottom: '10px', marginBottom: '14px' }}>
+              <h4 style={{ margin: 0, color: '#2a1a08', letterSpacing: '1px', textTransform: 'uppercase', fontSize: '13px' }}>Node Detail</h4>
+              <button onClick={() => setSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#8c1c1c' }}>×</button>
+            </div>
+
+            <span style={{
+              background: COLORS[selected.category] || COLORS.default,
+              color: '#fff', padding: '2px 10px', borderRadius: '4px',
+              fontSize: '10px', textTransform: 'uppercase', fontWeight: 700
+            }}>
+              {selected.category}
+            </span>
+            <h3 style={{ color: '#2a1a08', marginTop: '10px', fontSize: '18px', lineHeight: 1.3 }}>{selected.label}</h3>
+
+            <div style={{ fontSize: '13px', color: '#5d4037', lineHeight: 1.6, marginTop: '12px' }}>
+              <p>Part of the <strong>{title}</strong> knowledge network.</p>
+              {selected.category === 'community' && <p style={{ fontStyle: 'italic', borderLeft: '3px solid #d97706', paddingLeft: '8px' }}>Community / tribal group sustaining this practice.</p>}
+              {selected.category === 'ecology' && <p style={{ fontStyle: 'italic', borderLeft: '3px solid #059669', paddingLeft: '8px' }}>Regional ecological context of this knowledge.</p>}
+              {selected.category === 'material' && <p style={{ fontStyle: 'italic', borderLeft: '3px solid #2E7D32', paddingLeft: '8px' }}>Raw material used in this tradition.</p>}
+              {selected.category === 'technique' && <p style={{ fontStyle: 'italic', borderLeft: '3px solid #1e40af', paddingLeft: '8px' }}>Specific technique or method documented.</p>}
+            </div>
+
+            <div style={{ marginTop: '18px', paddingTop: '12px', borderTop: '1px dashed #d4ab63' }}>
+              <label style={{ fontSize: '10px', color: '#8c6414', textTransform: 'uppercase', fontWeight: 700 }}>Connections</label>
+              <div style={{ marginTop: '6px', fontSize: '12px', color: '#5a4a3a' }}>
+                {graphData.links
+                  .filter(l => (l.source?.id || l.source) === selected.id || (l.target?.id || l.target) === selected.id)
+                  .map((l, i) => (
+                    <div key={i} style={{ marginBottom: '4px' }}>• <strong style={{ color: '#8c1c1c' }}>{l.type || 'linked'}</strong></div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Explore by Region */}
-      <div className="region-explorer">
-        <h4>Explore by Region</h4>
-        <div className="region-buttons">
-          <button 
-            className={`region-btn ${region === 'coastal' ? 'active' : ''}`}
-            onClick={() => setRegion('coastal')}
-          >
-            Coastal Odisha
-          </button>
-          <button 
-            className={`region-btn ${region === 'western' ? 'active' : ''}`}
-            onClick={() => setRegion('western')}
-          >
-            Western Odisha
-          </button>
-          <button 
-            className={`region-btn ${region === 'tribal' ? 'active' : ''}`}
-            onClick={() => setRegion('tribal')}
-          >
-            Tribal Belt
-          </button>
-          <button 
-            className={`region-btn ${region === 'temple' ? 'active' : ''}`}
-            onClick={() => setRegion('temple')}
-          >
-            Temple Architecture Cluster
-          </button>
-        </div>
+      {/* ── Legend ── */}
+      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '14px', padding: '10px 14px', background: 'rgba(212,171,99,0.06)', borderRadius: '6px', border: '1px solid rgba(212,171,99,0.15)' }}>
+        {Object.entries({ craft: 'Tradition', material: 'Material', technique: 'Technique/Domain', community: 'Community', ecology: 'Region', history: 'Analysis/Interview', ritual: 'Cultural/Age' }).map(([k, v]) => (
+          <div key={k} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#5a4a3a' }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: COLORS[k] }} />
+            {v}
+          </div>
+        ))}
       </div>
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 };

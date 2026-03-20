@@ -53,7 +53,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
                         const resObj = job.result;
                         setResult(resObj);
                         setActiveAnalysis(resObj);
-                        
+
                         // Check for topic mismatch
                         if (resObj.topic_mismatch === true) {
                             setTopicMismatch(true);
@@ -95,14 +95,14 @@ const TechniqueAnalysis = ({ title, domain }) => {
         const startTime = Date.now();
         try {
             const res = await axios.post(`${LOCAL_API}/analysis/media`, formData, {
-                headers: { 
+                headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('lm_token')}`
                 },
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     setProgress(percentCompleted);
-                    
+
                     const timeElapsed = (Date.now() - startTime) / 1000; // seconds
                     const uploadSpeed = (progressEvent.loaded / 1024 / 1024) / timeElapsed; // MB/s
                     setUploadMetrics({
@@ -125,7 +125,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
 
     const renderInsightPanel = (data) => {
         if (!data) return null;
-        
+
         // Unified data structure from backend
         const interp = data.llm_interpretation || {};
         const vision = interp.vision_analysis || data.vision_analysis || {};
@@ -134,7 +134,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
         const renderField = (label, value) => {
             const isArray = Array.isArray(value);
             const isBulletString = typeof value === 'string' && (value.includes('- ') || value.includes('\n-'));
-            
+
             if (isArray || isBulletString) {
                 const points = isArray ? value : value.split(/\n- |^- /).filter(p => p.trim());
                 return (
@@ -149,9 +149,9 @@ const TechniqueAnalysis = ({ title, domain }) => {
             return (
                 <div style={{ marginBottom: '14px' }}>
                     <strong style={{ color: '#9b6b2f', fontSize: '12px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace", letterSpacing: '0.05em' }}>{label}:</strong>
-                    <div style={{ 
-                        marginTop: '4px', fontSize: '15.5px', 
-                        color: (value?.toString().includes('Error') || value?.toString().includes('Limit')) ? '#c62828' : '#2a1a08', 
+                    <div style={{
+                        marginTop: '4px', fontSize: '15.5px',
+                        color: (value?.toString().includes('Error') || value?.toString().includes('Limit')) ? '#c62828' : '#2a1a08',
                         lineHeight: '1.5',
                         fontWeight: (value?.toString().includes('Error') || value?.toString().includes('Limit')) ? 'bold' : 'normal'
                     }}>
@@ -166,7 +166,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
                 <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#2a1a08', borderBottom: '1px solid rgba(140, 100, 20, 0.2)', paddingBottom: '10px' }}>
                     📖 Traditional Metadata
                 </h3>
-                
+
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', marginTop: '20px' }}>
                     <PaperCard title="📜 Cultural Context" className="alt" style={{ borderColor: '#d4ab63' }}>
                         {renderField("Tradition", vision.tradition_name)}
@@ -181,7 +181,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
                         {renderField("Collaborators", vision.people_engaged_per_stage)}
                         {renderField("Est. Years to Master", interp.estimated_years_to_master || vision.estimated_years_to_master)}
                     </PaperCard>
-                    
+
                     <PaperCard title="🛠️ Materiality" style={{ borderColor: '#795548' }}>
                         {renderField("Raw Materials", vision.raw_materials_used)}
                         {renderField("Tools Required", vision.tools_required)}
@@ -206,7 +206,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
                         {vision.technique_analysis && renderField("Technique Overview", vision.technique_analysis)}
                         {vision.stroke_forensics && renderField("Stroke Forensics", vision.stroke_forensics)}
                         {vision.pressure_indicators && renderField("Pressure Indicators", vision.pressure_indicators)}
-                        
+
                         {interp.step_by_step_execution && renderField("Step-by-Step Execution", interp.step_by_step_execution)}
                         {interp.secret_techniques && renderField("Master Secrets", interp.secret_techniques)}
                         {interp.expertise_markers && renderField("Expertise Markers", interp.expertise_markers)}
@@ -239,7 +239,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
                                 width: `${widthPct}%`, height: '100%',
                                 background: ['#d4ab63', '#9b6b2f', '#7b6b5a', '#5d4037'][i % 4],
                                 borderRight: '1px solid rgba(255,255,255,0.3)', cursor: 'help', display: 'flex', alignItems: 'center',
-                                justifyContent: 'center', fontSize: '13px', color: i % 2 === 0 ? '#2a1a08' : 'white', 
+                                justifyContent: 'center', fontSize: '13px', color: i % 2 === 0 ? '#2a1a08' : 'white',
                                 textAlign: 'center', padding: '5px', fontFamily: 'Space Mono', fontWeight: 'bold',
                                 transition: 'all 0.3s ease'
                             }} title={`${p.name}: ${p.duration}s`}>
@@ -366,8 +366,8 @@ const TechniqueAnalysis = ({ title, domain }) => {
     };
 
     return (
-        <div className="technique-analysis-container" style={{ 
-            padding: '20px', 
+        <div className="technique-analysis-container" style={{
+            padding: '20px',
             maxWidth: '1200px',
             margin: '0 auto',
             width: '100%',
@@ -376,13 +376,13 @@ const TechniqueAnalysis = ({ title, domain }) => {
             {/* ── PARCHMENT WRAPPER ── */}
             <div className="parchment-container" style={{ animation: 'heroFloat 6s ease-in-out infinite' }}>
                 <div className="parchment-body" style={{ padding: '40px 60px' }}>
-                    
+
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '2px solid rgba(140, 100, 20, 0.2)', paddingBottom: '15px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                            <button 
+                            <button
                                 onClick={() => { setStatus('idle'); setFile(null); setActiveAnalysis(null); setTopicMismatch(false); }}
                                 style={{
-                                    background: 'rgba(212,171,99,0.1)', border: '1px solid rgba(212,171,99,0.3)', color: '#c4922a', 
+                                    background: 'rgba(212,171,99,0.1)', border: '1px solid rgba(212,171,99,0.3)', color: '#c4922a',
                                     cursor: 'pointer', fontFamily: 'Space Mono', fontSize: '11px', padding: '6px 14px', borderRadius: '20px',
                                     display: 'flex', alignItems: 'center', gap: '5px'
                                 }}
@@ -394,18 +394,18 @@ const TechniqueAnalysis = ({ title, domain }) => {
                         {history.length > 0 && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <span style={{ fontFamily: 'Space Mono', fontSize: '12px', color: '#9b6b2f' }}>ARCHIVES:</span>
-                                <select 
+                                <select
                                     onChange={(e) => {
                                         const analysis = history[e.target.value];
                                         setActiveAnalysis(analysis);
                                         setTopicMismatch(analysis?.topic_mismatch || false);
                                         setShowDespiteMismatch(false);
                                     }}
-                                    style={{ 
-                                        padding: '8px 12px', 
-                                        borderRadius: '4px', 
-                                        border: '1px solid #d4ab63', 
-                                        background: 'rgba(255,255,255,0.5)', 
+                                    style={{
+                                        padding: '8px 12px',
+                                        borderRadius: '4px',
+                                        border: '1px solid #d4ab63',
+                                        background: 'rgba(255,255,255,0.5)',
                                         fontSize: '13px',
                                         fontFamily: 'Cormorant Garamond',
                                         fontWeight: 'bold'
@@ -428,11 +428,11 @@ const TechniqueAnalysis = ({ title, domain }) => {
                             <p style={{ color: '#5d4037', fontSize: '18px', maxWidth: '600px', margin: '0 auto 25px' }}>
                                 Upload ancient techniques to extract strokes, secrets, and cultural signatures.
                             </p>
-                            
+
                             {status === 'error' && (
-                                <div style={{ 
-                                    color: '#c62828', background: '#ffebee', padding: '15px', 
-                                    borderRadius: '8px', marginBottom: '25px', fontSize: '15px', 
+                                <div style={{
+                                    color: '#c62828', background: '#ffebee', padding: '15px',
+                                    borderRadius: '8px', marginBottom: '25px', fontSize: '15px',
                                     border: '1px solid #c62828', maxWidth: '500px', margin: '0 auto 25px'
                                 }}>
                                     {errorMessage || "Connection interrupted. Please try a smaller file."}
@@ -440,19 +440,19 @@ const TechniqueAnalysis = ({ title, domain }) => {
                             )}
 
                             <div style={{ position: 'relative', display: 'inline-block' }}>
-                                <input 
+                                <input
                                     type="file" id="analysis-upload"
-                                    accept="video/*,image/*,audio/*,.pdf,.txt" 
-                                    onChange={(e) => setFile(e.target.files[0])} 
+                                    accept="video/*,image/*,audio/*,.pdf,.txt"
+                                    onChange={(e) => setFile(e.target.files[0])}
                                     style={{ display: 'none' }}
                                 />
                                 <label htmlFor="analysis-upload" className="btn btn-secondary" style={{ marginBottom: '20px', cursor: 'pointer' }}>
                                     {file ? `📎 ${file.name}` : "📂 Choose Manuscript / Media"}
                                 </label>
                             </div>
-                            
+
                             <div style={{ marginTop: '10px' }}>
-                                <button 
+                                <button
                                     onClick={handleUpload}
                                     disabled={!file}
                                     className="btn btn-primary"
@@ -470,7 +470,7 @@ const TechniqueAnalysis = ({ title, domain }) => {
                                 width: '100px', height: '100px', border: '5px solid rgba(212, 171, 99, 0.1)', borderTop: '5px solid #d4ab63',
                                 borderRadius: '50%', animation: 'spin 1.5s linear infinite', margin: '0 auto 30px'
                             }} />
-                            
+
                             <h2 style={{ letterSpacing: '3px', color: '#9b6b2f' }}>
                                 {status === 'uploading' ? 'TRANSMITTING...' : 'DECODING TACIT DATA...'}
                             </h2>
@@ -484,12 +484,12 @@ const TechniqueAnalysis = ({ title, domain }) => {
                                     <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #d4ab63, #f0e8d8)', transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                                 </div>
                                 <div style={{ marginTop: '10px', fontSize: '13px', color: '#5d4037', fontStyle: 'italic' }}>
-                                    {status === 'uploading' 
-                                        ? `Moving ${uploadMetrics.loaded}MB of ${uploadMetrics.size}MB` 
+                                    {status === 'uploading'
+                                        ? `Moving ${uploadMetrics.loaded}MB of ${uploadMetrics.size}MB`
                                         : "Connecting to Multimodal Wisdom Engine... (This may take 15-20 seconds as the AI deciphers technical nuances)"}
                                 </div>
                             </div>
-                            
+
                             <p className="hero-eyebrow" style={{ marginTop: '20px', fontSize: '12px' }}>Analyzing strokes, pressure, and cultural motifs</p>
                         </div>
                     )}
@@ -498,8 +498,8 @@ const TechniqueAnalysis = ({ title, domain }) => {
                     {activeAnalysis && (
                         <div style={{ marginTop: '40px', animation: 'fadeInUp 0.6s ease-out' }}>
                             {topicMismatch && !showDespiteMismatch && (
-                                <div style={{ 
-                                    background: '#8c1c1c', color: '#fff', padding: '30px', 
+                                <div style={{
+                                    background: '#8c1c1c', color: '#fff', padding: '30px',
                                     borderRadius: '15px', marginBottom: '30px', textAlign: 'center',
                                     border: '4px double #d4ab63', boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
                                     animation: 'shake 0.5s ease-in-out'
@@ -512,15 +512,15 @@ const TechniqueAnalysis = ({ title, domain }) => {
                                         Our AI detected a discrepancy between your media and the chosen topic: <strong>{title}</strong>.
                                     </p>
                                     <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
-                                        <button 
+                                        <button
                                             onClick={() => { setStatus('idle'); setFile(null); setActiveAnalysis(null); setTopicMismatch(false); setShowDespiteMismatch(false); }}
                                             className="btn btn-primary"
                                             style={{ background: '#d4ab63', color: '#1a0f08' }}
                                         >
                                             TRY ANOTHER PATH
                                         </button>
-                                        <button 
-                                            onClick={() => { 
+                                        <button
+                                            onClick={() => {
                                                 setShowDespiteMismatch(true);
                                                 // If viewing anyway, add to history now
                                                 if (history.indexOf(activeAnalysis) === -1) {
@@ -539,9 +539,9 @@ const TechniqueAnalysis = ({ title, domain }) => {
                                 <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
                                     {renderMediaPreview(activeAnalysis)}
                                     {renderActiveAnalysis(activeAnalysis)}
-                                    
+
                                     <div style={{ marginTop: '30px', textAlign: 'center', borderTop: '1px solid rgba(140, 100, 20, 0.1)', paddingTop: '20px' }}>
-                                        <button 
+                                        <button
                                             onClick={() => { setStatus('idle'); setFile(null); setActiveAnalysis(null); setTopicMismatch(false); setShowDespiteMismatch(false); }}
                                             className="btn btn-secondary"
                                             style={{ padding: '12px 30px', background: 'rgba(212,171,99,0.1)', border: '1px solid rgba(212,171,99,0.3)' }}

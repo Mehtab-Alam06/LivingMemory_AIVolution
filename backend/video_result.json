@@ -1,0 +1,62 @@
+{
+  "topic_mismatch": true,
+  "raw_metrics": {
+    "hands_visible_pct": 85,
+    "rhythm_detected": true
+  },
+  "video_metadata": {
+    "duration_seconds": 40,
+    "resolution": "1080p",
+    "domain": "agriculture"
+  },
+  "llm_interpretation": {
+    "vision_analysis": {
+      "tradition_name": "Pattachitra Art\n- Line Drawing",
+      "historical_origin": "Ancient scroll painting\n- Temple art influence\n- Folk tradition",
+      "geographic_region": "Puri, Raghurajpur\n- Odisha coastal belt\n- Artistic villages",
+      "practicing_community": "Chitrakar community\n- Traditional artisans\n- Family enterprise",
+      "current_stage": "Detailed outlining\n- Ink application\n- Pattern enhancement",
+      "total_stages_in_tradition": "Sketching, outlining, coloring\n- Multiple complex stages\n- Final varnishing",
+      "people_engaged_per_stage": "Single artist focus\n- Family collaboration",
+      "raw_materials_used": [
+        "Paper (modern adaptation)",
+        "Pencil",
+        "Black ink pen"
+      ],
+      "tools_required": [
+        "Pencil",
+        "Fineliner pen"
+      ],
+      "cultural_impact": "Preserves mythological tales\n- Depicts religious iconography\n- Odia identity symbol",
+      "economic_significance": "Artist livelihood source\n- Tourist attraction\n- Art market sales",
+      "spiritual_or_ritual_meaning": "Sacred deity depictions\n- Narrates epics\n- Devotional expressions",
+      "environmental_sustainability": "Natural colors (traditional)\n- Eco-friendly materials",
+      "gender_roles": "Men and women participate\n- Shared family tasks",
+      "knowledge_at_risk": "Decreased patronage\n- Modern art competition\n- Apprenticeship decline",
+      "estimated_years_to_master": "Five to ten years\n- Lifelong dedication\n- Generational skill transfer",
+      "technique_analysis": "Precise, steady strokes\n- Controlled ink pressure\n- Intricate fine detailing",
+      "stroke_forensics": [
+        "Thin, consistent lines",
+        "Curved, fluid motions",
+        "Repetitive traditional patterns"
+      ],
+      "pressure_indicators": "Even ink flow\n- No paper indentations\n- Uniform line thickness"
+    },
+    "step_by_step_execution": [
+      "Initial pencil sketch",
+      "Develop basic body",
+      "Add garment outlines",
+      "Detail facial features",
+      "Outline hair, jewelry",
+      "Refine hands, feet",
+      "Add garment patterns",
+      "Black ink tracing",
+      "Erase pencil lines"
+    ],
+    "expertise_markers": [
+      "Fluid, confident lines",
+      "Intricate, consistent patterns",
+      "Detailed traditional motifs"
+    ]
+  }
+}
