@@ -16,6 +16,7 @@ import CommunityChat from "./components/Community/CommunityChat";
 import ContributeKnowledge from "./components/ContributeKnowledge/ContributeKnowledge";
 import LandingPage from "./components/LandingPage/LandingPage";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import TechniqueAnalysis from "./components/TechniqueAnalysis";
 import { useAuth } from "./context/AuthContext";
 
 const DOMAIN_CONFIG = {
@@ -365,14 +366,14 @@ export default function App() {
       {/* ── CONTRIBUTE TAB ── */}
       {mainTab === "contribute" && (
         <div className="tab-content contribute-fill">
-          <ContributeKnowledge />
+          <ContributeKnowledge onBack={() => setMainTab("home")} />
         </div>
       )}
 
       {/* ── ADMIN TAB ── */}
       {mainTab === "admin" && user?.role === "admin" && (
         <div className="tab-content" style={{ background: "linear-gradient(135deg, #fdf8ec, #f5edd6)" }}>
-          <AdminDashboard domainData={domainData} />
+          <AdminDashboard domainData={domainData} onBack={() => setMainTab("home")} />
         </div>
       )}
 
@@ -740,62 +741,70 @@ export default function App() {
                 flexShrink: 0,
               }}
             >
-              <div
-                style={{
-                  fontSize: "12px",
-                  fontFamily: "Space Mono",
-                  color: DOMAIN_CONFIG[modalState.domain].color,
-                  letterSpacing: "0.1em",
-                  marginBottom: "8px",
-                  fontWeight: "bold",
-                }}
-              >
-                {DOMAIN_CONFIG[modalState.domain].icon}{" "}
-                {DOMAIN_CONFIG[modalState.domain].label.toUpperCase()}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontFamily: "Space Mono",
+                      color: DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63",
+                      letterSpacing: "0.15em",
+                      marginBottom: "6px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {DOMAIN_CONFIG[modalState.domain]?.icon?.toUpperCase() || "📜"} {" "}
+                    {DOMAIN_CONFIG[modalState.domain]?.label?.toUpperCase() || "KNOWLEDGE"}
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "IM Fell DW Pica,serif",
+                      fontSize: "clamp(22px, 5vw, 32px)",
+                      color: "#2a1a08",
+                      margin: 0,
+                      lineHeight: 1.1
+                    }}
+                  >
+                    {modalState.entry}
+                  </h2>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <button
+                    onClick={() => setModalState({ isOpen: false })}
+                    style={{
+                      background: "rgba(212,171,99,0.15)",
+                      border: "1px solid rgba(212,171,99,0.4)",
+                      padding: "8px 16px",
+                      cursor: "pointer",
+                      borderRadius: "6px",
+                      fontFamily: "Space Mono",
+                      fontSize: "12px",
+                      color: '#4a301a',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => e.target.style.background = 'rgba(212,171,99,0.25)'}
+                    onMouseOut={(e) => e.target.style.background = 'rgba(212,171,99,0.15)'}
+                  >
+                    ✕ Close
+                  </button>
+                </div>
               </div>
-              <h2
-                style={{
-                  fontFamily: "IM Fell DW Pica,serif",
-                  fontSize: "clamp(20px, 6vw, 32px)",
-                  color: "#2a1a08",
-                  margin: 0,
-                }}
-              >
-                {modalState.entry}
-                {activeTab === "record" && resumeData?.interviewNumber && (
-                  <span style={{ fontSize: "0.6em", opacity: 0.6, marginLeft: "12px", fontFamily: "Space Mono" }}>
-                    · INT {resumeData.interviewNumber}
-                  </span>
-                )}
-              </h2>
-              <button
-                onClick={() => setModalState({ isOpen: false })}
-                style={{
-                  position: "absolute",
-                  top: "max(12px, 1.5vw)",
-                  right: "max(12px, 1.5vw)",
-                  background: "rgba(212,171,99,0.1)",
-                  border: "1px solid rgba(212,171,99,0.5)",
-                  padding: "6px 12px",
-                  cursor: "pointer",
-                  borderRadius: "4px",
-                  fontFamily: "Space Mono",
-                  fontSize: "12px",
-                }}
-              >
-                ✕ Close
-              </button>
             </div>
 
             {/* Modal Tabs */}
             <div
               style={{
                 display: "flex",
-                borderBottom: "1px solid rgba(212,171,99,0.3)",
-                background: "rgba(212,171,99,0.08)",
-                padding: "0 max(16px, 2vw)",
-                flexWrap: "wrap",
+                gap: '4px',
+                padding: "0 20px",
+                flexWrap: "nowrap",
+                overflowX: 'auto',
                 flexShrink: 0,
+                marginTop: '-10px',
+                zIndex: 2,
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none'
               }}
             >
               {[
@@ -809,116 +818,91 @@ export default function App() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   style={{
-                    background: "none",
-                    border: "none",
-                    padding: "12px max(10px, 1vw)",
+                    background: activeTab === tab.id 
+                      ? "linear-gradient(to bottom, #f5edd8, #ede0be)" 
+                      : "linear-gradient(to bottom, #ede0be, #e4d4a8)",
+                    border: "1px solid rgba(155, 107, 47, 0.3)",
+                    borderBottom: activeTab === tab.id ? "none" : "1px solid rgba(155, 107, 47, 0.3)",
+                    padding: "12px 24px",
                     cursor: "pointer",
-                    fontFamily: "Space Mono",
-                    fontSize: "clamp(11px, 2vw, 12px)",
-                    letterSpacing: "0.05em",
-                    color: activeTab === tab.id ? "#c4922a" : "#7b6b5a",
-                    borderBottom:
-                      activeTab === tab.id
-                        ? "3px solid #c4922a"
-                        : "3px solid transparent",
-                    whiteSpace: "nowrap",
+                    fontFamily: "Cormorant Garamond, serif",
+                    fontWeight: 'bold',
+                    fontSize: "16px",
+                    letterSpacing: "0.02em",
+                    color: activeTab === tab.id ? "#8c6414" : "#7b6b5a",
+                    position: 'relative',
+                    top: activeTab === tab.id ? '1px' : '0',
+                    zIndex: activeTab === tab.id ? 10 : 1,
+                    borderRadius: '8px 8px 0 0',
+                    boxShadow: activeTab === tab.id 
+                      ? "0 -4px 10px rgba(0,0,0,0.05)" 
+                      : "inset 0 -2px 5px rgba(0,0,0,0.05)",
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    minWidth: 'fit-content'
                   }}
                 >
-                  {tab.label}
+                  <span style={{ fontSize: "16px", opacity: activeTab === tab.id ? 1 : 0.6 }}>
+                    {tab.label.split(' ')[0]}
+                  </span>
+                  <span style={{ textTransform: 'capitalize' }}>
+                    {tab.label.split(' ')[1]}
+                  </span>
+                  {activeTab === tab.id && (
+                    <div style={{ 
+                      position: 'absolute', 
+                      bottom: '-1px', 
+                      left: 0, 
+                      right: 0, 
+                      height: '2px', 
+                      background: '#f5edd8', 
+                      zIndex: 11 
+                    }} />
+                  )}
                 </button>
               ))}
             </div>
 
             {/* ── Record Tab — stays mounted, hidden via CSS when inactive ── */}
             <div
-              style={{ display: activeTab === "record" ? "flex" : "none", flex: 1, minHeight: 0, overflow: "hidden" }}
+              style={{ display: activeTab === "record" ? "flex" : "none", flex: 1, minHeight: 0, overflowY: "auto", padding: "20px" }}
               className="modal-tab-content-wrapper"
             >
-              <AIInterview
-                topic={modalState.entry}
-                domain={modalState.domain}
-                userName={user?.name}
-                onSave={(data) => console.log("Interview saved:", data)}
-                resumeData={resumeData}
-                clearResumeData={() => setResumeData(null)}
-              />
+              <div className="parchment-container" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+                <div className="parchment-body" style={{ padding: '30px 40px' }}>
+                  <AIInterview
+                    topic={modalState.entry}
+                    domain={modalState.domain}
+                    userName={user?.name}
+                    onSave={(data) => console.log("Interview saved:", data)}
+                    resumeData={resumeData}
+                    clearResumeData={() => setResumeData(null)}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* ── Knowledge Tab — interview history & archive ── */}
-            <div style={{ display: activeTab === "knowledge" ? "flex" : "none", flex: 1, flexDirection: "column", minHeight: 0, overflow: "hidden" }} className="modal-tab-content-wrapper">
-              <KnowledgeSection
-                topic={modalState.entry}
-                domain={modalState.domain}
-                onResumeRequest={(iv) => {
-                  setResumeData(iv);
-                  setActiveTab("record");
-                }}
-              />
+            <div style={{ display: activeTab === "knowledge" ? "flex" : "none", flex: 1, flexDirection: "column", minHeight: 0, overflowY: "auto", padding: "20px" }} className="modal-tab-content-wrapper">
+              <div className="parchment-container" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+                <div className="parchment-body" style={{ padding: '30px 40px' }}>
+                  <KnowledgeSection
+                    topic={modalState.entry}
+                    domain={modalState.domain}
+                    onResumeRequest={(iv) => {
+                      setResumeData(iv);
+                      setActiveTab("record");
+                    }}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* ── Analysis Tab ── */}
-            <div style={{ display: activeTab === "analysis" ? "block" : "none", flex: 1, minHeight: 0, overflowY: "auto", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
-              <div className="modal-tab-content">
-                {sampleAnalysis[modalState.domain]?.[modalState.entry] ? (
-                  sampleAnalysis[modalState.domain][modalState.entry].map(
-                    (p, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          background: "rgba(255,255,255,0.5)",
-                          border: "1px solid rgba(212,171,99,0.3)",
-                          borderLeft: `4px solid ${DOMAIN_CONFIG[modalState.domain].color}`,
-                          padding: "16px",
-                          marginBottom: "16px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontFamily: "Space Mono",
-                            fontSize: "13px",
-                            color: DOMAIN_CONFIG[modalState.domain].color,
-                            marginBottom: "8px",
-                          }}
-                        >
-                          {p.time} · {p.title}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "21px",
-                            fontFamily: "Cormorant Garamond,serif",
-                            color: "#353535",
-                            marginBottom: "8px",
-                          }}
-                        >
-                          {p.desc}
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: "Space Mono",
-                            fontSize: "11px",
-                            color: "#d05e52",
-                          }}
-                        >
-                          {p.critical}
-                        </div>
-                      </div>
-                    ),
-                  )
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "48px",
-                      color: "#7b6b5a",
-                      fontStyle: "italic",
-                      fontFamily: "Cormorant Garamond,serif",
-                      fontSize: "18px",
-                    }}
-                  >
-                    Upload a technique video to generate AI movement analysis.
-                  </div>
-                )}
-              </div>
+            <div style={{ display: activeTab === "analysis" ? "block" : "none", flex: 1, minHeight: 0, overflowY: "auto", padding: "0" }} className="modal-tab-content-wrapper">
+              <TechniqueAnalysis title={modalState.entry} domain={modalState.domain} />
             </div>
 
             {/* ── Graph Tab ── */}
@@ -937,9 +921,9 @@ export default function App() {
                     ?.graph ? (
                     <svg width="100%" height="100%">
                       <g transform="translate(400,200)">
-                        {sampleKnowledge[modalState.domain][
+                        {sampleKnowledge[modalState.domain]?.[
                           modalState.entry
-                        ].graph.nodes.map((node, i, arr) => {
+                        ]?.graph?.nodes?.map((node, i, arr) => {
                           const angle =
                             (i / arr.length) * 2 * Math.PI - Math.PI / 2;
                           const nx = 150 * Math.cos(angle),
@@ -958,8 +942,8 @@ export default function App() {
                                 cx={nx}
                                 cy={ny}
                                 r="8"
-                                fill={`${DOMAIN_CONFIG[modalState.domain].color}55`}
-                                stroke={DOMAIN_CONFIG[modalState.domain].color}
+                                fill={`${DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63"}55`}
+                                stroke={DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63"}
                                 strokeWidth="2"
                               />
                               <text
@@ -980,7 +964,7 @@ export default function App() {
                           cy="0"
                           r="30"
                           fill="rgba(212,171,99,0.2)"
-                          stroke={DOMAIN_CONFIG[modalState.domain].color}
+                          stroke={DOMAIN_CONFIG[modalState.domain]?.color || "#d4ab63"}
                           strokeWidth="2"
                         />
                         <text
@@ -992,9 +976,9 @@ export default function App() {
                           fontFamily="IM Fell DW Pica,serif"
                         >
                           {
-                            sampleKnowledge[modalState.domain][
+                            sampleKnowledge[modalState.domain]?.[
                               modalState.entry
-                            ].graph.center.split(" ")[0]
+                            ]?.graph?.center?.split(" ")[0] || "Center"
                           }
                         </text>
                       </g>
@@ -1069,7 +1053,7 @@ export default function App() {
                         >
                           {msg.role === "user"
                             ? "🙋"
-                            : DOMAIN_CONFIG[modalState.domain].icon}
+                            : DOMAIN_CONFIG[modalState.domain]?.icon || "📜"}
                         </div>
                         <div
                           style={{

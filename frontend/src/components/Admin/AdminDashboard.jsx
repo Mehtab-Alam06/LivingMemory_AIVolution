@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 
-export default function AdminDashboard({ domainData }) {
+export default function AdminDashboard({ domainData, onBack }) {
   const { token } = useAuth();
   const [activeTab, setActiveTab] = useState("users");
   const [contributionTab, setContributionTab] = useState("Pending");
@@ -71,6 +71,7 @@ export default function AdminDashboard({ domainData }) {
 
   return (
     <div style={{ padding: "max(20px, 3vw)", fontFamily: "'Cormorant Garamond', serif", color: "#2a1a08", overflowY: "auto", height: "100%" }}>
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#d4ab63", cursor: "pointer", fontFamily: "Space Mono", fontSize: "12px", marginBottom: "15px", padding: 0 }}>← Back to Archive</button>
       <h2 style={{ fontFamily: "'IM Fell DW Pica', serif", fontSize: "32px", marginBottom: "20px", borderBottom: "1px solid rgba(212,171,99,0.3)", paddingBottom: "10px" }}>
         Admin Dashboard
       </h2>

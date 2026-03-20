@@ -27,3 +27,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project Specifics
+uploads/
+!uploads/.gitkeep
+analysis/frames/
+__pycache__/
+*.pyc

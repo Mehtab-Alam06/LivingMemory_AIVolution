@@ -17,7 +17,7 @@ const OWNERSHIP = [
 
 const OWNERSHIP_LABELS = { "only-you": "Only me", family: "My family", community: "My community", regional: "A wider regional group" };
 
-export default function ContributeKnowledge() {
+export default function ContributeKnowledge({ onBack }) {
   const { user, token } = useAuth();
   const [view, setView] = useState("landing");
   const [step, setStep] = useState(0);
@@ -250,6 +250,7 @@ export default function ContributeKnowledge() {
     return (
       <div style={{ maxWidth: 520, margin: "0 auto", padding: "40px 20px" }}>
         <style>{CSS}</style>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: "#d4ab63", cursor: "pointer", fontFamily: "Space Mono", fontSize: "12px", marginBottom: "15px" }}>← Back to Archive</button>
         <div style={{ animation: "ckIn .5s ease", textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 14, textShadow: "0 0 30px rgba(212,171,99,.4)" }}>✦</div>
           {parchCard(<>
@@ -278,6 +279,7 @@ export default function ContributeKnowledge() {
     return (
       <div style={{ maxWidth: 540, margin: "0 auto", padding: "32px 20px" }}>
         <style>{CSS}</style>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: "#d4ab63", cursor: "pointer", fontFamily: "Space Mono", fontSize: "12px", marginBottom: "15px" }}>← Back to Archive</button>
         <div style={{ animation: "ckIn .4s ease" }}>
           {/* Progress */}
           <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 24 }}>
@@ -395,6 +397,7 @@ export default function ContributeKnowledge() {
   return (
     <div style={{ maxWidth: 560, margin: "0 auto", padding: "32px 20px" }}>
       <style>{CSS}</style>
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#d4ab63", cursor: "pointer", fontFamily: "Space Mono", fontSize: "12px", marginBottom: "15px" }}>← Back to Archive</button>
       <div style={{ animation: "ckIn .4s ease" }}>
         {/* Glowing Hero */}
         <div style={{ textAlign: "center", marginBottom: 28 }}>

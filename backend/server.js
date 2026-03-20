@@ -56,6 +56,7 @@ app.use("/api/upload", require("./routes/upload"));
 app.use("/api/interviews", require("./routes/Interviews"));
 app.use("/api/ai", require("./routes/Ai")); // ← Gemini AI proxy
 app.use("/api/knowledge", require("./routes/knowledge"));
+app.use("/api/analysis", require("./routes/analysis")); // AI Analysis Routes
 
 app.get("/", (req, res) => {
   res.json({ status: "🌿 Living Memory API is running" });

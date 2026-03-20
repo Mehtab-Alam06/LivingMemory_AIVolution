@@ -535,7 +535,7 @@ export default function AIInterview({ topic, domain, userName, onSave, resumeDat
     <div key={existingSession?._id || "new-session"} style={{ ...wrapperStyle, padding: "20px 24px", alignItems: "center", justifyContent: "center", gap: "16px" }}>
       {existingSession && existingSession.interviewNumber && (
         <div style={{ padding: "4px 12px", background: "#6688cc22", border: "1px solid #6688cc44", borderRadius: "100px", position: "absolute", top: "12px", right: "12px" }}>
-          <span style={S.mono("9px", "#6688cc")}>SELECTED SESSION: INT {existingSession.interviewNumber}</span>
+          <span style={S.mono("9px", "#6688cc")}>SELECTED SESSION: INT {existingSession.interviewNumber || 1}</span>
         </div>
       )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
@@ -561,7 +561,7 @@ export default function AIInterview({ topic, domain, userName, onSave, resumeDat
           <div style={{ flex: 1, minWidth: "240px", padding: "16px", background: "rgba(255,255,255,0.7)", border: "1.5px solid #6688cc44", borderRadius: "12px", display: "flex", flexDirection: "column", gap: "10px", cursor: "pointer", boxShadow: "0 4px 12px rgba(102,136,204,0.1)" }} onClick={resumeExistingInterview}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={S.mono("10px", "#6688cc")}>
-                {existingSession.completed ? "COMPLETED" : "PAUSED"} · INT {existingSession.interviewNumber || "???"}
+                {existingSession.completed ? "COMPLETED" : "PAUSED"} · INT {existingSession.interviewNumber || 1}
               </div>
               <div style={{ background: "#6db86d22", color: "#2a5a2a", padding: "3px 6px", borderRadius: "4px", fontSize: "9px", fontWeight: "bold" }}>{existingSession.completed ? "100% DONE" : `${Math.round(((existingSession.currentQuestionIndex || existingSession.coreIndex || 0) / CORE_Q) * 100)}% DONE`}</div>
             </div>
@@ -633,9 +633,9 @@ export default function AIInterview({ topic, domain, userName, onSave, resumeDat
 
   if (phase === PHASE.PAUSED) return (
     <div style={{ ...wrapperStyle, padding: "clamp(12px, 3vh, 32px)", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "16px" }}>
-        <button onClick={() => setPhase(PHASE.SETUP)} style={{ background: "none", border: "none", color: "#c4922a", fontSize: "12px", fontFamily: "Space Mono", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", padding: 0 }}>
-          ← Back
+      <div style={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "16px", position: "absolute", top: "20px", left: "24px" }}>
+        <button onClick={() => setPhase(PHASE.SETUP)} style={{ background: "rgba(212,171,99,0.1)", border: "1px solid rgba(212,171,99,0.3)", borderRadius: "20px", color: "#c4922a", fontSize: "11px", padding: "6px 14px", fontFamily: "Space Mono", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}>
+          ← Back to Setup
         </button>
       </div>
       <div style={{ fontSize: "36px", marginBottom: "12px" }}>⏸</div>
@@ -667,9 +667,9 @@ export default function AIInterview({ topic, domain, userName, onSave, resumeDat
     const completenessScore = Math.round((coveredCount / 5) * 100);
     return (
       <div style={{ ...wrapperStyle, padding: "clamp(12px, 3vh, 32px)", gap: "16px", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "4px" }}>
-          <button onClick={() => setPhase(PHASE.SETUP)} style={{ background: "none", border: "none", color: "#c4922a", fontSize: "12px", fontFamily: "Space Mono", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", padding: 0 }}>
-            ← Back
+        <div style={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "4px", position: "absolute", top: "20px", left: "24px" }}>
+          <button onClick={() => setPhase(PHASE.SETUP)} style={{ background: "rgba(212,171,99,0.1)", border: "1px solid rgba(212,171,99,0.3)", borderRadius: "20px", color: "#c4922a", fontSize: "11px", padding: "6px 14px", fontFamily: "Space Mono", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}>
+            ← Back to Setup
           </button>
         </div>
         <div style={{ textAlign: "center", padding: "8px 0 4px" }}>
