@@ -58,6 +58,7 @@ app.use("/api/ai", require("./routes/Ai")); // ← Gemini AI proxy
 app.use("/api/knowledge", require("./routes/knowledge"));
 app.use("/api/analysis", require("./routes/analysis")); // AI Analysis Routes
 app.use("/api/graph", require("./routes/graph")); // Knowledge Graph Routes
+app.use("/api/mentor", require("./routes/mentor")); // RAG Web Search & Videos
 
 app.get("/", (req, res) => {
   res.json({ status: "🌿 Living Memory API is running" });

@@ -3,9 +3,12 @@ import "./App.css";
 import domainData from "./data/domainData.json";
 import {
   sampleKnowledge,
-  sampleAnalysis,
-  getChatResponse,
+  sampleAnalysis
 } from "./data/knowledgedata.js";
+import ReactMarkdown from "react-markdown";
+import axios from "axios";
+import { API } from "./context/AuthContext"; // Assuming API url is here or just hardcode if missing
+// Because we already import { useAuth }, we can just import { API } from ./context/AuthContext if it has it. Or we just define API using import.meta.env.
 import PaperCard from "./components/PaperCard";
 import StickyNote from "./components/StickyNote";
 import AIInterview from "./components/Interview";
@@ -60,6 +63,7 @@ export default function App() {
   const [showAuth, setShowAuth] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
+  const [allChats, setAllChats] = useState({}); // Persist chat histories per topic
   const chatEndRef = useRef(null);
 
   const toggleGroup = (key) =>
@@ -78,31 +82,83 @@ export default function App() {
     setModalState({ isOpen: true, domain, entry });
     setActiveTab("record");
     setSidebarOpen(false);
-    setChatHistory([
-      {
-        role: "ai",
-        text: `Namaskar. I carry the knowledge of ${entry}. Ask me about the techniques, the wisdom, the signs to watch for, or what a learner must know.`,
-      },
-    ]);
+    // As requested: start fresh, keep old chat hidden until requested
+    const initial = [{ role: "ai", text: `Namaskar. I carry the knowledge of ${entry}. Ask me about the techniques, the wisdom, the signs to watch for, or what a learner must know.` }];
+    setChatHistory(initial);
   };
 
-  const handleSendChat = () => {
-    if (!chatInput.trim()) return;
-    const userMsg = { role: "user", text: chatInput };
-    setChatHistory((prev) => [...prev, userMsg]);
-    setChatInput("");
-    setTimeout(() => {
-      const aiReply = {
-        role: "ai",
-        text: getChatResponse(modalState.entry, userMsg.text),
-      };
-      setChatHistory((prev) => [...prev, aiReply]);
-    }, 1000);
+  const handleSendChat = async (overrideTopic = null, originalText = null) => {
+    const textToSend = originalText || chatInput.trim();
+    if (!textToSend) return;
+    
+    if (!overrideTopic) {
+        setChatHistory((prev) => [...prev, { role: "user", text: textToSend }]);
+        setChatInput("");
+    } else {
+        setChatHistory(prev => {
+            const copy = [...prev];
+            if (copy[copy.length - 1]?.type === "mismatch_warning") copy.pop();
+            return copy;
+        });
+    }
+    
+    setChatHistory((prev) => [...prev, { role: "ai", text: "..." }]);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: textToSend,
+          history: chatHistory,
+          topic: modalState.entry,
+          domain: modalState.domain,
+          overrideTopic
+        })
+      });
+      const data = await response.json();
+      
+      if (data.topic_mismatch) {
+        setChatHistory((prev) => {
+          const newHistory = [...prev];
+          newHistory[newHistory.length - 1] = { 
+            role: "ai", 
+            type: "mismatch_warning",
+            detected_topic: data.detected_topic,
+            original_msg: textToSend,
+            text: `Hold on—your question appears to be about **${data.detected_topic}**, but we are currently exploring **${modalState.entry}**.\n\nShall I override the current topic and specifically search the global archives for **${data.detected_topic}** instead?`
+          };
+          return newHistory;
+        });
+        return;
+      }
+
+      setChatHistory((prev) => {
+        const newHistory = [...prev];
+        newHistory[newHistory.length - 1] = { 
+            role: "ai", 
+            text: data.reply || "Sorry, I couldn't reach the archives.",
+            sources: data.sources 
+        };
+        return newHistory;
+      });
+    } catch (err) {
+      console.error(err);
+      setChatHistory((prev) => {
+        const newHistory = [...prev];
+        newHistory[newHistory.length - 1] = { role: "ai", text: "Error connecting to the mentor." };
+        return newHistory;
+      });
+    }
   };
 
   useEffect(() => {
+    // Only save to global history if this is a real conversation (more than just the initial greeting)
+    if (modalState.entry && chatHistory.length > 1) {
+        setAllChats(prev => ({ ...prev, [modalState.entry]: chatHistory }));
+    }
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatHistory]);
+  }, [chatHistory, modalState.entry]);
 
   // ── LOADING ──────────────────────────────────────────────────────────────────
   if (loading)
@@ -162,6 +218,15 @@ export default function App() {
           text-shadow: 0 0 16px rgba(212,171,99,.55), 0 0 32px rgba(212,171,99,.25) !important;
         }
         .profile-btn:hover { background: rgba(212,171,99,.18) !important; }
+        
+        /* Markdown Chat Rendering Overrides */
+        .mentor-markdown p { margin: 0 0 10px 0; font-size: 15.5px !important; line-height: 1.6 !important; }
+        .mentor-markdown ul, .mentor-markdown ol { margin: 4px 0 10px 0; padding-left: 20px; font-size: 15.5px !important; line-height: 1.6 !important; }
+        .mentor-markdown li { margin-bottom: 4px; font-size: 15.5px !important; line-height: 1.6 !important; }
+        .mentor-markdown a { color: #9b6b2f; text-decoration: underline; font-weight: bold; }
+        .mentor-markdown a:hover { color: #d4ab63; }
+        .mentor-markdown h1, .mentor-markdown h2, .mentor-markdown h3, .mentor-markdown h4 { margin: 12px 0 8px 0; font-family: 'IM Fell DW Pica', serif; color: #2a1a08; }
+        
         html, body, #root { height: 100%; overflow: hidden; }
         .app-root { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         .tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
@@ -913,25 +978,48 @@ export default function App() {
 
             {/* ── Mentor / Chat Tab ── */}
             <div style={{ display: activeTab === "chat" ? "flex" : "none", flex: 1, minHeight: 0, overflow: "hidden", flexDirection: "column", padding: "max(16px, 2vw)" }} className="modal-tab-content-wrapper">
-              <div className="modal-tab-content" style={{ display: "flex", flex: 1, minHeight: 0 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1,
-                    minHeight: 0
-                  }}
-                >
+              <div className="parchment-container" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div className="parchment-body" style={{ padding: '30px 40px', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '2px solid rgba(140, 100, 20, 0.2)', paddingBottom: '10px' }}>
+                    <h2 style={{ margin: 0, fontFamily: 'IM Fell DW Pica, serif', color: '#2a1a08' }}>
+                      <span style={{ fontSize: '24px' }}>📜</span> Library of Wisdom
+                    </h2>
+                    <span style={{ fontFamily: 'Space Mono', fontSize: '11px', color: '#9b6b2f', textTransform: 'uppercase' }}>AI Archival Mentor</span>
+                  </div>
+
                   <div
                     style={{
                       flex: 1,
                       overflowY: "auto",
-                      padding: "12px",
-                      background: "rgba(255,255,255,0.4)",
+                      padding: "16px",
+                      background: "rgba(255,255,255,0.2)",
                       borderRadius: "8px",
-                      border: "1px solid rgba(212,171,99,0.2)",
+                      border: "1px dashed rgba(212,171,99,0.3)",
                     }}
                   >
+                    {allChats[modalState.entry] && allChats[modalState.entry].length > 1 && chatHistory.length === 1 && (
+                      <div style={{ textAlign: "center", paddingBottom: "16px" }}>
+                        <button
+                          onClick={() => setChatHistory(allChats[modalState.entry])}
+                          style={{
+                            background: "rgba(212,171,99,0.1)",
+                            border: "1px dashed rgba(212,171,99,0.5)",
+                            padding: "6px 16px",
+                            borderRadius: "20px",
+                            cursor: "pointer",
+                            fontFamily: "Space Mono",
+                            fontSize: "11px",
+                            color: "#9b6b2f",
+                            transition: "all 0.2s"
+                          }}
+                          onMouseOver={e => e.target.style.background = "rgba(212,171,99,0.2)"}
+                          onMouseOut={e => e.target.style.background = "rgba(212,171,99,0.1)"}
+                        >
+                          🕒 View Previous Chat History
+                        </button>
+                      </div>
+                    )}
                     {chatHistory.map((msg, i) => (
                       <div
                         key={i}
@@ -966,18 +1054,58 @@ export default function App() {
                         <div
                           style={{
                             background:
-                              msg.role === "user" ? "#e9f5e9" : "#fcf5e6",
+                              msg.role === "user" ? "#eef7ee" : 'rgba(255, 255, 255, 0.4) url("/Images/paper2.png") center/cover',
+                            backgroundBlendMode: "overlay",
                             padding: "10px 14px",
                             borderRadius: "8px",
                             maxWidth: "75%",
-                            fontSize: "clamp(13px, 2vw, 17px)",
+                            fontSize: "15.5px",
                             fontFamily: "Cormorant Garamond,serif",
-                            color: "#353535",
+                            color: "#111",
                             lineHeight: "1.5",
-                            border: `1px solid ${msg.role === "user" ? "rgba(109,184,109,0.3)" : "rgba(212,171,99,0.3)"}`,
+                            border: `1px solid ${msg.role === "user" ? "rgba(109,184,109,0.4)" : "rgba(212,171,99,0.4)"}`,
                           }}
                         >
-                          {msg.text}
+                          {msg.role === "user" ? msg.text : 
+                            msg.type === "mismatch_warning" ? (
+                              <div className="mentor-markdown">
+                                <ReactMarkdown components={{ a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" /> }}>{msg.text}</ReactMarkdown>
+                                <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
+                                  <button onClick={() => handleSendChat(msg.detected_topic, msg.original_msg)} style={{ background: '#d4ab63', color: '#fff', border: 'none', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'Cormorant Garamond,serif', fontSize: '15px', fontWeight: 'bold' }}>Yes, search the new topic</button>
+                                  <button onClick={() => setChatHistory(prev => prev.slice(0, -1))} style={{ background: 'transparent', color: '#9b6b2f', border: '1px solid rgba(155, 107, 47, 0.5)', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'Cormorant Garamond,serif', fontSize: '15px' }}>Cancel</button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="mentor-markdown">
+                                <ReactMarkdown components={{ a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" /> }}>{msg.text}</ReactMarkdown>
+                                {msg.sources && (msg.sources.web?.length > 0 || msg.sources.yt?.length > 0) && (
+                                  <div style={{ marginTop: '16px', borderTop: '1px dashed rgba(212,171,99,0.3)', paddingTop: '12px' }}>
+                                    <div style={{ fontSize: '11px', fontFamily: 'Space Mono', color: '#9b6b2f', marginBottom: '8px', fontWeight: 'bold', letterSpacing: '0.05em' }}>📜 VERIFIED SOURCES</div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                      {msg.sources.web?.map((w, idx) => (
+                                        <a key={`web-${idx}`} href={w.url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(212,171,99,0.25)', borderRadius: '6px', textDecoration: 'none', transition: 'all 0.2s', color: '#4a301a' }} onMouseOver={e => e.currentTarget.style.background='rgba(255,255,255,0.9)'} onMouseOut={e => e.currentTarget.style.background='rgba(255,255,255,0.6)'}>
+                                          <div style={{ fontSize: '18px' }}>🌐</div>
+                                          <div style={{ overflow: 'hidden', flex: 1 }}>
+                                            <div style={{ fontFamily: 'Cormorant Garamond,serif', fontSize: '16px', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{w.title}</div>
+                                            <div style={{ fontFamily: 'Space Mono', fontSize: '10px', color: '#9b6b2f', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>{w.url}</div>
+                                          </div>
+                                        </a>
+                                      ))}
+                                      {msg.sources.yt?.map((v, idx) => (
+                                        <a key={`yt-${idx}`} href={v.url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(212,171,99,0.25)', borderRadius: '6px', textDecoration: 'none', transition: 'all 0.2s', color: '#4a301a' }} onMouseOver={e => e.currentTarget.style.background='rgba(255,255,255,0.9)'} onMouseOut={e => e.currentTarget.style.background='rgba(255,255,255,0.6)'}>
+                                          <div style={{ fontSize: '18px' }}>▶️</div>
+                                          <div style={{ overflow: 'hidden', flex: 1 }}>
+                                            <div style={{ fontFamily: 'Cormorant Garamond,serif', fontSize: '16px', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{v.title}</div>
+                                            <div style={{ fontFamily: 'Space Mono', fontSize: '10px', color: '#cc2929', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>YouTube • {v.duration?.timestamp || 'Video'}</div>
+                                          </div>
+                                        </a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          }
                         </div>
                       </div>
                     ))}
@@ -1009,7 +1137,7 @@ export default function App() {
                       }}
                     />
                     <button
-                      onClick={handleSendChat}
+                      onClick={() => handleSendChat()}
                       className="btn btn-primary"
                       style={{
                         padding: "10px 16px",
