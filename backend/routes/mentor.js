@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const KnowledgeSubmission = require('../models/KnowledgeSubmission');
 const AnalysisHistory = require('../models/AnalysisHistory');
+const Interview = require('../models/Interview');
 const ytSearch = require('yt-search');
 const https = require('https');
 
@@ -67,19 +68,30 @@ Respond in JSON: {"mismatch": bool, "detected_topic": string|null, "is_greeting"
             try {
                 const safeTopic = activeTopic.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 
-                const dbResults = await KnowledgeSubmission.find({ 
-                    knowledgeTitle: { $regex: new RegExp(safeTopic, 'i') } 
-                }).lean().limit(2);
-                
-                const analysisResults = await AnalysisHistory.find({ 
-                    entryId: { $regex: new RegExp(safeTopic, 'i') } 
-                }).lean().limit(3);
+                const [dbResults, analysisResults, interviewResults] = await Promise.all([
+                    KnowledgeSubmission.find({ knowledgeTitle: { $regex: new RegExp(safeTopic, 'i') } }).lean().limit(2),
+                    AnalysisHistory.find({ entryId: { $regex: new RegExp(safeTopic, 'i') } }).lean().limit(3),
+                    Interview.find({ topic: { $regex: new RegExp(safeTopic, 'i') }, completed: true }).lean().limit(2)
+                ]);
+
+                let combinedKnowledge = [];
 
                 if (dbResults.length > 0) {
-                    dbContextStr = dbResults.map(r => 
-                        `Title: ${r.knowledgeTitle}\nDesc: ${r.description || ''}\nExp: ${r.explanation || ''}`
-                    ).join('\n---\n');
+                    dbResults.forEach(r => combinedKnowledge.push(`[SUBMISSION] Title: ${r.knowledgeTitle}\nDesc: ${r.description || ''}\nExp: ${r.explanation || ''}`));
                 }
+
+                if (interviewResults.length > 0) {
+                    interviewResults.forEach(r => {
+                        const summary = r.knowledgeSummary?.join(', ') || '';
+                        const portrait = r.knowledgePortrait ? JSON.stringify(r.knowledgePortrait) : '';
+                        combinedKnowledge.push(`[INTERVIEW] Topic: ${r.topic}\nSummary: ${summary}\nPortrait Data: ${portrait}`);
+                    });
+                }
+
+                if (combinedKnowledge.length > 0) {
+                    dbContextStr = combinedKnowledge.join('\n---\n');
+                }
+
                 if (analysisResults.length > 0) {
                     analysisContextStr = analysisResults.map(r => {
                         const vis = r.result?.vision_analysis || r.result?.llm_interpretation?.vision_analysis || {};
@@ -178,11 +190,11 @@ Respond in JSON: {"mismatch": bool, "detected_topic": string|null, "is_greeting"
 The user is exploring the topic: "${activeTopic}" (Domain: ${domain}).
 
 ### STRICT MANDATES:
-1. BE CONCISE AND TRADITIONAL. Answer as a wise mentor.
+1. BE CONCISE. Use clear, concrete bullet points for materials and techniques.
 2. YOU ONLY ANSWER QUESTIONS RELATED TO THE TRADITIONAL PRACTICE: "${activeTopic}" (DOMAIN: ${domain}).
-3. IF THE USER ASKS FOR GENERAL WORLD KNOWLEDGE (WEATHER, NEWS, TRIVIA), POLITELY DECLINE AND BRING THEM BACK TO THE TRADITION.
-4. HANDLE GREETINGS (HELLO, NAMASKAR) WARMLY OR CHARACTER, BUT DO NOT GIVE SOURCES FOR GREETINGS.
-5. YOU ARE FORBIDDEN FROM CITING WEB OR YOUTUBE LINKS IN YOUR ACTUAL TEXT. The system will automatically inject them.
+3. IF THE USER ASKS FOR GENERAL WORLD KNOWLEDGE (WEATHER, NEWS, MATH), POLITELY DECLINE.
+4. HANDLE GREETINGS (NAMASKAR, HELLO) WARMLY, BUT DO NOT PERFORM SEARCHES FOR THEM.
+5. YOU ARE FORBIDDEN FROM CITING WEB OR YOUTUBE LINKS IN YOUR ACTUAL TEXT. **ALSO, DO NOT MENTION THAT YOU ARE DECLINING LINKS OR CANNOT PROVIDE THEM.** The system will automatically inject them.
 6. If the Verified Database Context has relevant information, prioritize it heavily.
 
 ### VERIFIED LOCAL DATABASE CONTEXT:
