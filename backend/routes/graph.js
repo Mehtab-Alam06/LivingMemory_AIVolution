@@ -22,7 +22,9 @@ router.get('/knowledge/:title', async (req, res) => {
         console.log(`[Graph] Internal structure for: "${title}"`);
 
         // Fetch analysis records for this tradition
-        const analyses = await AnalysisHistory.find({ entryId: title }).lean();
+        const analyses = await AnalysisHistory.find({ 
+            entryId: { $regex: new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } 
+        }).lean();
         console.log(`[Graph] Found ${analyses.length} analysis records`);
 
         // Fetch knowledge submissions matching this title

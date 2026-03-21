@@ -105,7 +105,7 @@ export default function App() {
     setChatHistory((prev) => [...prev, { role: "ai", text: "..." }]);
 
     try {
-      const response = await fetch('http://localhost:5000/api/mentor', {
+      const response = await fetch(`${API}/mentor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
