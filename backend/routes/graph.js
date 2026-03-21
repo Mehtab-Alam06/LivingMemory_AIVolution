@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AnalysisHistory = require('../models/AnalysisHistory');
 const KnowledgeSubmission = require('../models/KnowledgeSubmission');
+const Interview = require('../models/Interview');
 const { findCrossDomainBridges } = require('../utils/ai_similarity');
 
 // Helper
@@ -21,17 +22,37 @@ router.get('/knowledge/:title', async (req, res) => {
         const title = req.params.title?.trim();
         console.log(`[Graph] Internal structure for: "${title}"`);
 
-        // Fetch analysis records for this tradition
-        const analyses = await AnalysisHistory.find({ 
-            entryId: { $regex: new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } 
-        }).lean();
-        console.log(`[Graph] Found ${analyses.length} analysis records`);
+        // Robust Title Matching logic (handle "Methods" vs "Techniques" vs "Practices")
+        const cleanTitle = title.replace(/Methods|Techniques|Practices|Systems|Knowledge|Traditions|Prtactice/gi, '').trim();
+        const words = cleanTitle.split(' ').filter(w => w.length > 2);
+        // Create a fuzzy regex that matches core keywords (e.g. "Adivasi.*Seed.*Preservation")
+        const fuzzyRegex = new RegExp(words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.*'), 'i');
 
-        // Fetch knowledge submissions matching this title
-        const submissions = await KnowledgeSubmission.find({
-            knowledgeTitle: { $regex: new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') }
-        }).lean();
-        console.log(`[Graph] Found ${submissions.length} knowledge submissions`);
+        // Fetch records with the fuzzy regex to catch naming variations
+        const [analyses, submissions, interviews] = await Promise.all([
+            AnalysisHistory.find({ 
+                $or: [
+                    { entryId: { $regex: new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } },
+                    { entryId: { $regex: fuzzyRegex } }
+                ]
+            }).lean(),
+            KnowledgeSubmission.find({
+                $or: [
+                    { knowledgeTitle: { $regex: new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } },
+                    { knowledgeTitle: { $regex: fuzzyRegex } }
+                ]
+            }).lean(),
+            Interview.find({
+                $or: [
+                    { topic: { $regex: new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } },
+                    { topic: { $regex: fuzzyRegex } }
+                ],
+                completed: true
+            }).lean()
+        ]);
+
+        console.log(`[Graph] Fuzzy Match using: "${fuzzyRegex}"`);
+        console.log(`[Graph] Found ${analyses.length} analyses, ${submissions.length} submissions, ${interviews.length} interviews for: "${title}"`);
 
         const nodes = [];
         const links = [];
@@ -51,39 +72,51 @@ router.get('/knowledge/:title', async (req, res) => {
         const centerId = 'center';
         add(centerId, title, 'craft', 'large');
 
-        // ── Analysis Records (video, image, document) ──
+        // ── Analysis Records (video, image, document, audio) ──
         analyses.forEach((a, i) => {
             const id = `analysis-${i}`;
             const domain = (a.domain || 'General').charAt(0).toUpperCase() + (a.domain || 'general').slice(1);
             const type = (a.type || 'study').charAt(0).toUpperCase() + (a.type || 'study').slice(1);
             add(id, `${domain} ${type}`, 'history', 'medium');
-            link(centerId, id, type.toLowerCase());
+            link(centerId, id, 'analyzed');
 
-            const vis = a.result?.vision_analysis || a.result?.llm_interpretation?.vision_analysis || {};
-            const techList = _list(vis.techniques_and_tools || vis.tools_required);
-            techList.forEach(t => {
-                const tid = `tech-${t.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-                add(tid, t, 'technique');
-                link(id, tid, 'technique');
-            });
-            _list(vis.raw_materials_used).forEach(m => {
+            const result = a.result || {};
+            const vis = result.vision_analysis || result.llm_interpretation?.vision_analysis || {};
+            
+            // Materials
+            _list(vis.raw_materials_used || result.raw_materials).forEach(m => {
                 const mid = `mat-${m.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
                 add(mid, m, 'material');
                 link(id, mid, 'material');
             });
-            const expertiseList = _list(a.result?.expertise_markers || a.result?.llm_interpretation?.expertise_markers);
-            expertiseList.forEach(e => {
-                const eid = `exp-${e.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-                add(eid, e, 'craft');
-                link(id, eid, 'expertise');
+
+            // Techniques
+            _list(vis.techniques_and_tools || vis.tools_required || result.techniques).forEach(t => {
+                const tid = `tech-${t.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+                add(tid, t, 'technique');
+                link(id, tid, 'technique');
+            });
+        });
+
+        // ── Interview Records ──
+        interviews.forEach((iv, i) => {
+            const id = `interview-${i}`;
+            add(id, `Interview Sess. ${i+1}`, 'history', 'medium');
+            link(centerId, id, 'recorded');
+
+            // Key knowledge points from interview
+            (iv.knowledgeSummary || []).slice(0, 5).forEach(kp => {
+                const kpid = `kp-${kp.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 20)}`;
+                add(kpid, kp, 'ritual'); // Using ritual color for "knowledge secrets"
+                link(id, kpid, 'wisdom');
             });
         });
 
         // ── Knowledge Submissions ──
         submissions.forEach((s, i) => {
             const id = `knowledge-${i}`;
-            add(id, s.knowledgeTitle || 'Interview', 'history', 'medium');
-            link(centerId, id, 'interview');
+            add(id, s.knowledgeTitle || 'Submission', 'history', 'medium');
+            link(centerId, id, 'submitted');
 
             if (s.community) {
                 const cid = `comm-${s.community.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
@@ -95,16 +128,9 @@ router.get('/knowledge/:title', async (req, res) => {
                 add(rid, s.knowledgeRegion, 'ecology');
                 link(id, rid, 'region');
             }
-            if (s.materials) {
-                _list(s.materials).forEach(m => {
-                    const mid = `mat-${m.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-                    add(mid, m, 'material');
-                    link(id, mid, 'material');
-                });
-            }
         });
 
-        console.log(`[Graph] Returning ${nodes.length} nodes, ${links.length} links`);
+        console.log(`[Graph] Final Build: ${nodes.length} nodes, ${links.length} links`);
         res.json({ nodes, links });
     } catch (err) {
         console.error('Internal graph error:', err);
